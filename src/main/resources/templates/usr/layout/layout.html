@@ -5,21 +5,60 @@
 <header layout:fragment="header">
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <a class="navbar-brand" href="#">오름 오름</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item active">
-                    <a class="nav-link" href="#">홈</a>
+                    <a class="nav-link" href="/">홈</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="#">커뮤니티</a>
                 </li>
+                <li class="nav-item">
+                    <button type="button" class="btn btn-link" data-toggle="modal" data-target="#exampleModalCenter">
+                        로그인
+                    </button>
+                </li>
             </ul>
+        </div>
+        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
+             aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalCenterTitle">오름오름에 오신 것을 환영합니다!</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <a href="/oauth2/authorization/kakao" class="btn btn-block btn-outline gap-1">
+                            <i class="fa-solid fa-comment text-[color:#ffe812]"></i>
+                            <span class="normal-case" th:text="#{c.startWithKakao}"></span>
+                        </a>
+
+                        <a href="/oauth2/authorization/naver" class="btn btn-block btn-outline gap-1">
+                            <i class="fa-solid fa-n text-[color:#2DB400]"></i>
+                            <span class="normal-case" th:text="#{c.startWithNaver}"></span>
+                        </a>
+
+                        <a href="/oauth2/authorization/google" class="btn btn-block btn-outline gap-1">
+                            <i class="fa-brands fa-google text-[color:#ff4000]"></i>
+                            <span class="normal-case" th:text="#{c.startWithGoogle}"></span>
+                        </a>
+
+                        <a href="/oauth2/authorization/facebook" class="btn btn-block btn-outline gap-1">
+                            <i class="fa-brands fa-facebook text-[color:#3b5998]"></i>
+                            <span class="normal-case" th:text="#{c.startWithFacebook}"></span>
+                        </a>
+                    </div>
+                </div>
+            </div>
         </div>
     </nav>
 </header>
-
 </body>
 </html>
