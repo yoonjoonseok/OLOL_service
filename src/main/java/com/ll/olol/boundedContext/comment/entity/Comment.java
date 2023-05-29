@@ -17,7 +17,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Comment {
-    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne()
@@ -25,6 +26,7 @@ public class Comment {
     private RecruitmentArticle recruitmentArticle;
 
     private String content;
+
     private LocalDateTime createDate;
     private LocalDateTime modifyDate;
 
