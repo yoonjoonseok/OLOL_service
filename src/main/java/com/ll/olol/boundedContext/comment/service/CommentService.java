@@ -16,7 +16,7 @@ public class CommentService {
     private final RecruitmentRepository recruitmentRepository;
 
     @Transactional
-    public Long commentSave(String name, Long id, CommentDto dto){
+    public Long commentSave(Long id, CommentDto dto){
         RecruitmentArticle recruitmentArticle = recruitmentRepository.findById(id).orElseThrow(() ->
                 new IllegalArgumentException("해당 게시물이 존재하지 않습니다."));
 
