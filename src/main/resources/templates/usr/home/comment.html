@@ -1,0 +1,32 @@
+<html layout:decorate="~{usr/layout/layout.html}">
+
+<head>
+    <title>오름 오름(메인)</title>
+</head>
+
+<body>
+
+<main layout:fragment="main">
+    <form th:object="${comments}">
+    <div  class="card">
+<!--        <div class="card-header bi bi-chat-dots">-->
+<!--            <span th:if="${comments.size() > 0}" th:text="${comments.size()}"></span> Comments-->
+<!--        </div>-->
+        <ul class="list-group-flush">
+            <li class="list-group-item" th:each="comment : ${comments}">
+            <span>
+                <span style="font-size: small" th:text="${comment.member.nickname}"></span>
+                <span style="font-size: xx-small" th:text="${comment.createDate}"></span>&nbsp;
+                <button class="badge bi bi-pencil-square"> 수정</button>
+                <button class="badge bi bi-trash"> 삭제</button>
+            </span>
+                <div th:text="${comment.content}"></div>
+            </li>
+        </ul>
+    </div>
+    </form>
+</main>
+
+</body>
+
+</html>

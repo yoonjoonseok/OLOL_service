@@ -18,19 +18,21 @@ import lombok.NoArgsConstructor;
 public class CommentDto {
 
     private Long id;
-    private RecruitmentArticle recruitmentArticle;
+//    private RecruitmentArticle recruitmentArticle;
     private String content;
+    private String writer;
+    private String password;
     private LocalDateTime createDate = LocalDateTime.now();
     private LocalDateTime modifyDate = LocalDateTime.now();
 
-    public Comment toEntity(){
-        Comment comments = Comment.builder()
-                .id(id)
-                .content(content)
-                .recruitmentArticle(recruitmentArticle)
-                .createDate(createDate)
-                .modifyDate(modifyDate)
-                .build();
-        return comments;
-    }
+//    public Comment toEntity(){
+//        Comment comments = Comment.builder()
+//                .id(id)
+//                .content(content)
+//                .recruitmentArticle(recruitmentArticle)
+//                .createDate(createDate)
+//                .modifyDate(modifyDate)
+//                .build();
+//        return comments;
+//    }
 }
