@@ -1,0 +1,25 @@
+<html layout:decorate="~{usr/layout/layout.html}">
+<head>
+</head>
+<body>
+<main layout:fragment="main">
+    <div th:text="${recruitmentArticle.getTitle()}">제목</div>
+    <div th:text="${recruitmentArticle.getMember().getNickname()}">닉네임</div>
+    <div th:text="${recruitmentArticle.getCreateDate()}">게시글 날짜</div>
+    <div th:text="${recruitmentArticle.getViews()}">조회수</div>
+    <div th:text="${recruitmentArticle.getDeadLineDate()}">마감일</div>
+    <div th:text="${recruitmentArticle.getTypeValue()}">모임 구분</div>
+
+    <div th:text="${recruitmentArticle.getRecruitmentArticleForm().getMountainName()}">산 이름</div>
+    <div th:text="${recruitmentArticle.getRecruitmentArticleForm().getDayNight()}">주1 야2</div>
+    <div th:text="${recruitmentArticle.getRecruitmentArticleForm().getRecruitsNumbers()}">모집 인원</div>
+    <div th:text="${recruitmentArticle.getRecruitmentArticleForm().getAgeRange()}">연령대</div>
+    <div th:text="${recruitmentArticle.getRecruitmentArticleForm().getStartTime()}">등산 시작 시각</div>
+    <div th:text="${recruitmentArticle.getRecruitmentArticleForm().getCourseTime()}">예상 소요 시간</div>
+    <div th:text="${recruitmentArticle.getRecruitmentArticleForm().getConnectType()}">연락 방법</div>
+
+    <div th:text="${recruitmentArticle.getContent()}">게시글 내용</div>
+
+</main>
+</body>
+</html>

@@ -1,16 +1,14 @@
 package com.ll.olol.boundedContext.recruitment.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
@@ -23,7 +21,7 @@ public class RecruitmentArticleForm {
     @JoinColumn(name="RecruitmentArticle_ID")
     private RecruitmentArticle recruitmentArticle;
 
-    private Boolean dayNight;
+    private int dayNight;
 
     private Long recruitsNumbers;
 
@@ -35,5 +33,5 @@ public class RecruitmentArticleForm {
 
     private LocalDateTime courseTime;
 
-    private String ConnectType;
+    private String connectType;
 }
