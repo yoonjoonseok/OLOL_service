@@ -37,10 +37,12 @@ public class CommentController {
     }
 
     @PostMapping("/comment")
-    public String createComment(@ModelAttribute Comment comment){
+    public String createComment(@ModelAttribute Comment comment,String writer){
+        System.out.println(writer);
         comment.setCreateDate(LocalDateTime.now());
-        commentService.commentSave(comment,"test");
+        commentService.commentSave(comment,writer);
         System.out.println("comment = " + comment.getContent());
+
         return "redirect:/comment";
     }
 

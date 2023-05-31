@@ -39,12 +39,16 @@ public class CommentService {
     @Transactional
     public Long commentSave(Comment comment, String writer){
         //member, Long recruitmentId
-
+        Member member = new Member();
+        member.setNickname(writer);
+        memberRepository.save(member);
 //        Optional<Member> member1 = memberRepository.findById(member.getId());
 //        Optional<RecruitmentArticle> id = recruitmentRepository.findById(recruitmentId);
 
 //        comment.setMember(member1.get());
 //        comment.setRecruitmentArticle(id.get());
+        comment.setMember(member);
+
         Comment save = commentRepository.save(comment);
         return save.getId();
     }

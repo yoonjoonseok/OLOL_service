@@ -30,7 +30,7 @@
             <ul class="list-group-flush">
                 <li class="list-group-item" th:each="comment : ${comments}">
             <span>
-                <span style="font-size: x-large" th:text="${comment.content}"></span>
+                <span style="font-size: x-large" th:text="${comment.member.nickname}"></span>
                 <span style="font-size: xx-small" th:text="${comment.createDate}"></span>&nbsp;
 
                 <button class="badge bi bi-pencil-square"> 수정</button>
