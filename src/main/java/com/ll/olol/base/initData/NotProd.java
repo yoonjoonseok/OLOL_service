@@ -49,13 +49,13 @@ public class NotProd {
             em.persist(member3);
             em.persist(member4);
 
-            RecruitmentArticle recruitmentArticle1 = createRecruitmentArticle(LocalDateTime.now(), "테스트용1",
+            RecruitmentArticle recruitmentArticle1 = createRecruitmentArticle(LocalDateTime.now(),LocalDateTime.now(),1L,member1,1,"테스트용1",
                     "테스트용 게시글 내용입니다1.");
-            RecruitmentArticle recruitmentArticle2 = createRecruitmentArticle(LocalDateTime.now(), "테스트용2",
+            RecruitmentArticle recruitmentArticle2 = createRecruitmentArticle(LocalDateTime.now(),LocalDateTime.now(),3L,member2,2,"테스트용2",
                     "테스트용 게시글 내용입니다2.");
-            RecruitmentArticle recruitmentArticle3 = createRecruitmentArticle(LocalDateTime.now(), "테스트용3",
+            RecruitmentArticle recruitmentArticle3 = createRecruitmentArticle(LocalDateTime.now(),LocalDateTime.now(),5L,member3,1,"테스트용3",
                     "테스트용 게시글 내용입니다3.");
-            RecruitmentArticle recruitmentArticle4 = createRecruitmentArticle(LocalDateTime.now(), "테스트용4",
+            RecruitmentArticle recruitmentArticle4 = createRecruitmentArticle(LocalDateTime.now(),LocalDateTime.now(),10L,member4,2,"테스트용4",
                     "테스트용 게시글 내용입니다4.");
             em.persist(recruitmentArticle1);
             em.persist(recruitmentArticle2);
@@ -78,12 +78,16 @@ public class NotProd {
         }
 
 
-        private static RecruitmentArticle createRecruitmentArticle(LocalDateTime createDate, String articleName,
+        private static RecruitmentArticle createRecruitmentArticle(LocalDateTime createDate,LocalDateTime deadLineDate, Long views, Member member,int typeValue, String articleName,
                                                                    String content) {
             RecruitmentArticle recruitmentArticle = new RecruitmentArticle();
             recruitmentArticle.setArticleName(articleName);
             recruitmentArticle.setCreateDate(createDate);
             recruitmentArticle.setContent(content);
+            recruitmentArticle.setMember(member);
+            recruitmentArticle.setDeadLineDate(deadLineDate);
+            recruitmentArticle.setTypeValue(typeValue);
+            recruitmentArticle.setViews(views);
             return recruitmentArticle;
         }
 
@@ -108,6 +112,7 @@ public class NotProd {
             comment.setCreateDate(createDate);
             comment.setRecruitmentArticle(recruitmentArticle);
             comment.setMember(member);
+            comment.setContent(content);
             return comment;
         }
 

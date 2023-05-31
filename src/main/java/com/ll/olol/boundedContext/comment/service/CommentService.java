@@ -37,12 +37,14 @@ public class CommentService {
 //        return dto.getId();
 //    }
     @Transactional
-    public Long commentSave(Comment comment, Member member, Long recruitmentId){
-        Optional<Member> member1 = memberRepository.findById(member.getId());
-        Optional<RecruitmentArticle> id = recruitmentRepository.findById(recruitmentId);
+    public Long commentSave(Comment comment, String writer){
+        //member, Long recruitmentId
 
-        comment.setMember(member1.get());
-        comment.setRecruitmentArticle(id.get());
+//        Optional<Member> member1 = memberRepository.findById(member.getId());
+//        Optional<RecruitmentArticle> id = recruitmentRepository.findById(recruitmentId);
+
+//        comment.setMember(member1.get());
+//        comment.setRecruitmentArticle(id.get());
         Comment save = commentRepository.save(comment);
         return save.getId();
     }
@@ -51,7 +53,12 @@ public class CommentService {
     }
 
     @Transactional
-    public void commentDelete(Comment comment){
-        commentRepository.delete(comment);
+    public void commentDelete(Long id){
+        Optional<Comment> id1 = commentRepository.findById(id);
+//        Member member = id1.get().getMember();
+//        RecruitmentArticle recruitmentArticle = id1.get().getRecruitmentArticle();
+//        System.out.println(member.getNickname());
+//        System.out.println(recruitmentArticle.getArticleName());
+        commentRepository.delete(id1.get());
     }
 }

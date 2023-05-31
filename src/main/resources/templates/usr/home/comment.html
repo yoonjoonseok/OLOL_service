@@ -7,24 +7,44 @@
 <body>
 
 <main layout:fragment="main">
-    <form th:object="${comments}">
-    <div  class="card">
-<!--        <div class="card-header bi bi-chat-dots">-->
-<!--            <span th:if="${comments.size() > 0}" th:text="${comments.size()}"></span> Comments-->
-<!--        </div>-->
-        <ul class="list-group-flush">
-            <li class="list-group-item" th:each="comment : ${comments}">
-            <span>
-                <span style="font-size: small" th:text="${comment.member.nickname}"></span>
-                <span style="font-size: xx-small" th:text="${comment.createDate}"></span>&nbsp;
-                <button class="badge bi bi-pencil-square"> 수정</button>
-                <button class="badge bi bi-trash"> 삭제</button>
-            </span>
-                <div th:text="${comment.content}"></div>
-            </li>
-        </ul>
+    <div>
+        <form th:object="${comments}" method="post" action="/comment">
+
+            <p>
+                <label>댓글 작성자</label> <input type="text" name="writer">
+            </p>
+            <p>
+                <textarea rows="5" cols="50" name="content"></textarea>
+            </p>
+            <p>
+                <button type="submit">댓글 작성</button>
+            </p>
+        </form>
     </div>
+    <form th:object="${comments}">
+
+        <div class="card">
+            <!--        <div class="card-header bi bi-chat-dots">-->
+            <!--            <span th:if="${comments.size() > 0}" th:text="${comments.size()}"></span> Comments-->
+            <!--        </div>-->
+            <ul class="list-group-flush">
+                <li class="list-group-item" th:each="comment : ${comments}">
+            <span>
+                <span style="font-size: x-large" th:text="${comment.content}"></span>
+                <span style="font-size: xx-small" th:text="${comment.createDate}"></span>&nbsp;
+
+                <button class="badge bi bi-pencil-square"> 수정</button>
+                <button type="button" class="badge bi bi-trash"
+                        th:onclick="|location.href='@{/comment/{id}/delete (id=${comment.id})}'|">삭제</button>
+            </span>
+                    <div th:text="${comment.content}"></div>
+                </li>
+            </ul>
+        </div>
     </form>
+    <script>
+
+    </script>
 </main>
 
 </body>

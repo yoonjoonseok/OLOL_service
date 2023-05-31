@@ -2,13 +2,9 @@ package com.ll.olol.boundedContext.recruitment.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.ll.olol.boundedContext.comment.entity.Comment;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OrderBy;
+import com.ll.olol.boundedContext.member.entity.Member;
+import jakarta.persistence.*;
+
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -31,15 +27,24 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 public class RecruitmentArticle {
     @Id
     @GeneratedValue(strategy = IDENTITY)
+    @Column(name = "RecruitmentArticle_ID")
     private Long id;
-
+    @ManyToOne
+    private Member member;
+    private String title;
+    private int typeValue;
     private String articleName;
     @CreatedDate
     private LocalDateTime createDate;
-
     private String content;
-    @OneToMany(mappedBy = "recruitmentArticle",fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    private LocalDateTime deadLineDate;
+    private Long views;
+
+
+    @OneToMany(mappedBy = "recruitmentArticle", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     @OrderBy("id desc")
     private List<Comment> comment;
 
+    @OneToOne(mappedBy = "recruitmentArticle")
+    private RecruitmentArticleForm recruitmentArticleForm;
 }
