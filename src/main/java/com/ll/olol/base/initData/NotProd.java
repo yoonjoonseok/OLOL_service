@@ -4,6 +4,7 @@ import com.ll.olol.boundedContext.comment.entity.Comment;
 import com.ll.olol.boundedContext.member.entity.Member;
 import com.ll.olol.boundedContext.member.repository.MemberRepository;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
+import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticleForm;
 import com.ll.olol.boundedContext.recruitment.repository.RecruitmentRepository;
 import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityManager;
@@ -75,6 +76,14 @@ public class NotProd {
             em.persist(comment3);
             em.persist(comment4);
 
+            RecruitmentArticleForm recruitmentArticleForm1 = createRecruitmentArticleForm(recruitmentArticle1,1,1L,"한라산",30L,LocalDateTime.now(),LocalDateTime.now().plusDays(1),"카카오톡1");
+            RecruitmentArticleForm recruitmentArticleForm2 = createRecruitmentArticleForm(recruitmentArticle2,2,2L,"지리산",40L,LocalDateTime.now(),LocalDateTime.now().plusDays(2),"카카오톡2");
+            RecruitmentArticleForm recruitmentArticleForm3 = createRecruitmentArticleForm(recruitmentArticle3,1,2L,"한라산",40L,LocalDateTime.now(),LocalDateTime.now().plusDays(2),"카카오톡3");
+            RecruitmentArticleForm recruitmentArticleForm4 = createRecruitmentArticleForm(recruitmentArticle4,2,4L,"백두산",20L,LocalDateTime.now(),LocalDateTime.now().plusDays(4),"카카오톡4");
+            em.persist(recruitmentArticleForm1);
+            em.persist(recruitmentArticleForm2);
+            em.persist(recruitmentArticleForm3);
+            em.persist(recruitmentArticleForm4);
         }
 
 
@@ -116,5 +125,17 @@ public class NotProd {
             return comment;
         }
 
+        private static RecruitmentArticleForm createRecruitmentArticleForm(RecruitmentArticle recruitmentArticle, int dayNight, Long recruitsNumbers, String mountainName, Long ageRange, LocalDateTime startTime, LocalDateTime courseTime, String connectType){
+            RecruitmentArticleForm recruitmentArticleForm = new RecruitmentArticleForm();
+            recruitmentArticleForm.setRecruitmentArticle(recruitmentArticle);
+            recruitmentArticleForm.setDayNight(dayNight);
+            recruitmentArticleForm.setRecruitsNumbers(recruitsNumbers);
+            recruitmentArticleForm.setMountainName(mountainName);
+            recruitmentArticleForm.setAgeRange(ageRange);
+            recruitmentArticleForm.setStartTime(startTime);
+            recruitmentArticleForm.setCourseTime(courseTime);
+            recruitmentArticleForm.setConnectType(connectType);
+            return recruitmentArticleForm;
+        }
     }
 }

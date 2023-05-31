@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 
@@ -17,6 +18,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @SuperBuilder
 @ToString
+@Setter
 public class RecruitmentArticleForm {
     @Id
     private Long id;
@@ -25,7 +27,7 @@ public class RecruitmentArticleForm {
     @JoinColumn(name="RecruitmentArticle_ID")
     private RecruitmentArticle recruitmentArticle;
 
-    private Boolean dayNight;
+    private int dayNight;
 
     private Long recruitsNumbers;
 

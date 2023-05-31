@@ -36,6 +36,8 @@ public class CommentService {
 //
 //        return dto.getId();
 //    }
+
+
     @Transactional
     public Long commentSave(Comment comment, String writer){
         //member, Long recruitmentId
@@ -56,6 +58,12 @@ public class CommentService {
         return commentRepository.findAll();
     }
 
+    public Comment findOne(Long id){
+        return commentRepository.findById(id).get();
+    }
+    public Comment update(Comment comment){
+        return commentRepository.save(comment);
+    }
     @Transactional
     public void commentDelete(Long id){
         Optional<Comment> id1 = commentRepository.findById(id);

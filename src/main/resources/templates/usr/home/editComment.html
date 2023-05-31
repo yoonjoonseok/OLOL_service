@@ -1,0 +1,5 @@
+<!-- edit-comment.html -->
+<form  th:object="${comment}" method="post">
+  <textarea th:field="*{content}"></textarea>
+  <button type="submit">수정</button>
+</form>

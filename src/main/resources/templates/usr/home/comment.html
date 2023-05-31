@@ -33,13 +33,16 @@
                 <span style="font-size: x-large" th:text="${comment.member.nickname}"></span>
                 <span style="font-size: xx-small" th:text="${comment.createDate}"></span>&nbsp;
 
-                <button class="badge bi bi-pencil-square"> 수정</button>
+
+                <button type="button" class="badge bi bi-pencil-square"
+                        th:onclick="|location.href='@{/comment/{id}/edit (id=${comment.id})}'|">수정</button>
                 <button type="button" class="badge bi bi-trash"
                         th:onclick="|location.href='@{/comment/{id}/delete (id=${comment.id})}'|">삭제</button>
             </span>
                     <div th:text="${comment.content}"></div>
                 </li>
             </ul>
+
         </div>
     </form>
     <script>
