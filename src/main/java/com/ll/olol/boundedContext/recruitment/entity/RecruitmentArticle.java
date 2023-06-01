@@ -25,7 +25,6 @@ public class RecruitmentArticle {
     private Long id;
     @ManyToOne
     private Member member;
-    private String title;
     private int typeValue;
     private String articleName;
     @CreatedDate
