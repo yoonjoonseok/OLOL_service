@@ -9,18 +9,18 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequiredArgsConstructor
 public class HomeController {
     @GetMapping("/")
-    public String showMain(){
+    public String showMain() {
         return "usr/home/main";
     }
 
     @GetMapping("/hee")
-    public String showHelloo(){
+    public String showHelloo() {
         return "usr/layout/hello";
     }
 
     @GetMapping("/hello")
     @ResponseBody
-    public String showHello(){
+    public String showHello() {
         return "hello";
     }
 }

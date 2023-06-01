@@ -1,13 +1,14 @@
 package com.ll.olol.boundedContext.member.entity;
 
+import com.ll.olol.boundedContext.comment.entity.Comment;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-import org.hibernate.annotations.LazyCollection;
-import org.hibernate.annotations.LazyCollectionOption;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @SuperBuilder
 @EntityListeners(AuditingEntityListener.class)
 @ToString
+@Setter
 public class Member {
     @Id
     @GeneratedValue(strategy = IDENTITY)
@@ -33,6 +35,8 @@ public class Member {
     @LastModifiedDate
     private LocalDateTime modifyDate;
 
+    @OneToMany(mappedBy = "member")
+    private List<Comment> comments;
 
     // 일반회원인지, 카카오로 가입한 회원인지, 구글로 가입한 회원인지
     private String providerTypeCode;
@@ -64,23 +68,20 @@ public class Member {
 //    @Builder.Default // @Builder 가 있으면 ` = new ArrayList<>();` 가 작동하지 않는다. 그래서 이걸 붙여야 한다.
 //    private List<LikeableRecruitmentArticle> fromLikeableArticle = new ArrayList<>();
 
-
-
-
     // 이 함수 자체는 만들어야 한다. 스프링 시큐리티 규격
-//    public List<? extends GrantedAuthority> getGrantedAuthorities() {
-//        List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
-//
-//        // 모든 멤버는 member 권한을 가진다.
-//        grantedAuthorities.add(new SimpleGrantedAuthority("member"));
-//
-//        // username이 admin인 회원은 추가로 admin 권한도 가진다.
-//        if (isAdmin()) {
-//            grantedAuthorities.add(new SimpleGrantedAuthority("admin"));
-//        }
-//
-//        return grantedAuthorities;
-//    }
+    public List<? extends GrantedAuthority> getGrantedAuthorities() {
+        List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
+
+        // 모든 멤버는 member 권한을 가진다.
+        grantedAuthorities.add(new SimpleGrantedAuthority("member"));
+
+        // username이 admin인 회원은 추가로 admin 권한도 가진다.
+        if (isAdmin()) {
+            grantedAuthorities.add(new SimpleGrantedAuthority("admin"));
+        }
+
+        return grantedAuthorities;
+    }
 
     public boolean isAdmin() {
         return "admin".equals(username);
