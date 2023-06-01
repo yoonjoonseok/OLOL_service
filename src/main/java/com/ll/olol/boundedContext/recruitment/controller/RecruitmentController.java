@@ -17,16 +17,18 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class RecruitmentController {
     private final RecruitmentRepository recruitmentRepository;
+
     @GetMapping("/{id}")
-    public String showDetail(@PathVariable Long id, Model model){
+    public String showDetail(@PathVariable Long id, Model model) {
         Optional<RecruitmentArticle> recruitmentArticle = recruitmentRepository.findById(id);
         RecruitmentArticleForm recruitmentArticleForm = null;
 
-        if(recruitmentArticle.isPresent())
+        if (recruitmentArticle.isPresent())
             recruitmentArticleForm = recruitmentArticle.get().getRecruitmentArticleForm();
 
-        model.addAttribute("recruitmentArticle",recruitmentArticle.get());
-        model.addAttribute("recruitmentArticleForm",recruitmentArticleForm);
+        model.addAttribute("recruitmentArticle", recruitmentArticle.get());
+        //model.addAttribute("recruitmentArticleForm", recruitmentArticleForm);
+
 
         return "usr/recruitment/detail";
     }
