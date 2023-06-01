@@ -8,6 +8,8 @@ import com.ll.olol.boundedContext.recruitment.repository.RecruitmentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+
 @Service
 @RequiredArgsConstructor
 public class RecruitmentService {
@@ -27,7 +29,7 @@ public class RecruitmentService {
         return recruitmentArticle;
     }
 
-    public void createArticleForm(RecruitmentArticle recruitmentArticle, Integer dayNight, Long recruitsNumber, String mountainName, Long ageRange, String connectType) {
+    public void createArticleForm(RecruitmentArticle recruitmentArticle, Integer dayNight, Long recruitsNumber, String mountainName, Long ageRange, String connectType, LocalDateTime startTime, LocalDateTime courseTime) {
         RecruitmentArticleForm recruitmentArticleForm = new RecruitmentArticleForm();
 
         recruitmentArticleForm.setRecruitmentArticle(recruitmentArticle);
@@ -36,8 +38,8 @@ public class RecruitmentService {
         recruitmentArticleForm.setMountainName(mountainName);
         recruitmentArticleForm.setAgeRange(ageRange);
         recruitmentArticleForm.setConnectType(connectType);
-        recruitmentArticleForm.setStartTime(null);
-        recruitmentArticleForm.setCourseTime(null);
+        recruitmentArticleForm.setStartTime(startTime);
+        recruitmentArticleForm.setCourseTime(courseTime);
 
         recruitmentFormRepository.save(recruitmentArticleForm);
     }

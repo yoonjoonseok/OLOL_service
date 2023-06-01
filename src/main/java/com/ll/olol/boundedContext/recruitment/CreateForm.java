@@ -4,6 +4,8 @@ import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
+
 @AllArgsConstructor
 @Getter
 public class CreateForm {
@@ -34,9 +36,10 @@ public class CreateForm {
     @Min(value = 0, message = "올바른 인원수를 입력해주세요.")
     private Long recruitsNumber;
 
-//        private LocalDateTime startTime;
 
-//        private LocalDateTime courseTime;
+    private LocalDateTime startTime;
+
+    private LocalDateTime courseTime;
 
     private Long ageRange;
 

@@ -18,7 +18,7 @@ public class RecruitmentArticleForm {
     private Long id;
     @MapsId
     @OneToOne
-    @JoinColumn(name="RecruitmentArticle_ID")
+    @JoinColumn(name = "RecruitmentArticle_ID")
     private RecruitmentArticle recruitmentArticle;
 
     private int dayNight;
@@ -28,6 +28,7 @@ public class RecruitmentArticleForm {
     private String mountainName;
 
     private Long ageRange;
+
 
     private LocalDateTime startTime;
 

@@ -43,7 +43,7 @@ public class RecruitmentController {
 
         RecruitmentArticle recruitmentArticle = recruitmentService.createArticle(createForm.getTitle(), createForm.getContent(), /* member,  */createForm.getTypeValue());
         recruitmentService.createArticleForm(recruitmentArticle, createForm.getDayNight(), createForm.getRecruitsNumber(), createForm.getMountainName(),
-                createForm.getAgeRange(), createForm.getConnectType());
+                createForm.getAgeRange(), createForm.getConnectType(), createForm.getStartTime(), createForm.getCourseTime());
 
         return "redirect:/"; // 질문 저장 후 질문목록으로 이동
     }
