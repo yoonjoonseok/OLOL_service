@@ -1,4 +1,3 @@
-
 package com.ll.olol.base.initData;
 
 import com.ll.olol.boundedContext.comment.entity.Comment;
@@ -7,10 +6,11 @@ import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticleForm;
 import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityManager;
-import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
 
 
 @Component
@@ -20,10 +20,11 @@ public class NotProd {
     private final InitService initService;
 
     @PostConstruct
-                //여기에 그냥 코드를 넣어도 될거같은데 스프링 라이프 사이클 때문에 트랜잭션이 잘 처리가 안됨.
+    //여기에 그냥 코드를 넣어도 될거같은데 스프링 라이프 사이클 때문에 트랜잭션이 잘 처리가 안됨.
     public void NotProd() {
         initService.dbInit1();
     }
+
     @Component
     @Transactional
     @RequiredArgsConstructor
@@ -114,9 +115,11 @@ public class NotProd {
             comment.setModifyDate(modifyDate);
             comment.setCreateDate(createDate);
             comment.setRecruitmentArticle(recruitmentArticle);
-            //comment.setMember(member);
+            comment.setMember(member);
+            comment.setContent(content);
             return comment;
         }
+
         private static RecruitmentArticleForm createRecruitmentArticleForm(RecruitmentArticle recruitmentArticle, int dayNight, Long recruitsNumbers, String mountainName, Long ageRange, LocalDateTime startTime, LocalDateTime courseTime, String connectType) {
             RecruitmentArticleForm recruitmentArticleForm = new RecruitmentArticleForm();
             recruitmentArticleForm.setRecruitmentArticle(recruitmentArticle);
