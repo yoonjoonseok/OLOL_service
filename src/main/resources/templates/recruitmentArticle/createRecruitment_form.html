@@ -1,0 +1,105 @@
+<html layout:decorate="~{usr/layout/layout.html}" xmlns="http://www.w3.org/1999/html">
+
+<head>
+    <title>모집 공고 등록</title>
+</head>
+
+<body>
+
+<main layout:fragment="main" class="container">
+    <div class="d-flex align-items-center p-3 my-3 text-black bg-purple rounded shadow-sm">
+        <div class="lh-1">
+            <h1 class="h6 mb-0 text-black lh-1 fs-2">1. 모집 공고 정보를 입력해주세요.</h1>
+        </div>
+    </div>
+
+    <form th:action method="post" th:object="${createForm}">
+        <div th:replace="~{recruitmentArticle/form_errors :: formErrorsFragment}"></div>
+
+        <div class="row g-3 mb-3 mt-4">
+            <div class="col-md-6 mb-2">
+                <label for="typeValue" class="form-label">글 타입</label>
+                <select required class="form-select " th:field="*{typeValue}">
+                    <option value="">번개/정기 공고 선택</option>
+                    <option value="1">번개</option>
+                    <option value="2">정기</option>
+                </select>
+            </div>
+            <div class="col-md-6 mb-2">
+                <label for="dayNight" class="form-label">주간/야간</label>
+                <select required class="form-select" th:field="*{dayNight}">
+                    <option value="">주간/야간 선택</option>
+                    <option value="1">주간</option>
+                    <option value="2">야간</option>
+                </select>
+            </div>
+            <div class="col-md-6 mb-2">
+                <label for="mountainName" class="form-label">산 이름</label>
+                <input maxlength="20" autocomplete="off" type="text" placeholder="산 이름" class="form-control"
+                       th:field="*{mountainName}">
+            </div>
+
+            <div class="col-md-6 mb-2">
+                <label for="recruitsNumber" class="form-label">모집 인원수</label>
+                <input required autocomplete="off" type="number" placeholder="모집 인원 수" class="form-control"
+                       th:field="*{recruitsNumber}">
+                <!--        <span>명</span>-->
+            </div>
+
+            <div class="col-md-6 mb-2">
+                <label for="ageRange" class="form-label">연령대</label>
+                <input autocomplete="off" type="number" placeholder="연령대" class="form-control" th:field="*{ageRange}">
+            </div>
+
+            <div class="col-md-6 mb-2">
+                <label for="connectType" class="form-label">연락 방법</label>
+                <input required maxlength="20" autocomplete="off" type="text" placeholder="연락 방법" class="form-control"
+                       th:field="*{connectType}">
+            </div>
+
+            <div class="col-md-6 mb-2">
+                <label for="startTime" class="form-label">출발 시간</label>
+                <input type="datetime-local" class="form-control" th:field="*{startTime}">
+            </div>
+
+            <div class="col-md-6 mb-2">
+                <label for="courseTime" class="form-label">종료 예정 시간</label>
+                <input type="datetime-local" class="form-control" th:field="*{courseTime}">
+            </div>
+
+        </div>
+
+        <div class="d-flex align-items-center p-3 my-3 mt-5 text-black bg-purple rounded shadow-sm">
+            <div class="lh-1">
+                <h1 class="h6 mb-0 text-black lh-1 fs-2">2. 모집 공고를 소개해주세요.</h1>
+            </div>
+        </div>
+
+
+        <div class="mb-3">
+            <label for="articleName" class="form-label">제목</label>
+            <input required maxlength="200" autocomplete="off" type="text" placeholder="제목(200자 이하)"
+                   class="form-control" th:field="*{articleName}">
+            <!--
+            th:field="*{subject}" ==> id="subject" name="subject" th:value="*{subject}"
+            -->
+        </div>
+        <div class="mb-3">
+            <label for="content" class="form-label">내용</label>
+            <textarea required maxlength="20000" placeholder="내용(20,000자 이하)" class="form-control" rows="10"
+                      th:field="*{content}"></textarea>
+            <!--
+            th:field="*{content} ==> id="content" name="content" th:text="*{content}"
+            -->
+            <!--
+            required를 입력하면 해당칸들을 빈칸으로 넘어갈 수가 없다. 또 "이 입력란을 작성하세요" 라는 메시지가 뜸
+            -->
+        </div>
+
+        <button type="submit" class="btn btn-primary my-2">저장하기</button>
+    </form>
+</main>
+
+</body>
+
+</html>
