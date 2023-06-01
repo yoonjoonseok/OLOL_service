@@ -4,7 +4,6 @@ import com.ll.olol.boundedContext.comment.entity.Comment;
 import com.ll.olol.boundedContext.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
@@ -15,10 +14,9 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@SuperBuilder
+@Setter
 @ToString
 public class RecruitmentArticle {
     @Id
@@ -27,22 +25,17 @@ public class RecruitmentArticle {
     private Long id;
     @ManyToOne
     private Member member;
-
     private String title;
-
-    private String content;
-
     private int typeValue;
-
+    private String articleName;
     @CreatedDate
     private LocalDateTime createDate;
-
+    private String content;
     private LocalDateTime deadLineDate;
-
     private Long views;
 
     @OneToMany(mappedBy = "recruitmentArticle", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
-    @OrderBy("id asc")
+    @OrderBy("id desc")
     private List<Comment> comment;
 
     @OneToOne(mappedBy = "recruitmentArticle")

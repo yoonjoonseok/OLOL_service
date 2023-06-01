@@ -9,11 +9,11 @@ import java.time.format.DateTimeFormatter;
 
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
 @ToString
+@Setter
 public class RecruitmentArticleForm {
     @Id
     private Long id;

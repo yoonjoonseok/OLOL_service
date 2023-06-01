@@ -6,10 +6,11 @@ import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticleForm;
 import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityManager;
-import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
 
 
 @Component
@@ -44,13 +45,13 @@ public class NotProd {
             em.persist(member3);
             em.persist(member4);
 
-            RecruitmentArticle recruitmentArticle1 = createRecruitmentArticle(LocalDateTime.now(),LocalDateTime.now(),1L,member1,1,"테스트용1",
+            RecruitmentArticle recruitmentArticle1 = createRecruitmentArticle(LocalDateTime.now(), LocalDateTime.now(), 1L, member1, 1, "테스트용1",
                     "테스트용 게시글 내용입니다1.");
-            RecruitmentArticle recruitmentArticle2 = createRecruitmentArticle(LocalDateTime.now(),LocalDateTime.now(),3L,member2,2,"테스트용2",
+            RecruitmentArticle recruitmentArticle2 = createRecruitmentArticle(LocalDateTime.now(), LocalDateTime.now(), 3L, member2, 2, "테스트용2",
                     "테스트용 게시글 내용입니다2.");
-            RecruitmentArticle recruitmentArticle3 = createRecruitmentArticle(LocalDateTime.now(),LocalDateTime.now(),5L,member3,1,"테스트용3",
+            RecruitmentArticle recruitmentArticle3 = createRecruitmentArticle(LocalDateTime.now(), LocalDateTime.now(), 5L, member3, 1, "테스트용3",
                     "테스트용 게시글 내용입니다3.");
-            RecruitmentArticle recruitmentArticle4 = createRecruitmentArticle(LocalDateTime.now(),LocalDateTime.now(),10L,member4,2,"테스트용4",
+            RecruitmentArticle recruitmentArticle4 = createRecruitmentArticle(LocalDateTime.now(), LocalDateTime.now(), 10L, member4, 2, "테스트용4",
                     "테스트용 게시글 내용입니다4.");
             em.persist(recruitmentArticle1);
             em.persist(recruitmentArticle2);
@@ -70,10 +71,10 @@ public class NotProd {
             em.persist(comment3);
             em.persist(comment4);
 
-            RecruitmentArticleForm recruitmentArticleForm1 = createRecruitmentArticleForm(recruitmentArticle1,1,1L,"한라산",30L,LocalDateTime.now(),LocalDateTime.now().plusDays(1),"카카오톡1");
-            RecruitmentArticleForm recruitmentArticleForm2 = createRecruitmentArticleForm(recruitmentArticle2,2,2L,"지리산",40L,LocalDateTime.now(),LocalDateTime.now().plusDays(2),"카카오톡2");
-            RecruitmentArticleForm recruitmentArticleForm3 = createRecruitmentArticleForm(recruitmentArticle3,1,2L,"한라산",40L,LocalDateTime.now(),LocalDateTime.now().plusDays(2),"카카오톡3");
-            RecruitmentArticleForm recruitmentArticleForm4 = createRecruitmentArticleForm(recruitmentArticle4,2,4L,"백두산",20L,LocalDateTime.now(),LocalDateTime.now().plusDays(4),"카카오톡4");
+            RecruitmentArticleForm recruitmentArticleForm1 = createRecruitmentArticleForm(recruitmentArticle1, 1, 1L, "한라산", 30L, LocalDateTime.now(), LocalDateTime.now().plusDays(1), "카카오톡1");
+            RecruitmentArticleForm recruitmentArticleForm2 = createRecruitmentArticleForm(recruitmentArticle2, 2, 2L, "지리산", 40L, LocalDateTime.now(), LocalDateTime.now().plusDays(2), "카카오톡2");
+            RecruitmentArticleForm recruitmentArticleForm3 = createRecruitmentArticleForm(recruitmentArticle3, 1, 2L, "한라산", 40L, LocalDateTime.now(), LocalDateTime.now().plusDays(2), "카카오톡3");
+            RecruitmentArticleForm recruitmentArticleForm4 = createRecruitmentArticleForm(recruitmentArticle4, 2, 4L, "백두산", 20L, LocalDateTime.now(), LocalDateTime.now().plusDays(4), "카카오톡4");
             em.persist(recruitmentArticleForm1);
             em.persist(recruitmentArticleForm2);
             em.persist(recruitmentArticleForm3);
@@ -81,10 +82,10 @@ public class NotProd {
         }
 
 
-        private static RecruitmentArticle createRecruitmentArticle(LocalDateTime createDate,LocalDateTime deadLineDate, Long views, Member member,int typeValue, String articleName,
+        private static RecruitmentArticle createRecruitmentArticle(LocalDateTime createDate, LocalDateTime deadLineDate, Long views, Member member, int typeValue, String articleName,
                                                                    String content) {
             RecruitmentArticle recruitmentArticle = new RecruitmentArticle();
-            recruitmentArticle.setTitle(articleName);
+            recruitmentArticle.setArticleName(articleName);
             recruitmentArticle.setCreateDate(createDate);
             recruitmentArticle.setContent(content);
             recruitmentArticle.setMember(member);
@@ -115,10 +116,11 @@ public class NotProd {
             comment.setCreateDate(createDate);
             comment.setRecruitmentArticle(recruitmentArticle);
             comment.setMember(member);
+            comment.setContent(content);
             return comment;
         }
 
-        private static RecruitmentArticleForm createRecruitmentArticleForm(RecruitmentArticle recruitmentArticle, int dayNight,Long recruitsNumbers,String mountainName,Long ageRange,LocalDateTime startTime,LocalDateTime courseTime,String connectType){
+        private static RecruitmentArticleForm createRecruitmentArticleForm(RecruitmentArticle recruitmentArticle, int dayNight, Long recruitsNumbers, String mountainName, Long ageRange, LocalDateTime startTime, LocalDateTime courseTime, String connectType) {
             RecruitmentArticleForm recruitmentArticleForm = new RecruitmentArticleForm();
             recruitmentArticleForm.setRecruitmentArticle(recruitmentArticle);
             recruitmentArticleForm.setDayNight(dayNight);
