@@ -6,6 +6,8 @@ import com.ll.olol.boundedContext.comment.entity.Comment;
 import com.ll.olol.boundedContext.comment.entity.CommentDto;
 import com.ll.olol.boundedContext.comment.repository.CommentRepository;
 import com.ll.olol.boundedContext.comment.service.CommentService;
+import com.ll.olol.boundedContext.member.entity.Member;
+import com.ll.olol.boundedContext.member.repository.MemberRepository;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
 import com.ll.olol.boundedContext.recruitment.repository.RecruitmentRepository;
 import com.ll.olol.boundedContext.recruitment.service.RecruitmentService;
@@ -22,9 +24,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.transaction.annotation.Transactional;
 
 
-
 @SpringBootTest
-@RunWith(JUnit4.class)
 @Transactional
 public class CommentServiceTest {
     @Autowired
@@ -35,13 +35,20 @@ public class CommentServiceTest {
     static RecruitmentRepository recruitmentRepository;
     @Autowired
     static RecruitmentService recruitmentArticle;
+    @Autowired
+    static MemberRepository memberRepository;
 
     @Test
-    public void 댓글_작성(){
-        List<RecruitmentArticle> all = recruitmentRepository.findAll();
+    public void 댓글_작성() {
+        List<Member> members = memberRepository.findAll();
+        List<Comment> all = commentRepository.findAll();
+        Member member = members.get(0);
+        Comment comment = new Comment();
 
-        assertEquals(4,all.size());
+        comment.setMember(member);
+        comment.setContent("테스트댓글입니다");
 
+        assertEquals(5, all.size());
     }
 
 }

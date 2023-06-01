@@ -39,7 +39,7 @@ public class CommentService {
 
 
     @Transactional
-    public Long commentSave(Comment comment, String writer){
+    public Long commentSave(Comment comment, String writer) {
         //member, Long recruitmentId
         Member member = new Member();
         member.setNickname(writer);
@@ -54,18 +54,23 @@ public class CommentService {
         Comment save = commentRepository.save(comment);
         return save.getId();
     }
-    public List<Comment> findComments(){
+
+    public List<Comment> findComments() {
         return commentRepository.findAll();
     }
 
-    public Comment findOne(Long id){
+    public Comment findOne(Long id) {
         return commentRepository.findById(id).get();
     }
-    public Comment update(Comment comment){
-        return commentRepository.save(comment);
+
+    public Comment update(Long commentId, String content) {
+        Comment updateComment = findOne(commentId);
+        updateComment.setContent(content);
+        return commentRepository.save(updateComment);
     }
+
     @Transactional
-    public void commentDelete(Long id){
+    public void commentDelete(Long id) {
         Optional<Comment> id1 = commentRepository.findById(id);
 //        Member member = id1.get().getMember();
 //        RecruitmentArticle recruitmentArticle = id1.get().getRecruitmentArticle();

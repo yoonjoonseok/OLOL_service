@@ -28,48 +28,42 @@ public class CommentController {
     private final CommentService commentService;
 
     @GetMapping("/comment")
-    public String comment(Model model){
+    public String comment(Model model) {
         List<Comment> comments = commentService.findComments();
-        if(!comments.isEmpty()) {
+        if (!comments.isEmpty()) {
             model.addAttribute("comments", comments);
         }
         return "usr/home/comment";
     }
 
     @PostMapping("/comment")
-    public String createComment(@ModelAttribute Comment comment,String writer){
+    public String createComment(@ModelAttribute Comment comment, String writer) {
         System.out.println(writer);
         comment.setCreateDate(LocalDateTime.now());
-        commentService.commentSave(comment,writer);
+        commentService.commentSave(comment, writer);
         System.out.println("comment = " + comment.getContent());
 
         return "redirect:/comment";
     }
 
     @GetMapping("/comment/{commentId}/delete")
-    public String deleteComment(@PathVariable("commentId") Long commentId){
+    public String deleteComment(@PathVariable("commentId") Long commentId) {
         commentService.commentDelete(commentId);
         return "redirect:/comment";
     }
 
 
     @GetMapping("/comment/{commentId}/edit")
-    public String editCommentForm(@PathVariable("commentId") Long commentId, Model model){
+    public String editCommentForm(@PathVariable("commentId") Long commentId, Model model) {
         Comment comment = commentService.findOne(commentId);
 
-        model.addAttribute("comment",comment);
+        model.addAttribute("comment", comment);
         return "usr/home/editComment";
     }
 
     @PostMapping("/comment/{commentId}/edit")
-    public String editComment(@PathVariable("commentId") Long commentId ,@ModelAttribute Comment comment){
-        Comment comment1 = commentService.findOne(commentId);
-
-        comment1.setContent(comment.getContent());
-        commentService.update(comment1);
-
+    public String editComment(@PathVariable("commentId") Long commentId, @ModelAttribute Comment comment) {
+        commentService.update(commentId, comment.getContent());
         return "redirect:/comment";
-
-
     }
 }
