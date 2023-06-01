@@ -3,14 +3,13 @@ package com.ll.olol.boundedContext.recruitment.entity;
 import com.ll.olol.boundedContext.comment.entity.Comment;
 import com.ll.olol.boundedContext.member.entity.Member;
 import jakarta.persistence.*;
-
-import java.util.List;
-
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
 
@@ -42,10 +41,15 @@ public class RecruitmentArticle {
 
     private Long views;
 
-    @OneToMany(mappedBy = "recruitmentArticle",fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "recruitmentArticle", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     @OrderBy("id asc")
-    private List<Comment> comment;
+    private List<Comment> commentList = new ArrayList<>();
 
     @OneToOne(mappedBy = "recruitmentArticle")
     private RecruitmentArticleForm recruitmentArticleForm;
+
+    public void addComment(Comment c) {
+        c.setRecruitmentArticle(this); // 넌 나랑 관련된 답변이야.
+        commentList.add(c); // 너는 나랑 관련되어 있는 답변들 중 하나야.
+    }
 }

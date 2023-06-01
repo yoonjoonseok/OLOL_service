@@ -1,25 +1,24 @@
 package com.ll.olol.boundedContext.recruitment.controller;
 
+import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
+import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticleForm;
+import com.ll.olol.boundedContext.recruitment.repository.RecruitmentRepository;
 import com.ll.olol.boundedContext.recruitment.service.RecruitmentService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
-import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticleForm;
-import com.ll.olol.boundedContext.recruitment.repository.RecruitmentRepository;
-import java.util.Optional;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.security.Principal;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/recruitment")
@@ -84,11 +83,12 @@ public class RecruitmentController {
             return "recruitmentArticle/createRecruitment_form";
         }
 
-        //recruitmentService.create(createForm.getTitle(), createForm.getContent(), /* member,  */createForm.getTypeValue());
+        RecruitmentArticle recruitmentArticle = recruitmentService.createArticle(createForm.getTitle(), createForm.getContent(), /* member,  */createForm.getTypeValue());
+        recruitmentService.createArticleForm(recruitmentArticle, createForm.getDayNight(), createForm.getRecruitsNumber(), createForm.getMountainName(),
+                createForm.getAgeRange(), createForm.getConnectType());
 
         return "redirect:/"; // 질문 저장 후 질문목록으로 이동
     }
-
 
 
     private final RecruitmentRepository recruitmentRepository;
