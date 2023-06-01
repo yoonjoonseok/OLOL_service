@@ -1,8 +1,7 @@
 package com.ll.olol.boundedContext.recruitment.controller;
 
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
-import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticleForm;
-import com.ll.olol.boundedContext.recruitment.repository.RecruitmentRepository;
+import com.ll.olol.boundedContext.recruitment.service.RecruitmentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,19 +15,12 @@ import java.util.Optional;
 @RequestMapping("/recruitment")
 @RequiredArgsConstructor
 public class RecruitmentController {
-    private final RecruitmentRepository recruitmentRepository;
+    private final RecruitmentService recruitmentService;
 
     @GetMapping("/{id}")
     public String showDetail(@PathVariable Long id, Model model) {
-        Optional<RecruitmentArticle> recruitmentArticle = recruitmentRepository.findById(id);
-        RecruitmentArticleForm recruitmentArticleForm = null;
-
-        if (recruitmentArticle.isPresent())
-            recruitmentArticleForm = recruitmentArticle.get().getRecruitmentArticleForm();
-
+        Optional<RecruitmentArticle> recruitmentArticle = recruitmentService.findById(id);
         model.addAttribute("recruitmentArticle", recruitmentArticle.get());
-        //model.addAttribute("recruitmentArticleForm", recruitmentArticleForm);
-
 
         return "usr/recruitment/detail";
     }
