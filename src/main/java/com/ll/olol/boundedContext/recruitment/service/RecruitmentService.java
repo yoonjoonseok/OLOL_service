@@ -1,18 +1,14 @@
 package com.ll.olol.boundedContext.recruitment.service;
 
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
+import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticleForm;
+import com.ll.olol.boundedContext.recruitment.repository.RecruitmentFormRepository;
 import com.ll.olol.boundedContext.recruitment.repository.RecruitmentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
-
-import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
-import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticleForm;
-import com.ll.olol.boundedContext.recruitment.repository.RecruitmentFormRepository;
-
-
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -26,10 +22,10 @@ public class RecruitmentService {
     }
 
 
-    public RecruitmentArticle createArticle(String title, String content, Integer typeValue) {
+    public RecruitmentArticle createArticle(String articleName, String content, Integer typeValue) {
         RecruitmentArticle recruitmentArticle = new RecruitmentArticle();
         recruitmentArticle.setMember(null);
-        recruitmentArticle.setTitle(title);
+        recruitmentArticle.setArticleName(articleName);
         recruitmentArticle.setContent(content);
         recruitmentArticle.setViews(0L);
         recruitmentArticle.setTypeValue(typeValue);

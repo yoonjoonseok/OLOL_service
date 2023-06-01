@@ -85,7 +85,7 @@ public class NotProd {
         private static RecruitmentArticle createRecruitmentArticle(LocalDateTime createDate, LocalDateTime deadLineDate, Long views, Member member, int typeValue, String articleName,
                                                                    String content) {
             RecruitmentArticle recruitmentArticle = new RecruitmentArticle();
-            recruitmentArticle.setTitle(articleName);
+            recruitmentArticle.setArticleName(articleName);
             recruitmentArticle.setCreateDate(createDate);
             recruitmentArticle.setContent(content);
             recruitmentArticle.setMember(member);
