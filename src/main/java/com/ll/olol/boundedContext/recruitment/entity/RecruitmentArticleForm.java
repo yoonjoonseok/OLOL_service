@@ -1,13 +1,7 @@
 package com.ll.olol.boundedContext.recruitment.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Embeddable;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
@@ -24,7 +18,7 @@ public class RecruitmentArticleForm {
     private Long id;
     @MapsId
     @OneToOne
-    @JoinColumn(name="RecruitmentArticle_ID")
+    @JoinColumn(name = "RecruitmentArticle_ID")
     private RecruitmentArticle recruitmentArticle;
 
     private int dayNight;

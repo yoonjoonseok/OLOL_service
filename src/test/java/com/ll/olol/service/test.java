@@ -12,8 +12,9 @@ public class test {
 
     RecruitmentRepository recruitmentRepository;
     MemberRepository memberRepository;
+
     @Test
-    void 그냥(){
+    void 그냥() {
 
     }
 }
