@@ -1,5 +1,6 @@
 package com.ll.olol.boundedContext.recruitment.controller;
 
+import com.ll.olol.base.rq.Rq;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
 import com.ll.olol.boundedContext.recruitment.service.RecruitmentService;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ import java.util.Optional;
 @RequestMapping("/recruitment")
 @RequiredArgsConstructor
 public class RecruitmentController {
+    private final Rq rq;
     private final RecruitmentService recruitmentService;
 
     @GetMapping("/{id}")
