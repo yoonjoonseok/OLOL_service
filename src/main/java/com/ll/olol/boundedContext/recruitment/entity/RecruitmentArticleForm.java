@@ -5,14 +5,15 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
 @ToString
+@Setter
 public class RecruitmentArticleForm {
     @Id
     private Long id;
@@ -29,10 +30,24 @@ public class RecruitmentArticleForm {
 
     private Long ageRange;
 
-
     private LocalDateTime startTime;
 
     private LocalDateTime courseTime;
 
-    private String ConnectType;
+    private String connectType;
+
+    public String getDayNightToString() {
+        if (dayNight == 1)
+            return "주";
+        else
+            return "야";
+    }
+
+    public String getStartTimeToString() {
+        return startTime.format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm:ss"));
+    }
+
+    public String getCourseTimeToString() {
+        return courseTime.format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm:ss"));
+    }
 }

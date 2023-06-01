@@ -1,4 +1,4 @@
-<html layout:decorate="~{common/layout.html}">
+<html layout:decorate="~{common/layout.html}" xmlns:sec="http://www.w3.org/1999/xhtml">
 
 <body>
 
@@ -18,45 +18,16 @@
                     <a class="nav-link" href="#">커뮤니티</a>
                 </li>
                 <li class="nav-item">
-                    <button type="button" class="btn btn-link" data-toggle="modal" data-target="#exampleModalCenter">
+                    <button type="button" sec:authorize="isAnonymous()" class="btn btn-link" data-toggle="modal"
+                            data-target="#exampleModalCenter">
                         로그인
                     </button>
+                    <th:block th:replace="~{/usr/layout/loginModal :: setLogin(~{this::login} )}"></th:block>
+                    <a type="button" class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/user/logout}">
+                        로그아웃
+                    </a>
                 </li>
             </ul>
-        </div>
-        <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
-             aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-            <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalCenterTitle">오름오름에 오신 것을 환영합니다!</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <a href="/oauth2/authorization/kakao" class="btn btn-block btn-outline gap-1">
-                            <i class="fa-solid fa-comment text-[color:#ffe812]"></i>
-                            <span class="normal-case" th:text="#{c.startWithKakao}"></span>
-                        </a>
-
-                        <a href="/oauth2/authorization/naver" class="btn btn-block btn-outline gap-1">
-                            <i class="fa-solid fa-n text-[color:#2DB400]"></i>
-                            <span class="normal-case" th:text="#{c.startWithNaver}"></span>
-                        </a>
-
-                        <a href="/oauth2/authorization/google" class="btn btn-block btn-outline gap-1">
-                            <i class="fa-brands fa-google text-[color:#ff4000]"></i>
-                            <span class="normal-case" th:text="#{c.startWithGoogle}"></span>
-                        </a>
-
-                        <a href="/oauth2/authorization/facebook" class="btn btn-block btn-outline gap-1">
-                            <i class="fa-brands fa-facebook text-[color:#3b5998]"></i>
-                            <span class="normal-case" th:text="#{c.startWithFacebook}"></span>
-                        </a>
-                    </div>
-                </div>
-            </div>
         </div>
     </nav>
 </header>

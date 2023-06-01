@@ -1,12 +1,16 @@
 package com.ll.olol.boundedContext.recruitment.service;
 
+import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
+import com.ll.olol.boundedContext.recruitment.repository.RecruitmentRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticleForm;
 import com.ll.olol.boundedContext.recruitment.repository.RecruitmentFormRepository;
-import com.ll.olol.boundedContext.recruitment.repository.RecruitmentRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+
 
 import java.time.LocalDateTime;
 
@@ -14,7 +18,13 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 public class RecruitmentService {
     private final RecruitmentRepository recruitmentRepository;
+
     private final RecruitmentFormRepository recruitmentFormRepository;
+
+    public Optional<RecruitmentArticle> findById(Long id) {
+        return recruitmentRepository.findById(id);
+    }
+
 
     public RecruitmentArticle createArticle(String title, String content, Integer typeValue) {
         RecruitmentArticle recruitmentArticle = new RecruitmentArticle();

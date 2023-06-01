@@ -2,14 +2,9 @@ package com.ll.olol.boundedContext.comment.entity;
 
 import com.ll.olol.boundedContext.member.entity.Member;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import lombok.*;
+
 import java.time.LocalDateTime;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
 @Builder

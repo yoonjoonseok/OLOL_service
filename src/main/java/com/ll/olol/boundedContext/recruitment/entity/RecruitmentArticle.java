@@ -8,7 +8,7 @@ import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
@@ -27,29 +27,38 @@ public class RecruitmentArticle {
     private Long id;
     @ManyToOne
     private Member member;
-
-    private String title;
-
-    private String content;
-
     private int typeValue;
-
+    private String articleName;
     @CreatedDate
     private LocalDateTime createDate;
-
+    private String content;
     private LocalDateTime deadLineDate;
-
     private Long views;
 
     @OneToMany(mappedBy = "recruitmentArticle", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
-    @OrderBy("id asc")
-    private List<Comment> commentList = new ArrayList<>();
+    @OrderBy("id desc")
+    private List<Comment> comment;
 
     @OneToOne(mappedBy = "recruitmentArticle")
     private RecruitmentArticleForm recruitmentArticleForm;
 
+    public String getTypeValueToString() {
+        if (typeValue == 1)
+            return "정기";
+        else
+            return "번개";
+    }
+
+    public String getCreateDateToString() {
+        return createDate.format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
+    }
+
+    public String getDeadLineDateToString() {
+        return deadLineDate.format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm:ss"));
+    }
+
     public void addComment(Comment c) {
         c.setRecruitmentArticle(this); // 넌 나랑 관련된 답변이야.
-        commentList.add(c); // 너는 나랑 관련되어 있는 답변들 중 하나야.
+        comment.add(c); // 너는 나랑 관련되어 있는 답변들 중 하나야.
     }
 }
