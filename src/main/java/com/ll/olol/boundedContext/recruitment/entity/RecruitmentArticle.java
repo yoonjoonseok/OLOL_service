@@ -4,6 +4,7 @@ import com.ll.olol.boundedContext.comment.entity.Comment;
 import com.ll.olol.boundedContext.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.CreatedDate;
 
 import java.time.LocalDateTime;
@@ -14,9 +15,10 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Setter
+@SuperBuilder
 @ToString
 public class RecruitmentArticle {
     @Id
@@ -53,5 +55,10 @@ public class RecruitmentArticle {
 
     public String getDeadLineDateToString() {
         return deadLineDate.format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm:ss"));
+    }
+
+    public void addComment(Comment c) {
+        c.setRecruitmentArticle(this); // 넌 나랑 관련된 답변이야.
+        comment.add(c); // 너는 나랑 관련되어 있는 답변들 중 하나야.
     }
 }

@@ -27,7 +27,6 @@ public class Comment {
     private Member member;
     private String content;
 
-
     private LocalDateTime createDate;
     private LocalDateTime modifyDate;
 

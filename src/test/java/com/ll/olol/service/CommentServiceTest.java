@@ -7,6 +7,9 @@ import com.ll.olol.boundedContext.member.repository.MemberRepository;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
+import com.ll.olol.boundedContext.recruitment.repository.RecruitmentRepository;
+import com.ll.olol.boundedContext.recruitment.service.RecruitmentService;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,11 +24,15 @@ import static org.junit.Assert.assertEquals;
 @Transactional
 @TestMethodOrder(MethodOrderer.MethodName.class)
 public class CommentServiceTest {
-
     @Autowired
     private CommentService commentService;
     @Autowired
     private CommentRepository commentRepository;
+
+    @Autowired
+    private RecruitmentRepository recruitmentRepository;
+    @Autowired
+    private RecruitmentService recruitmentArticle;
     @Autowired
     private MemberRepository memberRepository;
 
@@ -67,4 +74,5 @@ public class CommentServiceTest {
         //then
         assertEquals(comment.getContent(), "수정된댓글이에요.");
     }
+
 }
