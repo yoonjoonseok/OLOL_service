@@ -1,6 +1,7 @@
 package com.ll.olol.boundedContext.recruitment.controller;
 
 import com.ll.olol.base.rq.Rq;
+import com.ll.olol.boundedContext.member.service.LikeableRecruitmentArticleService;
 import com.ll.olol.boundedContext.recruitment.CreateForm;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
 import com.ll.olol.boundedContext.recruitment.service.RecruitmentService;
@@ -24,6 +25,8 @@ public class RecruitmentController {
     private final Rq rq;
     private final RecruitmentService recruitmentService;
 
+    private final LikeableRecruitmentArticleService likeableRecruitmentArticleService;
+
 
     @GetMapping("/create")
     // @Valid를 붙여야 QuestionForm.java내의 NotBlank나 Size가 동작한다.
@@ -46,7 +49,6 @@ public class RecruitmentController {
 
         return "redirect:/";
     }
-
 
     @GetMapping("/{id}")
     public String showDetail(@PathVariable Long id, Model model) {

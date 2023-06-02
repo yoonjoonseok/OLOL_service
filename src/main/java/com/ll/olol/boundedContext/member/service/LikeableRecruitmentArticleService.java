@@ -15,6 +15,11 @@ import java.util.List;
 public class LikeableRecruitmentArticleService {
     private final LikeableRecruitmentArticleRepository likeableRecruitmentArticleRepository;
 
+    @Transactional
+    public void add(LikeableRecruitmentArticle likeableRecruitmentArticle) {
+        likeableRecruitmentArticleRepository.save(likeableRecruitmentArticle);
+    }
+
     public List<LikeableRecruitmentArticle> findByFromMember(Member FromMember) {
         return likeableRecruitmentArticleRepository.findAllByFromMember(FromMember);
     }

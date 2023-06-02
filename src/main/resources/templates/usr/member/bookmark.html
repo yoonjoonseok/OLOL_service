@@ -11,7 +11,9 @@
                     <ul th:if="${!#lists.isEmpty(likeableRecruitmentArticles)}" class="list-group">
                         <li th:each="likeableRecruitmentArticle: ${likeableRecruitmentArticles}"
                             class="list-group-item">
-                            <span th:text="${likeableRecruitmentArticle.getRecruitmentArticle().getArticleName()}">공고 제목</span>
+                            <a th:href="@{|/recruitment/${likeableRecruitmentArticle.recruitmentArticle.id}|}"
+                               th:text="${likeableRecruitmentArticle.getRecruitmentArticle().getArticleName()}">공고
+                                제목</a>
                             <button>찜 해제</button>
                         </li>
                     </ul>
