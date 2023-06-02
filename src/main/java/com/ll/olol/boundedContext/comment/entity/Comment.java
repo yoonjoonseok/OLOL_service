@@ -33,5 +33,4 @@ public class Comment {
     @CreatedDate
     private LocalDateTime createDate;
     private LocalDateTime modifyDate;
-
 }
