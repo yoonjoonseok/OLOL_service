@@ -4,6 +4,7 @@ import com.ll.olol.boundedContext.member.entity.Member;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
@@ -29,6 +30,7 @@ public class Comment {
     private Member member;
     private String content;
 
+    @CreatedDate
     private LocalDateTime createDate;
     private LocalDateTime modifyDate;
 
