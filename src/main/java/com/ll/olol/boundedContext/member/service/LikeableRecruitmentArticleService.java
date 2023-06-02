@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -20,7 +21,16 @@ public class LikeableRecruitmentArticleService {
         likeableRecruitmentArticleRepository.save(likeableRecruitmentArticle);
     }
 
+    @Transactional
+    public void delete(LikeableRecruitmentArticle likeableRecruitmentArticle) {
+        likeableRecruitmentArticleRepository.delete(likeableRecruitmentArticle);
+    }
+
     public List<LikeableRecruitmentArticle> findByFromMember(Member FromMember) {
         return likeableRecruitmentArticleRepository.findAllByFromMember(FromMember);
+    }
+
+    public Optional<LikeableRecruitmentArticle> findById(Long id) {
+        return likeableRecruitmentArticleRepository.findById(id);
     }
 }

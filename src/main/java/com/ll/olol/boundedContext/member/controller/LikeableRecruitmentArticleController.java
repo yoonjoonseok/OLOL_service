@@ -9,10 +9,7 @@ import com.ll.olol.boundedContext.recruitment.service.RecruitmentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -49,6 +46,16 @@ public class LikeableRecruitmentArticleController {
             likeableRecruitmentArticleService.add(likeableRecruitmentArticle);
         }
 
-        return "redirect:/recruitment/" + id;
+        //return "redirect:/recruitment/" + id;
+        return "redirect:/member/bookmark";
+    }
+
+    @DeleteMapping("/bookmark/{id}")
+    public String cancel(@PathVariable Long id) {
+        Member actor = rq.getMember();
+        Optional<LikeableRecruitmentArticle> likeableRecruitmentArticle = likeableRecruitmentArticleService.findById(id);
+        if (actor.getId() == likeableRecruitmentArticle.get().getFromMember().getId())
+            likeableRecruitmentArticleService.delete(likeableRecruitmentArticle.get());
+        return "redirect:/member/bookmark";
     }
 }

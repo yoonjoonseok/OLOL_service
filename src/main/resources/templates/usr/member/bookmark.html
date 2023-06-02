@@ -12,9 +12,16 @@
                         <li th:each="likeableRecruitmentArticle: ${likeableRecruitmentArticles}"
                             class="list-group-item">
                             <a th:href="@{|/recruitment/${likeableRecruitmentArticle.recruitmentArticle.id}|}"
-                               th:text="${likeableRecruitmentArticle.getRecruitmentArticle().getArticleName()}">공고
-                                제목</a>
-                            <button>찜 해제</button>
+                               th:text="${likeableRecruitmentArticle.recruitmentArticle.articleName}">
+                                공고 제목</a>
+                            <button href="javascript:"
+                                    onclick="if ( confirm('찜을 해제하시겠습니까?') ) $(this).next().submit();">
+                                찜 해제
+                            </button>
+                            <form hidden th:action="@{|/member/bookmark/${likeableRecruitmentArticle.id}|}"
+                                  method="POST">
+                                <input type="hidden" name="_method" value="delete">
+                            </form>
                         </li>
                     </ul>
                 </section>
