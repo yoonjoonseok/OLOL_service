@@ -71,6 +71,77 @@
                         </div>
                     </div>
                 </div>
+                
+                <script>
+                    var selectedValue = "";
+
+                    function search() {
+                        var input = document.getElementById("searchInput").value;
+
+                        if (!input) {
+                            alert("검색어를 입력해주세요.");
+                            return;
+                        }
+
+                        // 서버로 값을 전달하고 검색 결과를 받아옴
+                        $.ajax({
+                            type: "POST",
+                            url: "/api/server/search",
+                            data: {query: input},
+                            success: function (response) {
+                                // 검색 결과를 동적으로 생성하여 표시
+                                var searchResults = document.getElementById("searchResults");
+                                searchResults.innerHTML = "";  // 이전 검색 결과 초기화
+
+                                for (var i = 0; i < response.length; i++) {
+                                    var li = document.createElement("li");
+                                    li.textContent = response[i];
+                                    li.classList.add("list-group-item");
+                                    li.style.cursor = "pointer";
+                                    li.onclick = function () {
+                                        // 검색 결과를 클릭하면 해당 값을 입력란에 채움
+                                        document.getElementById("resultInput").value = this.textContent;
+                                        //document.getElementById("textInput").value = this.textContent;
+                                    };
+                                    searchResults.appendChild(li);
+                                }
+                            },
+                            error: function (xhr, status, error) {
+                                // 에러 처리 로직
+                                console.error(error);
+                            }
+                        });
+                    }
+
+                    function saveSelectedValue() {
+
+                        document.getElementById("textInput").value = document.getElementById("resultInput").value;
+                        var inputValue = document.getElementById("textInput").value;
+                        selectedValue = inputValue;
+                        selectedValue = "";  // selectedValue 초기화
+                        document.getElementById("searchInput").value = "";
+                        document.getElementById("resultInput").value = "";
+                        clearSearchResults();
+                        closeModal();
+                    }
+
+                    function clearSearchResults() {
+                        var searchResults = document.getElementById("searchResults");
+                        searchResults.innerHTML = "";
+                    }
+
+                    function handleSearchInput(event) {
+                        if (event.key === "Enter") {
+                            event.preventDefault();
+                            search();
+                            return false;
+                        }
+                    }
+
+                    function closeModal() {
+                        $('#myModal').modal('hide');
+                    }
+                </script>
             </div>
 
             <div class="col-md-6 mb-2">
