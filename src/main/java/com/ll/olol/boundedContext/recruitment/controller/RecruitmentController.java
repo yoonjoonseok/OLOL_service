@@ -5,6 +5,9 @@ import com.ll.olol.boundedContext.recruitment.CreateForm;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
 import com.ll.olol.boundedContext.recruitment.service.RecruitmentService;
 import jakarta.validation.Valid;
+import java.security.Principal;
+import java.time.LocalDateTime;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,9 +16,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import java.security.Principal;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/recruitment")
@@ -40,19 +40,39 @@ public class RecruitmentController {
             return "recruitmentArticle/createRecruitment_form";
         }
 
-        RecruitmentArticle recruitmentArticle = recruitmentService.createArticle(createForm.getArticleName(), createForm.getContent(), /* member,  */createForm.getTypeValue());
-        recruitmentService.createArticleForm(recruitmentArticle, createForm.getDayNight(), createForm.getRecruitsNumber(), createForm.getMountainName(),
-                createForm.getAgeRange(), createForm.getConnectType(), createForm.getStartTime(), createForm.getCourseTime());
+        RecruitmentArticle recruitmentArticle = recruitmentService.createArticle(createForm.getArticleName(),
+                createForm.getContent(), /* member,  */createForm.getTypeValue());
+        recruitmentService.createArticleForm(recruitmentArticle, createForm.getDayNight(),
+                createForm.getRecruitsNumber(), createForm.getMountainName(),
+                createForm.getAgeRange(), createForm.getConnectType(), createForm.getStartTime(),
+                createForm.getCourseTime());
 
         return "redirect:/";
     }
 
+    @GetMapping("/{id}/attend")
+    public String attendForm(@PathVariable Long id, Model model) {
+        Optional<RecruitmentArticle> recruitmentArticle = recruitmentService.findById(id);
+//        //이미 마감 시간이 지났다면
+//        System.out.println(recruitmentArticle.get().getDeadLineDate().isAfter(LocalDateTime.now()));
+//        if (LocalDateTime.now().isAfter(recruitmentArticle.get().getDeadLineDate())) {
+//            return rq.historyBack("마감 시간이 지났습니다.");
+//        }
+
+        model.addAttribute("recruitmentArticle", recruitmentArticle.get());
+        return "usr/recruitment/attendForm";
+    }
+
+//    @PostMapping("/{id}/attend")
+//    public String attend(@PathVariable Long id, @ModelAttribute RecruitmentArticle recruitmentArticle) {
+//
+//    }
 
     @GetMapping("/{id}")
     public String showDetail(@PathVariable Long id, Model model) {
         Optional<RecruitmentArticle> recruitmentArticle = recruitmentService.findById(id);
         model.addAttribute("recruitmentArticle", recruitmentArticle.get());
-
+        model.addAttribute("nowDate", LocalDateTime.now());
         return "usr/recruitment/detail";
     }
 }

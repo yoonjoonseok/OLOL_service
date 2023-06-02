@@ -1,13 +1,11 @@
 package com.ll.olol.boundedContext.member.entity;
 
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
@@ -20,6 +18,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @AllArgsConstructor
 @SuperBuilder
 @ToString
+@EntityListeners(AuditingEntityListener.class)
 public class RecruitmentApplyMember {
     @Id
     @GeneratedValue(strategy = IDENTITY)

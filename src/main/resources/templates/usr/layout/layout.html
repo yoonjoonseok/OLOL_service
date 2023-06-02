@@ -22,10 +22,18 @@
                             data-target="#exampleModalCenter">
                         로그인
                     </button>
+                    <div class="dropdown" sec:authorize="isAuthenticated()">
+                        <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton"
+                                data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false">
+                            My Menu
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" href="/">설정</a>
+                            <a class="dropdown-item" th:href="@{/user/logout}">로그아웃</a>
+                        </div>
+                    </div>
                     <th:block th:replace="~{/usr/layout/loginModal :: setLogin(~{this::login} )}"></th:block>
-                    <a type="button" class="nav-link" sec:authorize="isAuthenticated()" th:href="@{/user/logout}">
-                        로그아웃
-                    </a>
                 </li>
             </ul>
         </div>
