@@ -22,7 +22,6 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @EntityListeners(AuditingEntityListener.class)
 @SuperBuilder
 @ToString
-@EntityListeners(AuditingEntityListener.class)
 public class RecruitmentArticle {
     @Id
     @GeneratedValue(strategy = IDENTITY)
