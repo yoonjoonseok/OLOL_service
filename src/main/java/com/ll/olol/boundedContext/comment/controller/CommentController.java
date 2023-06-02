@@ -44,8 +44,8 @@ public class CommentController {
     @GetMapping("/comment/{commentId}/delete")
     public String deleteComment(@PathVariable("commentId") Long commentId) {
         RsData rsData = commentService.isEqualMemberById(commentId);
-        System.out.println("rq.getId()=" + rq.getMember().getId());
-        System.out.println("commentId = " + commentId);
+//        System.out.println("rq.getId()=" + rq.getMember().getId());
+//        System.out.println("commentId = " + commentId);
         if (rsData.isFail()) {
             return rq.historyBack(rsData.getMsg());
         }
@@ -58,7 +58,12 @@ public class CommentController {
     @GetMapping("/comment/{commentId}/edit")
     public String editCommentForm(@PathVariable("commentId") Long commentId, Model model) {
         Comment comment = commentService.findOne(commentId);
-
+        RsData rsData = commentService.isEqualMemberById(commentId);
+//        System.out.println("rq.getId()=" + rq.getMember().getId());
+//        System.out.println("commentId = " + commentId);
+        if (rsData.isFail()) {
+            return rq.historyBack(rsData.getMsg());
+        }
         model.addAttribute("comment", comment);
         return "usr/home/editComment";
     }
