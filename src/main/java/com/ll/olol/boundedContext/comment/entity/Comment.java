@@ -1,6 +1,5 @@
 package com.ll.olol.boundedContext.comment.entity;
 
-
 import com.ll.olol.boundedContext.member.entity.Member;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
 import jakarta.persistence.Entity;
