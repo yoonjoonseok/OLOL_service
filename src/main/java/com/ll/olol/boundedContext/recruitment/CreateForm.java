@@ -41,6 +41,9 @@ public class CreateForm {
 
     private LocalDateTime courseTime;
 
+    @NotNull(message = "마감일 지정은 필수항목입니다.")
+    private LocalDateTime deadLineDate;
+
     private Long ageRange;
 
     @NotBlank(message = "내용은 필수항목입니다.")

@@ -4,6 +4,7 @@ import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticleForm;
 import com.ll.olol.boundedContext.recruitment.repository.RecruitmentFormRepository;
 import com.ll.olol.boundedContext.recruitment.repository.RecruitmentRepository;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,14 +23,14 @@ public class RecruitmentService {
     }
 
 
-    public RecruitmentArticle createArticle(String articleName, String content, Integer typeValue) {
+    public RecruitmentArticle createArticle(String articleName, String content, Integer typeValue, @NotNull(message = "마감일 지정은 필수항목입니다.") LocalDateTime deadLineDate) {
         RecruitmentArticle recruitmentArticle = new RecruitmentArticle();
         recruitmentArticle.setMember(null);
         recruitmentArticle.setArticleName(articleName);
         recruitmentArticle.setContent(content);
         recruitmentArticle.setViews(0L);
         recruitmentArticle.setTypeValue(typeValue);
-        recruitmentArticle.setDeadLineDate(null);
+        recruitmentArticle.setDeadLineDate(deadLineDate);
 
         recruitmentRepository.save(recruitmentArticle);
         return recruitmentArticle;
