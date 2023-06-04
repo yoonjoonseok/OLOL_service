@@ -37,13 +37,17 @@ public class LikeableRecruitmentArticleController {
         Optional<RecruitmentArticle> recruitmentArticle = recruitmentService.findById(id);
 
         if (recruitmentArticle.isPresent()) {
-            LikeableRecruitmentArticle likeableRecruitmentArticle = LikeableRecruitmentArticle
-                    .builder()
-                    .recruitmentArticle(recruitmentArticle.get())
-                    .fromMember(actor)
-                    .build();
+            Optional<LikeableRecruitmentArticle> likeableRecruitmentArticle = likeableRecruitmentArticleService.findByRecruitmentArticleAndFromMember(recruitmentArticle.get(), actor);
 
-            likeableRecruitmentArticleService.add(likeableRecruitmentArticle);
+            if (likeableRecruitmentArticle.isEmpty()) {
+                LikeableRecruitmentArticle newLikeableRecruitmentArticle = LikeableRecruitmentArticle
+                        .builder()
+                        .recruitmentArticle(recruitmentArticle.get())
+                        .fromMember(actor)
+                        .build();
+
+                likeableRecruitmentArticleService.add(newLikeableRecruitmentArticle);
+            }
         }
 
         //return "redirect:/recruitment/" + id;

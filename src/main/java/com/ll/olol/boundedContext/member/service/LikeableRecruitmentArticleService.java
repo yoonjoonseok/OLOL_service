@@ -3,6 +3,7 @@ package com.ll.olol.boundedContext.member.service;
 import com.ll.olol.boundedContext.member.entity.LikeableRecruitmentArticle;
 import com.ll.olol.boundedContext.member.entity.Member;
 import com.ll.olol.boundedContext.member.repository.LikeableRecruitmentArticleRepository;
+import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,5 +33,9 @@ public class LikeableRecruitmentArticleService {
 
     public Optional<LikeableRecruitmentArticle> findById(Long id) {
         return likeableRecruitmentArticleRepository.findById(id);
+    }
+
+    public Optional<LikeableRecruitmentArticle> findByRecruitmentArticleAndFromMember(RecruitmentArticle recruitmentArticle, Member member) {
+        return likeableRecruitmentArticleRepository.findByRecruitmentArticleAndFromMember(recruitmentArticle, member);
     }
 }
