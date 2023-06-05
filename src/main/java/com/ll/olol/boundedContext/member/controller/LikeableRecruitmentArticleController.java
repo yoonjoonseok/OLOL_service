@@ -40,7 +40,7 @@ public class LikeableRecruitmentArticleController {
         RsData canAddRsData = likeableRecruitmentArticleService.canAdd(recruitmentArticle, actor);
 
         if (canAddRsData.isFail())
-            rq.historyBack(canAddRsData);
+            return rq.historyBack(canAddRsData);
 
         likeableRecruitmentArticleService.add(recruitmentArticle.get(), actor);
 
@@ -55,7 +55,7 @@ public class LikeableRecruitmentArticleController {
         RsData canCancelRsData = likeableRecruitmentArticleService.canCancel(likeableRecruitmentArticle, rq.getMember());
 
         if (canCancelRsData.isFail())
-            rq.historyBack(canCancelRsData);
+            return rq.historyBack(canCancelRsData);
 
         likeableRecruitmentArticleService.cancel(likeableRecruitmentArticle.get());
 
