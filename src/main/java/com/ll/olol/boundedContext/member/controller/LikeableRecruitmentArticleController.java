@@ -1,6 +1,7 @@
 package com.ll.olol.boundedContext.member.controller;
 
 import com.ll.olol.base.rq.Rq;
+import com.ll.olol.base.rsData.RsData;
 import com.ll.olol.boundedContext.member.entity.LikeableRecruitmentArticle;
 import com.ll.olol.boundedContext.member.entity.Member;
 import com.ll.olol.boundedContext.member.service.LikeableRecruitmentArticleService;
@@ -33,22 +34,28 @@ public class LikeableRecruitmentArticleController {
 
     @PostMapping("/bookmark/{id}")
     public String add(@PathVariable Long id) {
-        Member actor = rq.getMember();
         Optional<RecruitmentArticle> recruitmentArticle = recruitmentService.findById(id);
 
-        if (recruitmentArticle.isPresent()) {
-            Optional<LikeableRecruitmentArticle> likeableRecruitmentArticle = likeableRecruitmentArticleService.findByRecruitmentArticleAndFromMember(recruitmentArticle.get(), actor);
-
-            if (likeableRecruitmentArticle.isEmpty()) {
-                LikeableRecruitmentArticle newLikeableRecruitmentArticle = LikeableRecruitmentArticle
-                        .builder()
-                        .recruitmentArticle(recruitmentArticle.get())
-                        .fromMember(actor)
-                        .build();
-
-                likeableRecruitmentArticleService.add(newLikeableRecruitmentArticle);
-            }
+        if (recruitmentArticle.isEmpty()) {
+            RsData rsData = RsData.of("F-1", "존재하지 않는 모임 공고입니다");
+            return rq.historyBack(rsData);
         }
+
+        Member actor = rq.getMember();
+        Optional<LikeableRecruitmentArticle> likeableRecruitmentArticle = likeableRecruitmentArticleService.findByRecruitmentArticleAndFromMember(recruitmentArticle.get(), actor);
+
+        if (likeableRecruitmentArticle.isPresent()) {
+            RsData rsData = RsData.of("F-2", "이미 찜한 모임 공고입니다");
+            return rq.historyBack(rsData);
+        }
+
+        LikeableRecruitmentArticle newLikeableRecruitmentArticle = LikeableRecruitmentArticle
+                .builder()
+                .recruitmentArticle(recruitmentArticle.get())
+                .fromMember(actor)
+                .build();
+
+        likeableRecruitmentArticleService.add(newLikeableRecruitmentArticle);
 
         //return "redirect:/recruitment/" + id;
         return "redirect:/member/bookmark";
@@ -58,8 +65,19 @@ public class LikeableRecruitmentArticleController {
     public String cancel(@PathVariable Long id) {
         Member actor = rq.getMember();
         Optional<LikeableRecruitmentArticle> likeableRecruitmentArticle = likeableRecruitmentArticleService.findById(id);
-        if (actor.getId() == likeableRecruitmentArticle.get().getFromMember().getId())
-            likeableRecruitmentArticleService.delete(likeableRecruitmentArticle.get());
+
+        if (likeableRecruitmentArticle.isEmpty()) {
+            RsData rsData = RsData.of("F-1", "존재하지 않는 찜입니다");
+            return rq.historyBack(rsData);
+        }
+
+        if (actor.getId() != likeableRecruitmentArticle.get().getFromMember().getId()) {
+            RsData rsData = RsData.of("F-2", "사용자가 일치하지 않습니다");
+            return rq.historyBack(rsData);
+        }
+
+        likeableRecruitmentArticleService.delete(likeableRecruitmentArticle.get());
+
         return "redirect:/member/bookmark";
     }
 }
