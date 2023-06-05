@@ -1,4 +1,4 @@
-package com.ll.olol.boundedContext.searchLocal;
+package com.ll.olol.boundedContext.api.searchLocal;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;

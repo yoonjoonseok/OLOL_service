@@ -1,8 +1,8 @@
-package com.ll.olol.boundedContext.searchLocal.apiController;
+package com.ll.olol.boundedContext.api.searchLocal.apiController;
 
-import com.ll.olol.boundedContext.searchLocal.NaverSearchClient;
-import com.ll.olol.boundedContext.searchLocal.SearchLocalReq;
-import com.ll.olol.boundedContext.searchLocal.SearchLocalRes;
+import com.ll.olol.boundedContext.api.searchLocal.NaverSearchClient;
+import com.ll.olol.boundedContext.api.searchLocal.SearchLocalReq;
+import com.ll.olol.boundedContext.api.searchLocal.SearchLocalRes;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;

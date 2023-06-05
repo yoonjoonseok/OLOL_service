@@ -1,4 +1,4 @@
-package com.ll.olol.boundedContext.searchLocal;
+package com.ll.olol.boundedContext.api.searchLocal;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
