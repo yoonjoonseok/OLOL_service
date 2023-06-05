@@ -46,5 +46,4 @@ public class Comment {
 
     @LastModifiedDate
     private LocalDateTime modifyDate;
-
 }

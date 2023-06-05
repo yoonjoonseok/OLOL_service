@@ -1,18 +1,25 @@
 package com.ll.olol.boundedContext.recruitment.entity;
 
-import jakarta.persistence.*;
-import lombok.*;
-import lombok.experimental.SuperBuilder;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.MapsId;
+import jakarta.persistence.OneToOne;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 
 @Entity
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@EntityListeners(AuditingEntityListener.class)
 @SuperBuilder
 @ToString
 @Setter
@@ -20,7 +27,7 @@ public class RecruitmentArticleForm {
     @Id
     private Long id;
     @MapsId
-    @OneToOne
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "RecruitmentArticle_ID")
     private RecruitmentArticle recruitmentArticle;
 
@@ -41,10 +48,11 @@ public class RecruitmentArticleForm {
     private String connectType;
 
     public String getDayNightToString() {
-        if (dayNight == 1)
+        if (dayNight == 1) {
             return "주";
-        else
+        } else {
             return "야";
+        }
     }
 
     public String getStartTimeToString() {

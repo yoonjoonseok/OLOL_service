@@ -1,11 +1,13 @@
 package com.ll.olol.base.rq;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ll.olol.base.rsData.RsData;
 import com.ll.olol.boundedContext.member.entity.Member;
 import com.ll.olol.boundedContext.member.service.MemberService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import java.util.Locale;
 import org.springframework.context.MessageSource;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -15,12 +17,14 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.RequestScope;
 import org.springframework.web.servlet.LocaleResolver;
 
+import java.util.Locale;
+import java.util.Map;
+
 
 @Component
 @RequestScope
 public class Rq {
     private final MemberService memberService;
-
     private final MessageSource messageSource;
     private final LocaleResolver localeResolver;
     private Locale locale;
@@ -103,6 +107,10 @@ public class Rq {
         return "common/js";
     }
 
+    public String historyBack(RsData rsData) {
+        return historyBack(rsData.getMsg());
+    }
+
     public void setSessionAttr(String name, String value) {
         session.setAttribute(name, value);
     }
@@ -133,5 +141,13 @@ public class Rq {
         return locale;
     }
 
+    public String getParamsJsonStr() {
+        Map<String, String[]> parameterMap = req.getParameterMap();
 
+        try {
+            return new ObjectMapper().writeValueAsString(parameterMap);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

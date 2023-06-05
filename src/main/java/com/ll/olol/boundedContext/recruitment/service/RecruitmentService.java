@@ -6,11 +6,10 @@ import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticleForm;
 import com.ll.olol.boundedContext.recruitment.repository.RecruitmentFormRepository;
 import com.ll.olol.boundedContext.recruitment.repository.RecruitmentRepository;
 import jakarta.validation.constraints.NotNull;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
@@ -83,5 +82,9 @@ public class RecruitmentService {
         if (realMtAddress != null) return RsData.of("S-1", "주소를 저장했습니다.", realMtAddress);
 
         return RsData.of("F-1", "동을 저장 못함");
+    }
+
+    public void updateArticleForm(RecruitmentArticle recruitmentArticle) {
+        recruitmentRepository.save(recruitmentArticle);
     }
 }
