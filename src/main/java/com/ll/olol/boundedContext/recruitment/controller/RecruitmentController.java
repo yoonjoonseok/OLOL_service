@@ -86,7 +86,9 @@ public class RecruitmentController {
     @PostMapping("/{id}/deadLine")
     public String deadLineForm(@PathVariable Long id, @ModelAttribute RecruitmentArticle recruitmentArticle) {
         Optional<RecruitmentArticle> article = recruitmentService.findById(id);
-
+        if (rq.getMember().getId() != article.get().getMember().getId()) {
+            return rq.historyBack("만든 사람만 마감버튼을 누를 수 있어요.");
+        }
         article.get().setDeadLineDate(LocalDateTime.now());
         //마감 버튼을 누르면 마감 시간을 현재 시간으로 바꿈
         recruitmentService.updateArticleForm(article.get());
