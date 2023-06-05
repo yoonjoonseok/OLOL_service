@@ -63,8 +63,4 @@ public class LikeableRecruitmentArticleService {
     public Optional<LikeableRecruitmentArticle> findById(Long id) {
         return likeableRecruitmentArticleRepository.findById(id);
     }
-
-    public Optional<LikeableRecruitmentArticle> findByRecruitmentArticleAndFromMember(RecruitmentArticle recruitmentArticle, Member member) {
-        return likeableRecruitmentArticleRepository.findByRecruitmentArticleAndFromMember(recruitmentArticle, member);
-    }
 }
