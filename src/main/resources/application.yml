@@ -57,6 +57,9 @@ naver:
   url:
     search:
       local: https://openapi.naver.com/v1/search/local.json
+api:
+  url:
+    localCode: https://api.vworld.kr/req/data?service=data&request=GetFeature&data=LT_C_ADEMD_INFO&key=%s&domain=%s&columns=emd_cd&attrFilter=emd_kor_nm:=:{keyword}
 
 logging:
   level:
