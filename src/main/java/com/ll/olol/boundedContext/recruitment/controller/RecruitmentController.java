@@ -66,6 +66,8 @@ public class RecruitmentController {
         List<RecruitmentPeople> recruitmentPeople = recruitmentArticle.get().getRecruitmentPeople();
         //현재 로그인한 회원에 아이디
         Long memberId = rq.getMember().getId();
+        //게시글을 쓴 사람에 아이디
+        Long articleMemberId = recruitmentArticle.get().getMember().getId();
 
         for (RecruitmentPeople people : recruitmentPeople) {
             if (people.getMember().getId() == memberId) {
@@ -74,6 +76,9 @@ public class RecruitmentController {
         }
         if (recruitmentPeople.size() == recruitsNumbers) {
             return rq.historyBack("이미 마감된 공고입니다.");
+        }
+        if (articleMemberId == memberId) {
+            return rq.historyBack("게시글을 작성한 사람은 참가를 누를 수 없습니다.");
         }
 
         model.addAttribute("recruitmentArticle", recruitmentArticle.get());
