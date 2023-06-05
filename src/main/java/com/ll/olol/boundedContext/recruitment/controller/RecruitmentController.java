@@ -43,7 +43,8 @@ public class RecruitmentController {
             return "recruitmentArticle/createRecruitment_form";
         }
 
-        RecruitmentArticle recruitmentArticle = recruitmentService.createArticle(createForm.getArticleName(), createForm.getContent(), /* member,  */createForm.getTypeValue(), createForm.getDeadLineDate());
+
+        RecruitmentArticle recruitmentArticle = recruitmentService.createArticle(createForm.getArticleName(), createForm.getContent(), rq.getMember(), createForm.getTypeValue(), createForm.getDeadLineDate());
         recruitmentService.createArticleForm(recruitmentArticle, createForm.getDayNight(), createForm.getRecruitsNumber(), createForm.getMountainName(), createForm.getMtAddress(),
                 createForm.getAgeRange(), createForm.getConnectType(), createForm.getStartTime(), createForm.getCourseTime());
 
