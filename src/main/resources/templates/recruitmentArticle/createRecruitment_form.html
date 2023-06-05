@@ -38,10 +38,11 @@
             </div>
 
             <div class="col-md-6 mb-2">
-                <label for="connectType" class="form-label">산 이름</label>
+                <label for="mountainName" class="form-label">산 이름</label>
                 <div class="card">
                     <div class="input-group">
-                        <input type="text" id="textInput" placeholder="산 이름" class="form-control">
+                        <input type="text" id="textInput" placeholder="산 이름" class="form-control"
+                               th:field="*{mountainName}">
                         <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal"
                                 onclick="openModal()">산
                             주소 검색
@@ -164,10 +165,10 @@
             </div>
 
             <div class="col-md-6 mb-2">
-                <label for="mountainName" class="form-label">선택한 주소</label>
+                <label for="mtAddress" class="form-label">선택한 주소</label>
                 <input maxlength="20" id="mtAddressInput" autocomplete="off" type="text" placeholder="산 이름"
                        class="form-control"
-                       th:field="*{mountainName}">
+                       th:field="*{mtAddress}">
             </div>
 
 
@@ -205,115 +206,6 @@
                 <input type="datetime-local" class="form-control" th:field="*{deadLineDate}">
             </div>
         </div>
-
-
-        <!--        <div class="row g-3 mb-3 mt-4">-->
-        <!--            <div class="col-md-6 mb-2">-->
-        <!--                <div class="card">-->
-        <!--                    <div class="input-group">-->
-        <!--                        <input type="text" id="textInput" class="form-control">-->
-        <!--                        <button class="btn btn-primary" data-toggle="modal" data-target="#myModal">모달 열기-->
-        <!--                        </button>-->
-
-        <!--                        <div id="myModal" class="modal fade">-->
-        <!--                            <div class="modal-dialog">-->
-        <!--                                <div class="modal-content">-->
-        <!--                                    <div class="modal-header">-->
-        <!--                                        <h5 class="modal-title">검색 모달</h5>-->
-        <!--                                        <button type="button" class="close" data-dismiss="modal">&times;</button>-->
-        <!--                                    </div>-->
-        <!--                                    <div class="modal-body">-->
-        <!--                                        <input type="text" id="searchInput" class="form-control"-->
-        <!--                                               onkeydown="handleSearchInput(event)">-->
-        <!--                                        <button onclick="search()" class="btn btn-primary mt-2">검색</button>-->
-
-        <!--                                        <ul id="searchResults" class="list-group mt-3"></ul>-->
-        <!--                                    </div>-->
-        <!--                                    <div class="modal-footer">-->
-        <!--                                        <input type="text" id="resultInput" class="form-control">-->
-        <!--                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>-->
-        <!--                                        <button type="button" class="btn btn-primary" onclick="saveSelectedValue()"-->
-        <!--                                                data-dismiss="modal">저장-->
-        <!--                                        </button>-->
-        <!--                                    </div>-->
-        <!--                                </div>-->
-        <!--                            </div>-->
-        <!--                        </div>-->
-
-        <!--                        <script>-->
-        <!--                            var selectedValue = "";-->
-
-        <!--                            function search() {-->
-        <!--                                var input = document.getElementById("searchInput").value;-->
-
-        <!--                                if (!input) {-->
-        <!--                                    alert("검색어를 입력해주세요.");-->
-        <!--                                    return;-->
-        <!--                                }-->
-
-        <!--                                // 서버로 값을 전달하고 검색 결과를 받아옴-->
-        <!--                                $.ajax({-->
-        <!--                                    type: "POST",-->
-        <!--                                    url: "/api/server/search",-->
-        <!--                                    data: {query: input},-->
-        <!--                                    success: function (response) {-->
-        <!--                                        // 검색 결과를 동적으로 생성하여 표시-->
-        <!--                                        var searchResults = document.getElementById("searchResults");-->
-        <!--                                        searchResults.innerHTML = "";  // 이전 검색 결과 초기화-->
-
-        <!--                                        for (var i = 0; i < response.length; i++) {-->
-        <!--                                            var li = document.createElement("li");-->
-        <!--                                            li.textContent = response[i];-->
-        <!--                                            li.classList.add("list-group-item");-->
-        <!--                                            li.style.cursor = "pointer";-->
-        <!--                                            li.onclick = function () {-->
-        <!--                                                // 검색 결과를 클릭하면 해당 값을 입력란에 채움-->
-        <!--                                                document.getElementById("resultInput").value = this.textContent;-->
-        <!--                                                //document.getElementById("textInput").value = this.textContent;-->
-        <!--                                            };-->
-        <!--                                            searchResults.appendChild(li);-->
-        <!--                                        }-->
-        <!--                                    },-->
-        <!--                                    error: function (xhr, status, error) {-->
-        <!--                                        // 에러 처리 로직-->
-        <!--                                        console.error(error);-->
-        <!--                                    }-->
-        <!--                                });-->
-        <!--                            }-->
-
-        <!--                            function saveSelectedValue() {-->
-
-        <!--                                document.getElementById("textInput").value = document.getElementById("resultInput").value;-->
-        <!--                                var inputValue = document.getElementById("textInput").value;-->
-        <!--                                selectedValue = inputValue;-->
-        <!--                                selectedValue = "";  // selectedValue 초기화-->
-        <!--                                document.getElementById("searchInput").value = "";-->
-        <!--                                document.getElementById("resultInput").value = "";-->
-        <!--                                clearSearchResults();-->
-        <!--                                closeModal();-->
-        <!--                            }-->
-
-        <!--                            function clearSearchResults() {-->
-        <!--                                var searchResults = document.getElementById("searchResults");-->
-        <!--                                searchResults.innerHTML = "";-->
-        <!--                            }-->
-
-        <!--                            function handleSearchInput(event) {-->
-        <!--                                if (event.key === "Enter") {-->
-        <!--                                    event.preventDefault();-->
-        <!--                                    search();-->
-        <!--                                    return false;-->
-        <!--                                }-->
-        <!--                            }-->
-
-        <!--                            function closeModal() {-->
-        <!--                                $('#myModal').modal('hide');-->
-        <!--                            }-->
-        <!--                        </script>-->
-        <!--                    </div>-->
-        <!--                </div>-->
-        <!--            </div>-->
-        <!--        </div>-->
 
 
         <div class="d-flex align-items-center p-3 my-3 mt-5 text-black bg-purple rounded shadow-sm">

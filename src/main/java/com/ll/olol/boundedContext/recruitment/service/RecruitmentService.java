@@ -10,7 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.Optional;
 
 @Service
@@ -38,17 +37,23 @@ public class RecruitmentService {
         return recruitmentArticle;
     }
 
-    public void createArticleForm(RecruitmentArticle recruitmentArticle, Integer dayNight, Long recruitsNumber, String mountainName, Long ageRange, String connectType, LocalDateTime startTime, LocalDateTime courseTime) {
+    public void createArticleForm(RecruitmentArticle recruitmentArticle, Integer dayNight, Long recruitsNumber, String mountainName, String mtAddress, Long ageRange, String connectType, LocalDateTime startTime, LocalDateTime courseTime) {
         // 동만 붙은 부분만 가져옴
-        RsData<String> checkMt = mtAddressChecked(mountainName);
-        String realMountainAddress = checkMt.getData();
+        RsData<String> checkMt = mtAddressChecked(mtAddress);
+
+        String realMountainAddress = null;
+
+        if (checkMt.isSuccess()) {
+            realMountainAddress = checkMt.getData();
+        }
 
         RecruitmentArticleForm recruitmentArticleForm = new RecruitmentArticleForm();
 
         recruitmentArticleForm.setRecruitmentArticle(recruitmentArticle);
         recruitmentArticleForm.setDayNight(dayNight);
         recruitmentArticleForm.setRecruitsNumbers(recruitsNumber);
-        recruitmentArticleForm.setMountainName(realMountainAddress);
+        recruitmentArticleForm.setMountainName(mountainName);
+        recruitmentArticleForm.setMtAddress(realMountainAddress);
         recruitmentArticleForm.setAgeRange(ageRange);
         recruitmentArticleForm.setConnectType(connectType);
         recruitmentArticleForm.setStartTime(startTime);
@@ -61,12 +66,21 @@ public class RecruitmentService {
     private RsData<String> mtAddressChecked(String mountainName) {
         String[] mtPullAddress = mountainName.split(" ");
 
-        String realMtAddress = Arrays.stream(mtPullAddress)
-                .filter(e -> e.endsWith("동"))
-                .findAny()
-                .orElse(null);
+        String realMtAddress = null;
 
-        if (realMtAddress != null) return RsData.of("S-1", "동을 저장했습니다.", realMtAddress);
+        for (String checkAdd : mtPullAddress) {
+            if (checkAdd.endsWith("동")) {
+                realMtAddress = checkAdd;
+            } else if (checkAdd.endsWith("읍")) {
+                realMtAddress = checkAdd;
+            } else if (checkAdd.endsWith("면")) {
+                realMtAddress = checkAdd;
+            } else if (checkAdd.endsWith("가")) {
+                realMtAddress = checkAdd;
+            }
+        }
+
+        if (realMtAddress != null) return RsData.of("S-1", "주소를 저장했습니다.", realMtAddress);
 
         return RsData.of("F-1", "동을 저장 못함");
     }
