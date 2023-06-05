@@ -1,5 +1,6 @@
 package com.ll.olol.boundedContext.member.service;
 
+import com.ll.olol.base.rsData.RsData;
 import com.ll.olol.boundedContext.member.entity.LikeableRecruitmentArticle;
 import com.ll.olol.boundedContext.member.entity.Member;
 import com.ll.olol.boundedContext.member.repository.LikeableRecruitmentArticleRepository;
@@ -18,13 +19,41 @@ public class LikeableRecruitmentArticleService {
     private final LikeableRecruitmentArticleRepository likeableRecruitmentArticleRepository;
 
     @Transactional
-    public void add(LikeableRecruitmentArticle likeableRecruitmentArticle) {
+    public void add(RecruitmentArticle recruitmentArticle, Member actor) {
+        LikeableRecruitmentArticle likeableRecruitmentArticle = LikeableRecruitmentArticle
+                .builder()
+                .recruitmentArticle(recruitmentArticle)
+                .fromMember(actor)
+                .build();
+
         likeableRecruitmentArticleRepository.save(likeableRecruitmentArticle);
     }
 
+    public RsData canAdd(Optional<RecruitmentArticle> recruitmentArticle, Member actor) {
+        if (recruitmentArticle.isEmpty())
+            return RsData.of("F-1", "존재하지 않는 모임 공고입니다");
+
+        Optional<LikeableRecruitmentArticle> likeableRecruitmentArticle = likeableRecruitmentArticleRepository.findByRecruitmentArticleAndFromMember(recruitmentArticle.get(), actor);
+
+        if (likeableRecruitmentArticle.isPresent())
+            return RsData.of("F-2", "이미 찜한 모임 공고입니다");
+
+        return RsData.of("S-1", "찜 가능한 모임 공고입니다");
+    }
+
     @Transactional
-    public void delete(LikeableRecruitmentArticle likeableRecruitmentArticle) {
+    public void cancel(LikeableRecruitmentArticle likeableRecruitmentArticle) {
         likeableRecruitmentArticleRepository.delete(likeableRecruitmentArticle);
+    }
+
+    public RsData canCancel(Optional<LikeableRecruitmentArticle> likeableRecruitmentArticle, Member actor) {
+        if (likeableRecruitmentArticle.isEmpty())
+            return RsData.of("F-1", "존재하지 않는 찜입니다");
+
+        if (actor.getId() != likeableRecruitmentArticle.get().getFromMember().getId())
+            return RsData.of("F-2", "사용자가 일치하지 않습니다");
+
+        return RsData.of("S-1", "찜 취소가 가능합니다");
     }
 
     public List<LikeableRecruitmentArticle> findByFromMember(Member FromMember) {

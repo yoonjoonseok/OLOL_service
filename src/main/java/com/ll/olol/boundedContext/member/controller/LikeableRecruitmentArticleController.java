@@ -35,27 +35,14 @@ public class LikeableRecruitmentArticleController {
     @PostMapping("/bookmark/{id}")
     public String add(@PathVariable Long id) {
         Optional<RecruitmentArticle> recruitmentArticle = recruitmentService.findById(id);
-
-        if (recruitmentArticle.isEmpty()) {
-            RsData rsData = RsData.of("F-1", "존재하지 않는 모임 공고입니다");
-            return rq.historyBack(rsData);
-        }
-
         Member actor = rq.getMember();
-        Optional<LikeableRecruitmentArticle> likeableRecruitmentArticle = likeableRecruitmentArticleService.findByRecruitmentArticleAndFromMember(recruitmentArticle.get(), actor);
 
-        if (likeableRecruitmentArticle.isPresent()) {
-            RsData rsData = RsData.of("F-2", "이미 찜한 모임 공고입니다");
-            return rq.historyBack(rsData);
-        }
+        RsData canAddRsData = likeableRecruitmentArticleService.canAdd(recruitmentArticle, actor);
 
-        LikeableRecruitmentArticle newLikeableRecruitmentArticle = LikeableRecruitmentArticle
-                .builder()
-                .recruitmentArticle(recruitmentArticle.get())
-                .fromMember(actor)
-                .build();
+        if (canAddRsData.isFail())
+            rq.historyBack(canAddRsData);
 
-        likeableRecruitmentArticleService.add(newLikeableRecruitmentArticle);
+        likeableRecruitmentArticleService.add(recruitmentArticle.get(), actor);
 
         //return "redirect:/recruitment/" + id;
         return "redirect:/member/bookmark";
@@ -63,20 +50,14 @@ public class LikeableRecruitmentArticleController {
 
     @DeleteMapping("/bookmark/{id}")
     public String cancel(@PathVariable Long id) {
-        Member actor = rq.getMember();
         Optional<LikeableRecruitmentArticle> likeableRecruitmentArticle = likeableRecruitmentArticleService.findById(id);
 
-        if (likeableRecruitmentArticle.isEmpty()) {
-            RsData rsData = RsData.of("F-1", "존재하지 않는 찜입니다");
-            return rq.historyBack(rsData);
-        }
+        RsData canCancelRsData = likeableRecruitmentArticleService.canCancel(likeableRecruitmentArticle, rq.getMember());
 
-        if (actor.getId() != likeableRecruitmentArticle.get().getFromMember().getId()) {
-            RsData rsData = RsData.of("F-2", "사용자가 일치하지 않습니다");
-            return rq.historyBack(rsData);
-        }
+        if (canCancelRsData.isFail())
+            rq.historyBack(canCancelRsData);
 
-        likeableRecruitmentArticleService.delete(likeableRecruitmentArticle.get());
+        likeableRecruitmentArticleService.cancel(likeableRecruitmentArticle.get());
 
         return "redirect:/member/bookmark";
     }
