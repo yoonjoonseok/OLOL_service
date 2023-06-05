@@ -1,6 +1,7 @@
 package com.ll.olol.boundedContext.recruitment.service;
 
 import com.ll.olol.base.rsData.RsData;
+import com.ll.olol.boundedContext.api.localCode.LocalCodeApiClient;
 import com.ll.olol.boundedContext.member.entity.Member;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticleForm;
@@ -19,6 +20,8 @@ public class RecruitmentService {
     private final RecruitmentRepository recruitmentRepository;
 
     private final RecruitmentFormRepository recruitmentFormRepository;
+
+    private final LocalCodeApiClient localCodeApiClient;
 
     public Optional<RecruitmentArticle> findById(Long id) {
         return recruitmentRepository.findById(id);
@@ -59,6 +62,12 @@ public class RecruitmentService {
         recruitmentArticleForm.setConnectType(connectType);
         recruitmentArticleForm.setStartTime(startTime);
         recruitmentArticleForm.setCourseTime(courseTime);
+
+        try {
+            recruitmentArticleForm.setLocalCode(localCodeApiClient.requestLocalCode(realMountainAddress));
+        } catch (Exception e) {
+            recruitmentArticleForm.setLocalCode(null);
+        }
 
         recruitmentFormRepository.save(recruitmentArticleForm);
     }
