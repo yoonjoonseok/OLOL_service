@@ -61,13 +61,19 @@ public class RecruitmentController {
     public String attendForm(@PathVariable Long id, Model model) {
         Optional<RecruitmentArticle> recruitmentArticle = recruitmentService.findById(id);
 
+        Long recruitsNumbers = recruitmentArticle.get().getRecruitmentArticleForm().getRecruitsNumbers();
+        //이제까지 신청한 인원들
         List<RecruitmentPeople> recruitmentPeople = recruitmentArticle.get().getRecruitmentPeople();
-        Long memberId = recruitmentArticle.get().getMember().getId();
+        //현재 로그인한 회원에 아이디
+        Long memberId = rq.getMember().getId();
 
         for (RecruitmentPeople people : recruitmentPeople) {
             if (people.getMember().getId() == memberId) {
-                return rq.historyBack("이미 신청하셨습니다!");
+                return rq.historyBack("이미 신청된 공고입니다.");
             }
+        }
+        if (recruitmentPeople.size() == recruitsNumbers) {
+            return rq.historyBack("이미 마감된 공고입니다.");
         }
 
         model.addAttribute("recruitmentArticle", recruitmentArticle.get());

@@ -50,7 +50,8 @@ public class NotProd {
             RecruitmentArticle recruitmentArticle2 = createRecruitmentArticle(LocalDateTime.now(), LocalDateTime.now(),
                     3L, member2, 2, "테스트용2",
                     "테스트용 게시글 내용입니다2.");
-            RecruitmentArticle recruitmentArticle3 = createRecruitmentArticle(LocalDateTime.now(), LocalDateTime.now(),
+            RecruitmentArticle recruitmentArticle3 = createRecruitmentArticle(LocalDateTime.now(),
+                    LocalDateTime.now().plusDays(1),
                     5L, member3, 1, "테스트용3",
                     "테스트용 게시글 내용입니다3.");
             RecruitmentArticle recruitmentArticle4 = createRecruitmentArticle(LocalDateTime.now(),
