@@ -8,8 +8,8 @@
             <div class="col-md-8">
                 <section>
                     <h2>신청한 공고 목록</h2>
-                    <ul th:if="${!#lists.isEmpty(peopleList)}" class="list-group">
-                        <li th:each="likeableRecruitmentArticle: ${peopleList}"
+                    <ul th:if="${!#lists.isEmpty(attendList)}" class="list-group">
+                        <li th:each="likeableRecruitmentArticle: ${attendList}"
                             class="list-group-item">
                             <a th:href="@{|/recruitment/${likeableRecruitmentArticle.recruitmentArticle.id}|}"
                                th:text="${likeableRecruitmentArticle.recruitmentArticle.articleName}">

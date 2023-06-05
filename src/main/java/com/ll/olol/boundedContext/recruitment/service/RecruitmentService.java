@@ -5,6 +5,7 @@ import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticleForm;
 import com.ll.olol.boundedContext.recruitment.repository.RecruitmentFormRepository;
 import com.ll.olol.boundedContext.recruitment.repository.RecruitmentRepository;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -53,5 +54,9 @@ public class RecruitmentService {
 
     public void updateArticleForm(RecruitmentArticle recruitmentArticle) {
         recruitmentRepository.save(recruitmentArticle);
+    }
+
+    public List<RecruitmentArticle> findAll() {
+        return recruitmentRepository.findAll();
     }
 }

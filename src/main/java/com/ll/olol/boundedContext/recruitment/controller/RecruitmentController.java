@@ -65,15 +65,43 @@ public class RecruitmentController {
         Long memberId = rq.getMember().getId();
         Optional<Member> member = memberRepository.findById(memberId);
         List<RecruitmentPeople> recruitmentPeople = member.get().getRecruitmentPeople();
+
         List<RecruitmentPeople> list = new ArrayList<>();
+        //내가 신청한 목록들을 보여줍니다.
         for (RecruitmentPeople people : recruitmentPeople) {
             if (people.getMember().getId() == member.get().getId()) {
                 list.add(people);
             }
         }
-        System.out.println(list);
         model.addAttribute("peopleList", list);
         return "usr/recruitment/attendList";
+    }
+
+    @GetMapping("/fromList")
+    public String showFromAttendList(Model model) {
+        Long memberId = rq.getMember().getId();
+        Optional<Member> member = memberRepository.findById(memberId);
+        List<RecruitmentArticle> all = recruitmentService.findAll();
+        List<RecruitmentPeople> list = new ArrayList<>();
+        //모든 게시물중에서
+        //내가 쓴 게시물을 찾아서
+        //내가 쓴 게시물에 신청자들을 다 뽑아온다.
+        for (RecruitmentArticle recruitmentArticle : all) {
+            if (recruitmentArticle.getMember().getId() == memberId) {
+                List<RecruitmentPeople> recruitmentPeople = recruitmentArticle.getRecruitmentPeople();
+                for (RecruitmentPeople recruitmentPeople1 : recruitmentPeople) {
+                    list.add(recruitmentPeople1);
+                }
+            }
+        }
+        model.addAttribute("attendList", list);
+        return "usr/recruitment/fromAttendList";
+    }
+
+
+    @PostMapping("{id}/attend/delete")
+    public String deleteAttend(@PathVariable Long id) {
+        return null;
     }
 
     @GetMapping("/{id}/attend")
@@ -97,9 +125,9 @@ public class RecruitmentController {
                 return rq.historyBack("이미 신청된 공고입니다.");
             }
         }
-        if (recruitmentPeople.size() == recruitsNumbers) {
-            return rq.historyBack("이미 마감된 공고입니다.");
-        }
+//        if (recruitmentPeople.size() == recruitsNumbers) {
+//            return rq.historyBack("이미 마감된 공고입니다.");
+//        }
         if (articleMemberId == memberId) {
             return rq.historyBack("게시글을 작성한 사람은 참가를 누를 수 없습니다.");
         }
@@ -128,6 +156,7 @@ public class RecruitmentController {
         recruitmentService.updateArticleForm(article.get());
         return "redirect:/";
     }
+
 
     @GetMapping("/{id}")
     public String showDetail(@PathVariable Long id, Model model) {

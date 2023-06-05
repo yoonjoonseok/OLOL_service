@@ -37,4 +37,5 @@ public class RecruitmentPeople {
     @JoinColumn(name = "recruitmentArticle_id")
     private RecruitmentArticle recruitmentArticle;
 
+    private boolean isAttend;
 }
