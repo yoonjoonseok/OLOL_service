@@ -1,8 +1,10 @@
 package com.ll.olol.boundedContext.recruitment.controller;
 
 import com.ll.olol.base.rq.Rq;
+import com.ll.olol.boundedContext.member.service.MemberService;
 import com.ll.olol.boundedContext.recruitment.CreateForm;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
+import com.ll.olol.boundedContext.recruitment.service.RecruitmentPeopleService;
 import com.ll.olol.boundedContext.recruitment.service.RecruitmentService;
 import jakarta.validation.Valid;
 import java.security.Principal;
@@ -13,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,6 +26,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class RecruitmentController {
     private final Rq rq;
     private final RecruitmentService recruitmentService;
+    private final MemberService memberService;
+    private final RecruitmentPeopleService recruitmentPeopleService;
 
 
     @GetMapping("/create")
@@ -63,8 +68,16 @@ public class RecruitmentController {
         return "usr/recruitment/attendForm";
     }
 
-//    @PostMapping("/{id}/attend")
-//    public String attend(@PathVariable Long id, @ModelAttribute RecruitmentArticle recruitmentArticle) {
+    @PostMapping("/{id}/attend")
+    public String attend(@PathVariable Long id, @ModelAttribute RecruitmentArticle recruitmentArticle) {
+        Optional<RecruitmentArticle> article = recruitmentService.findById(id);
+        recruitmentPeopleService.saveRecruitmentPeople(article.get().getMember().getId(), id);
+
+        return "redirect:/";
+    }
+
+//    @PostMapping("/{id}/deadLine")
+//    public String deadLineForm(@PathVariable Long id){
 //
 //    }
 

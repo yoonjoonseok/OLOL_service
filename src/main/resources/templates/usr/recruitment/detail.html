@@ -76,8 +76,12 @@
                                   th:unless="${recruitmentArticle.getDeadLineDate().isAfter(nowDate)}">
                                 마감 시간이 지났어요. 다음에 신청해주세요!
                             </span>
-                            <button>신청</button>
-                            <button>마감</button>
+
+                            <button type="button"
+                                    th:if="${recruitmentArticle.getDeadLineDate().isAfter(nowDate)}"
+                                    th:onclick="|location.href='@{/recruitment/{id}/deadline (id=${recruitmentArticle.id})}'|">
+                                마감
+                            </button>
 
                         </li>
                     </ul>
