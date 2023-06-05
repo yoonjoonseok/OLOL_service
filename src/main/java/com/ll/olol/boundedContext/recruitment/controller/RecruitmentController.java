@@ -4,11 +4,13 @@ import com.ll.olol.base.rq.Rq;
 import com.ll.olol.boundedContext.member.service.MemberService;
 import com.ll.olol.boundedContext.recruitment.CreateForm;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
+import com.ll.olol.boundedContext.recruitment.entity.RecruitmentPeople;
 import com.ll.olol.boundedContext.recruitment.service.RecruitmentPeopleService;
 import com.ll.olol.boundedContext.recruitment.service.RecruitmentService;
 import jakarta.validation.Valid;
 import java.security.Principal;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -58,11 +60,15 @@ public class RecruitmentController {
     @GetMapping("/{id}/attend")
     public String attendForm(@PathVariable Long id, Model model) {
         Optional<RecruitmentArticle> recruitmentArticle = recruitmentService.findById(id);
-//        //이미 마감 시간이 지났다면
-//        System.out.println(recruitmentArticle.get().getDeadLineDate().isAfter(LocalDateTime.now()));
-//        if (LocalDateTime.now().isAfter(recruitmentArticle.get().getDeadLineDate())) {
-//            return rq.historyBack("마감 시간이 지났습니다.");
-//        }
+
+        List<RecruitmentPeople> recruitmentPeople = recruitmentArticle.get().getRecruitmentPeople();
+        Long memberId = recruitmentArticle.get().getMember().getId();
+
+        for (RecruitmentPeople people : recruitmentPeople) {
+            if (people.getMember().getId() == memberId) {
+                return rq.historyBack("이미 신청하셨습니다!");
+            }
+        }
 
         model.addAttribute("recruitmentArticle", recruitmentArticle.get());
         return "usr/recruitment/attendForm";
@@ -71,6 +77,7 @@ public class RecruitmentController {
     @PostMapping("/{id}/attend")
     public String attend(@PathVariable Long id, @ModelAttribute RecruitmentArticle recruitmentArticle) {
         Optional<RecruitmentArticle> article = recruitmentService.findById(id);
+
         recruitmentPeopleService.saveRecruitmentPeople(article.get().getMember().getId(), id);
 
         return "redirect:/";
@@ -79,6 +86,7 @@ public class RecruitmentController {
     @PostMapping("/{id}/deadLine")
     public String deadLineForm(@PathVariable Long id, @ModelAttribute RecruitmentArticle recruitmentArticle) {
         Optional<RecruitmentArticle> article = recruitmentService.findById(id);
+
         article.get().setDeadLineDate(LocalDateTime.now());
         //마감 버튼을 누르면 마감 시간을 현재 시간으로 바꿈
         recruitmentService.updateArticleForm(article.get());
