@@ -76,10 +76,14 @@ public class RecruitmentController {
         return "redirect:/";
     }
 
-//    @PostMapping("/{id}/deadLine")
-//    public String deadLineForm(@PathVariable Long id){
-//
-//    }
+    @PostMapping("/{id}/deadLine")
+    public String deadLineForm(@PathVariable Long id, @ModelAttribute RecruitmentArticle recruitmentArticle) {
+        Optional<RecruitmentArticle> article = recruitmentService.findById(id);
+        article.get().setDeadLineDate(LocalDateTime.now());
+        //마감 버튼을 누르면 마감 시간을 현재 시간으로 바꿈
+        recruitmentService.updateArticleForm(article.get());
+        return "redirect:/";
+    }
 
     @GetMapping("/{id}")
     public String showDetail(@PathVariable Long id, Model model) {

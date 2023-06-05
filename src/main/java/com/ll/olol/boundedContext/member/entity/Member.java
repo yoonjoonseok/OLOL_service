@@ -72,6 +72,7 @@ public class Member {
     private String imageLink;
 
     @OneToMany(mappedBy = "member")
+    
     private List<RecruitmentPeople> recruitmentPeople;
 
 //    @OneToMany(mappedBy = "fromMember", cascade = {CascadeType.ALL})

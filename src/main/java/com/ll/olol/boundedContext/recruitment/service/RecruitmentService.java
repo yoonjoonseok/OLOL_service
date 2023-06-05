@@ -4,11 +4,10 @@ import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticleForm;
 import com.ll.olol.boundedContext.recruitment.repository.RecruitmentFormRepository;
 import com.ll.olol.boundedContext.recruitment.repository.RecruitmentRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
 import java.time.LocalDateTime;
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
@@ -35,7 +34,9 @@ public class RecruitmentService {
         return recruitmentArticle;
     }
 
-    public void createArticleForm(RecruitmentArticle recruitmentArticle, Integer dayNight, Long recruitsNumber, String mountainName, Long ageRange, String connectType, LocalDateTime startTime, LocalDateTime courseTime) {
+    public void createArticleForm(RecruitmentArticle recruitmentArticle, Integer dayNight, Long recruitsNumber,
+                                  String mountainName, Long ageRange, String connectType, LocalDateTime startTime,
+                                  LocalDateTime courseTime) {
         RecruitmentArticleForm recruitmentArticleForm = new RecruitmentArticleForm();
 
         recruitmentArticleForm.setRecruitmentArticle(recruitmentArticle);
@@ -48,5 +49,9 @@ public class RecruitmentService {
         recruitmentArticleForm.setCourseTime(courseTime);
 
         recruitmentFormRepository.save(recruitmentArticleForm);
+    }
+
+    public void updateArticleForm(RecruitmentArticle recruitmentArticle) {
+        recruitmentRepository.save(recruitmentArticle);
     }
 }
