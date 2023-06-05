@@ -1,17 +1,18 @@
 package com.ll.olol.boundedContext.comment.service;
 
+import com.ll.olol.base.rq.Rq;
+import com.ll.olol.base.rsData.RsData;
 import com.ll.olol.boundedContext.comment.entity.Comment;
 import com.ll.olol.boundedContext.comment.repository.CommentRepository;
 import com.ll.olol.boundedContext.member.entity.Member;
 import com.ll.olol.boundedContext.member.repository.MemberRepository;
 import com.ll.olol.boundedContext.recruitment.repository.RecruitmentRepository;
+import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -22,7 +23,8 @@ public class CommentService {
     private final RecruitmentRepository recruitmentRepository;
     @Autowired
     private final MemberRepository memberRepository;
-
+    @Autowired
+    private final Rq rq;
 //    @Transactional
 //    public Long commentSave(Long id, CommentDto dto){
 //        RecruitmentArticle recruitmentArticle = recruitmentRepository.findById(id).orElseThrow(() ->
@@ -39,15 +41,10 @@ public class CommentService {
 
     @Transactional
     public Long commentSave(Comment comment, String writer) {
-        //member, Long recruitmentId
-        Member member = new Member();
+
+        Member member = rq.getMember();
         member.setNickname(writer);
         memberRepository.save(member);
-//        Optional<Member> member1 = memberRepository.findById(member.getId());
-//        Optional<RecruitmentArticle> id = recruitmentRepository.findById(recruitmentId);
-
-//        comment.setMember(member1.get());
-//        comment.setRecruitmentArticle(id.get());
         comment.setMember(member);
 
         Comment save = commentRepository.save(comment);
@@ -71,10 +68,14 @@ public class CommentService {
     @Transactional
     public void commentDelete(Long id) {
         Optional<Comment> id1 = commentRepository.findById(id);
-//        Member member = id1.get().getMember();
-//        RecruitmentArticle recruitmentArticle = id1.get().getRecruitmentArticle();
-//        System.out.println(member.getNickname());
-//        System.out.println(recruitmentArticle.getArticleName());
+
         commentRepository.delete(id1.get());
+    }
+
+    public RsData isEqualMemberById(Long id) {
+        if (rq.getMember().getId() != findOne(id).getMember().getId()) {
+            return RsData.of("F-1", "동일한 사용자만 할 수 있습니다.");
+        }
+        return RsData.of("S-1", "성공");
     }
 }

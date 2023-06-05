@@ -56,4 +56,12 @@ public class MemberService {
 
         return join(providerTypeCode, username, "");
     }
+
+    @Transactional
+    public RsData modifyMemberInfo(Member member, String nickname) {
+        Member resultMember = memberRepository.findById(member.getId()).get();
+        resultMember.setNickname(nickname);
+        memberRepository.save(resultMember);
+        return RsData.of("S-1", "닉네임 수정 성공");
+    }
 }
