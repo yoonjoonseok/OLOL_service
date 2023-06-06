@@ -103,8 +103,6 @@ public class RecruitmentController {
 
     @PostMapping("/{id}/attend/delete")
     public String deleteAttend(@PathVariable Long id, @ModelAttribute RecruitmentPeople attendLists) {
-        System.out.println("attendLists = " + attendLists.getId());
-        System.out.println("id = " + id);
         RecruitmentPeople one = recruitmentPeopleService.findOne(id);
         recruitmentPeopleService.delete(one);
         return "redirect:/";
@@ -112,13 +110,6 @@ public class RecruitmentController {
 
     @PostMapping("/{id}/attend/create")
     public String createAttend(@PathVariable Long id, @ModelAttribute RecruitmentPeople attendLists) {
-        System.out.println("attendLists = " + attendLists.getId());
-        System.out.println("id = " + id);
-        List<RecruitmentPeople> recruitmentPeople = rq.getMember().getRecruitmentPeople();
-        for (RecruitmentPeople people : recruitmentPeople) {
-            System.out.println("people = " + people.getMember().getId());
-        }
-        System.out.println(recruitmentPeople);
         RecruitmentPeople person = recruitmentPeopleService.findOne(id);
         person.setAttend(true);
         recruitmentPeopleService.update(person);
@@ -134,15 +125,12 @@ public class RecruitmentController {
         //이제까지 신청한 인원들
 
         List<RecruitmentPeople> recruitmentPeople = recruitmentArticle.get().getRecruitmentPeople();
-        System.out.println("recruitmentPeople = " + recruitmentPeople);
         //현재 로그인한 회원에 아이디
         Long memberId = rq.getMember().getId();
         //게시글을 쓴 사람에 아이디
         Long articleMemberId = recruitmentArticle.get().getMember().getId();
 
         for (RecruitmentPeople people : recruitmentPeople) {
-            System.out.println("people = " + people.getMember().getId());
-            System.out.println("memberId = " + memberId);
             if (people.getMember().getId() == memberId) {
                 return rq.historyBack("이미 신청된 공고입니다.");
             }
