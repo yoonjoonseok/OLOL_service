@@ -99,6 +99,44 @@
             </div>
         </div>
     </div>
+    <div class="vr"></div>
+
+    <form th:object="${comments}">
+
+        <div class="card">
+            <!--        <div class="card-header bi bi-chat-dots">-->
+            <!--            <span th:if="${comments.size() > 0}" th:text="${comments.size()}"></span> Comments-->
+            <!--        </div>-->
+            <ul class="list-group-flush">
+                <li class="list-group-item" th:each="comment : ${comments}">
+            <span>
+                <span style="font-size: x-large" th:text="${comment.member.nickname}"></span>
+                <span style="font-size: xx-small" th:text="${comment.createDate}"></span>&nbsp;
+
+
+                <button type="button" class="badge bi bi-pencil-square"
+                        th:onclick="|location.href='@{/recruitment/comment/{id}/edit (id=${comment.id})}'|">수정</button>
+                <button type="button" class="badge bi bi-trash"
+                        th:onclick="|location.href='@{/recruitment/comment/{id}/delete (id=${comment.id})}'|">삭제</button>
+            </span>
+                    <div th:text="${comment.content}"></div>
+                </li>
+            </ul>
+
+        </div>
+    </form>
+    <form th:object="${comments}" method="post" th:action="@{|/recruitment/${recruitmentArticle.id}/comment|}">
+
+        <p>
+            <label>댓글 작성자</label> <input type="text" name="writer">
+        </p>
+        <p>
+            <textarea rows="5" cols="50" name="content"></textarea>
+        </p>
+        <p>
+            <button type="submit">댓글 작성</button>
+        </p>
+    </form>
 </main>
 </body>
 </html>

@@ -1,6 +1,9 @@
 package com.ll.olol.boundedContext.recruitment.controller;
 
 import com.ll.olol.base.rq.Rq;
+import com.ll.olol.base.rsData.RsData;
+import com.ll.olol.boundedContext.comment.entity.Comment;
+import com.ll.olol.boundedContext.comment.service.CommentService;
 import com.ll.olol.boundedContext.member.entity.Member;
 import com.ll.olol.boundedContext.member.repository.MemberRepository;
 import com.ll.olol.boundedContext.member.service.MemberService;
@@ -33,6 +36,7 @@ public class RecruitmentController {
     private final RecruitmentService recruitmentService;
     private final MemberService memberService;
     private final MemberRepository memberRepository;
+    private final CommentService commentService;
     private final RecruitmentPeopleService recruitmentPeopleService;
     private int limitPeople = 0;
 
@@ -163,7 +167,7 @@ public class RecruitmentController {
 
         recruitmentPeopleService.saveRecruitmentPeople(rq.getMember().getId(), id);
 
-        return "redirect:/";
+        return "redirect:/recruitment/id";
     }
 
     @PostMapping("/{id}/deadLine")
@@ -181,11 +185,76 @@ public class RecruitmentController {
 
     @GetMapping("/{id}")
     public String showDetail(@PathVariable Long id, Model model) {
+        List<Comment> comments = commentService.findComments();
+        List<Comment> commentList = new ArrayList<>();
+        if (!comments.isEmpty()) {
+            for (Comment comment : comments) {
+                if (comment.getRecruitmentArticle().getId() == id) {
+                    commentList.add(comment);
+                }
+            }
+        }
+
+        model.addAttribute("comments", commentList);
+
         Optional<RecruitmentArticle> recruitmentArticle = recruitmentService.findById(id);
         model.addAttribute("recruitmentArticle", recruitmentArticle.get());
         model.addAttribute("nowDate", LocalDateTime.now());
         return "usr/recruitment/detail";
     }
 
+    @PostMapping("/{id}/comment")
+    public String createComment(@PathVariable("id") Long id, @ModelAttribute Comment comment,
+                                String writer) {
+        System.out.println("id = " + id);
+        System.out.println("comment = " + comment.getContent());
+        comment.setCreateDate(LocalDateTime.now());
+        commentService.commentSave(comment, writer, id);
+
+        return "redirect:/recruitment/" + id;
+    }
+
+    @GetMapping("/comment/{id}/delete")
+    public String deleteComment(@PathVariable("id") Long id) {
+        RsData rsData = commentService.isEqualMemberById(id);
+//        System.out.println("rq.getId()=" + rq.getMember().getId());
+//        System.out.println("commentId = " + commentId);
+        if (rsData.isFail()) {
+            return rq.historyBack(rsData.getMsg());
+        }
+        Comment comment = commentService.findOne(id);
+        Long articleId = comment.getRecruitmentArticle().getId();
+        commentService.commentDelete(id);
+        return "redirect:/recruitment/" + articleId;
+    }
+
+
+    @GetMapping("/comment/{id}/edit")
+    public String editCommentForm(@PathVariable("id") Long id, Model model) {
+        Comment comment = commentService.findOne(id);
+        RsData rsData = commentService.isEqualMemberById(id);
+//        System.out.println("rq.getId()=" + rq.getMember().getId());
+//        System.out.println("commentId = " + commentId);
+        if (rsData.isFail()) {
+            return rq.historyBack(rsData.getMsg());
+        }
+
+        model.addAttribute("comment", comment);
+        return "usr/home/editComment";
+    }
+
+    @PostMapping("/comment/{id}/edit")
+    public String editComment(@PathVariable("id") Long id, @ModelAttribute Comment comment) {
+        System.out.println("comment = " + comment.getId());
+        System.out.println("comment = " + comment.getContent());
+        Comment one = commentService.findOne(id);
+        one.setContent(comment.getContent());
+        System.out.println("one = " + one.getRecruitmentArticle().getId());
+        System.out.println("one = " + one.getId());
+        commentService.update(one);
+        Long articleId = one.getRecruitmentArticle().getId();
+
+        return "redirect:/recruitment/" + articleId;
+    }
 
 }
