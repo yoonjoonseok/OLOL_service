@@ -7,7 +7,7 @@
         <div class="row">
             <div class="col-md-8">
                 <section>
-                    <h2>신청한 공고 목록</h2>
+                    <h2>참가자 목록</h2>
                     <ul th:if="${!#lists.isEmpty(attendList)}" class="list-group">
                         <li th:each="attendLists: ${attendList}"
                             class="list-group-item">
@@ -27,7 +27,7 @@
                             <span th:text="${attendLists.member.age}">
                             </span>
                             <div class="vr"></div>
-                            
+
                             <form th:action="@{|/recruitment/${attendLists.id}/attend/create|}"
                                   method="POST">
                                 <button type="submit">수락</button>
