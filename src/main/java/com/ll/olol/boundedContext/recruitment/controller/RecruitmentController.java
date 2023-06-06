@@ -90,6 +90,7 @@ public class RecruitmentController {
             if (recruitmentArticle.getMember().getId() == memberId) {
                 List<RecruitmentPeople> recruitmentPeople = recruitmentArticle.getRecruitmentPeople();
                 for (RecruitmentPeople recruitmentPeople1 : recruitmentPeople) {
+                    //신청자가 false일 경우만 추가
                     if (!recruitmentPeople1.isAttend()) {
                         list.add(recruitmentPeople1);
                     }
