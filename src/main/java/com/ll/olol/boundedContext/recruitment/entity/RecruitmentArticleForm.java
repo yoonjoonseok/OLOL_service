@@ -35,6 +35,8 @@ public class RecruitmentArticleForm {
 
     private String mountainName;
 
+    private String mtAddress;
+
     private Long ageRange;
 
     private LocalDateTime startTime;

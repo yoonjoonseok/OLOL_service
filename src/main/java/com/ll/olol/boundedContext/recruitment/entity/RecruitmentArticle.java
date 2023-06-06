@@ -30,8 +30,9 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@SuperBuilder
 @EntityListeners(AuditingEntityListener.class)
+@SuperBuilder
+
 public class RecruitmentArticle {
     @Id
     @GeneratedValue(strategy = IDENTITY)

@@ -51,9 +51,9 @@ public class RecruitmentController {
         }
 
         RecruitmentArticle recruitmentArticle = recruitmentService.createArticle(createForm.getArticleName(),
-                createForm.getContent(), /* member,  */createForm.getTypeValue());
+                createForm.getContent(), rq.getMember(), createForm.getTypeValue(), createForm.getDeadLineDate());
         recruitmentService.createArticleForm(recruitmentArticle, createForm.getDayNight(),
-                createForm.getRecruitsNumber(), createForm.getMountainName(),
+                createForm.getRecruitsNumber(), createForm.getMountainName(), createForm.getMtAddress(),
                 createForm.getAgeRange(), createForm.getConnectType(), createForm.getStartTime(),
                 createForm.getCourseTime());
 
@@ -90,7 +90,9 @@ public class RecruitmentController {
             if (recruitmentArticle.getMember().getId() == memberId) {
                 List<RecruitmentPeople> recruitmentPeople = recruitmentArticle.getRecruitmentPeople();
                 for (RecruitmentPeople recruitmentPeople1 : recruitmentPeople) {
-                    list.add(recruitmentPeople1);
+                    if (!recruitmentPeople1.isAttend()) {
+                        list.add(recruitmentPeople1);
+                    }
                 }
             }
         }
@@ -99,9 +101,29 @@ public class RecruitmentController {
     }
 
 
-    @PostMapping("{id}/attend/delete")
-    public String deleteAttend(@PathVariable Long id) {
-        return null;
+    @PostMapping("/{id}/attend/delete")
+    public String deleteAttend(@PathVariable Long id, @ModelAttribute RecruitmentPeople attendLists) {
+        System.out.println("attendLists = " + attendLists.getId());
+        System.out.println("id = " + id);
+        RecruitmentPeople one = recruitmentPeopleService.findOne(id);
+        recruitmentPeopleService.delete(one);
+        return "redirect:/";
+    }
+
+    @PostMapping("/{id}/attend/create")
+    public String createAttend(@PathVariable Long id, @ModelAttribute RecruitmentPeople attendLists) {
+        System.out.println("attendLists = " + attendLists.getId());
+        System.out.println("id = " + id);
+        List<RecruitmentPeople> recruitmentPeople = rq.getMember().getRecruitmentPeople();
+        for (RecruitmentPeople people : recruitmentPeople) {
+            System.out.println("people = " + people.getMember().getId());
+        }
+        System.out.println(recruitmentPeople);
+        RecruitmentPeople person = recruitmentPeopleService.findOne(id);
+        person.setAttend(true);
+        recruitmentPeopleService.update(person);
+
+        return "redirect:/";
     }
 
     @GetMapping("/{id}/attend")

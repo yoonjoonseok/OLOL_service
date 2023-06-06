@@ -19,7 +19,9 @@ public class CommentDto {
     private String content;
     private String writer;
     private String password;
+
     private LocalDateTime createDate = LocalDateTime.now();
+
     private LocalDateTime modifyDate = LocalDateTime.now();
 
 //    public Comment toEntity(){
