@@ -34,6 +34,7 @@ public class RecruitmentController {
     private final MemberService memberService;
     private final MemberRepository memberRepository;
     private final RecruitmentPeopleService recruitmentPeopleService;
+    private int limitPeople = 0;
 
     @GetMapping("/create")
     // @Valid를 붙여야 QuestionForm.java내의 NotBlank나 Size가 동작한다.
@@ -115,9 +116,15 @@ public class RecruitmentController {
     @PostMapping("/{id}/attend/create")
     public String createAttend(@PathVariable Long id) {
         RecruitmentPeople person = recruitmentPeopleService.findOne(id);
+        RecruitmentArticle recruitmentArticle = person.getRecruitmentArticle();
+        Long recruitsNumbers = recruitmentArticle.getRecruitmentArticleForm().getRecruitsNumbers();
+        if (limitPeople >= recruitsNumbers) {
+            return rq.historyBack("이미 참가 인원이 꽉 찼습니다.");
+        }
+
         person.setAttend(true);
         recruitmentPeopleService.update(person);
-
+        limitPeople++;
         return "redirect:/recruitment/fromList";
     }
 
