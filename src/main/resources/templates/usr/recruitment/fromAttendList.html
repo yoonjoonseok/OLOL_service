@@ -16,11 +16,10 @@
                                 공고 제목</a>
                             <a th:text="${attendLists.id}"></a>
                             <div class="vr"></div>
-                            <span th:text="${attendLists.recruitmentArticle.recruitmentArticleForm.mountainName}">
+                            <span th:text="${attendLists.member.age}">
                             </span>
                             <div class="vr"></div>
-                            <span th:text="${attendLists.recruitmentArticle.getDeadLineDateToString()}">
-                            </span>
+                            <span th:text="${attendLists.member.nickname}"></span>
                             <form th:action="@{|/recruitment/${attendLists.id}/attend/create|}"
                                   method="POST">
                                 <button type="submit">수락</button>

@@ -68,6 +68,7 @@ public class RecruitmentController {
 
         List<RecruitmentPeople> list = new ArrayList<>();
         //내가 신청한 목록들을 보여줍니다.
+
         for (RecruitmentPeople people : recruitmentPeople) {
             if (people.getMember().getId() == member.get().getId()) {
                 list.add(people);
@@ -86,6 +87,7 @@ public class RecruitmentController {
         //모든 게시물중에서
         //내가 쓴 게시물을 찾아서
         //내가 쓴 게시물에 신청자들을 다 뽑아온다.
+
         for (RecruitmentArticle recruitmentArticle : all) {
             if (recruitmentArticle.getMember().getId() == memberId) {
                 List<RecruitmentPeople> recruitmentPeople = recruitmentArticle.getRecruitmentPeople();
@@ -97,25 +99,26 @@ public class RecruitmentController {
                 }
             }
         }
+
         model.addAttribute("attendList", list);
         return "usr/recruitment/fromAttendList";
     }
 
 
     @PostMapping("/{id}/attend/delete")
-    public String deleteAttend(@PathVariable Long id, @ModelAttribute RecruitmentPeople attendLists) {
+    public String deleteAttend(@PathVariable Long id) {
         RecruitmentPeople one = recruitmentPeopleService.findOne(id);
         recruitmentPeopleService.delete(one);
-        return "redirect:/";
+        return "redirect:/recruitment/fromList";
     }
 
     @PostMapping("/{id}/attend/create")
-    public String createAttend(@PathVariable Long id, @ModelAttribute RecruitmentPeople attendLists) {
+    public String createAttend(@PathVariable Long id) {
         RecruitmentPeople person = recruitmentPeopleService.findOne(id);
         person.setAttend(true);
         recruitmentPeopleService.update(person);
 
-        return "redirect:/";
+        return "redirect:/recruitment/fromList";
     }
 
     @GetMapping("/{id}/attend")
