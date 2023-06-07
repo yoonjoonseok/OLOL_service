@@ -8,7 +8,6 @@ import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticleForm;
 import com.ll.olol.boundedContext.recruitment.repository.RecruitmentFormRepository;
 import com.ll.olol.boundedContext.recruitment.repository.RecruitmentRepository;
 import jakarta.persistence.criteria.*;
-import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -18,11 +17,9 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
@@ -109,14 +106,14 @@ public class RecruitmentService {
             @Override
             public Predicate toPredicate(Root<RecruitmentArticle> q, CriteriaQuery<?> query, CriteriaBuilder cb) {
                 query.distinct(true);  // 중복을 제거
-                Join<RecruitmentArticle, Member> u1 = q.join("author", JoinType.LEFT);
-                Join<RecruitmentArticle, Comment> a = q.join("answerList", JoinType.LEFT);
-                Join<Comment, Member> u2 = a.join("author", JoinType.LEFT);
-                return cb.or(cb.like(q.get("subject"), "%" + kw + "%"), // 제목
+                Join<RecruitmentArticle, Member> u1 = q.join("member", JoinType.LEFT);
+                Join<RecruitmentArticle, Comment> a = q.join("comment", JoinType.LEFT);
+                Join<Comment, Member> u2 = a.join("member", JoinType.LEFT);
+                return cb.or(cb.like(q.get("articleName"), "%" + kw + "%"), // 제목
                         cb.like(q.get("content"), "%" + kw + "%"),      // 내용
-                        cb.like(u1.get("username"), "%" + kw + "%"),    // 질문 작성자
+                        cb.like(u1.get("nickname"), "%" + kw + "%"),    // 질문 작성자
                         cb.like(a.get("content"), "%" + kw + "%"),      // 답변 내용
-                        cb.like(u2.get("username"), "%" + kw + "%"));   // 답변 작성자
+                        cb.like(u2.get("nickname"), "%" + kw + "%"));   // 답변 작성자
             }
         };
     }
