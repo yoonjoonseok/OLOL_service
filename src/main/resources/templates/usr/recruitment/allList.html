@@ -1,10 +1,19 @@
 <html layout:decorate="~{usr/layout/layout.html}">
+<link rel="stylesheet" href="common.css">
 
 <head>
     <title>오름 오름(메인)</title>
     <style>
         .smaller-text {
             font-size: 13px;
+        }
+
+        .card {
+            transition: transform 0.2s;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
         }
     </style>
 </head>
@@ -28,13 +37,11 @@
     </div>
 
     <div class="container">
-        <h2>커뮤니티 리스트</h2>
-
         <div class="row row-cols-1 row-cols-md-4">
             <div class="col mb-4" th:each="recruitmentArticle, loop : ${paging}">
-                <div class="card mb-4" style="width: 100%; height: 18rem; text-decoration: none;">
-                    <a class="card-body ml-2" style="text-decoration: none;"
-                       th:href="@{|/recruitment/${recruitmentArticle.id}|}">
+                <a class="card mb-4 text-dark" style="width: 100%; height: 18rem; text-decoration: none;"
+                   th:href="@{|/recruitment/${recruitmentArticle.id}|}">
+                    <div class="card-header bg-white">
                         <div class="card-title mt-3">
                             <div class="smaller-text mb-2">
                                 <div th:if="${recruitmentArticle.isImpromotu()}">
@@ -51,37 +58,25 @@
                                               th:text="${recruitmentArticle.getTypeValueToString()}"></span>
                                     </span>
                                 </div>
+
                                 <div class="smaller-text text-secondary mt-1 fw-bold"
                                      th:text="|마감일 ${#temporals.format(recruitmentArticle.deadLineDate, 'yyyy.MM.dd')}|"></div>
                             </div>
                         </div>
-                        <!--                        <div class="card-text">-->
-                        <!--                            &lt;!&ndash;                            <div class="fw-bold fs-5 mt-2"&ndash;&gt;-->
-                        <!--                            &lt;!&ndash;                                 style=" display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;"&ndash;&gt;-->
-                        <!--                            &lt;!&ndash;                                 th:text="${recruitmentArticle.articleName}"></div>&ndash;&gt;-->
-                        <!--                            <div class="fw-bold fs-5 mt-2" th:text="${recruitmentArticle.articleName}"-->
-                        <!--                                 style="height: 70px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;"></div>-->
-                        <!--                        </div>-->
+                    </div>
+                    <div class="card-body ml-2" style="text-decoration: none;">
+
                         <div class="card-text" style="height: 4rem; /* 예시로 높이를 조절 */">
                             <div class="fw-bold fs-5 mt-2"
                                  style="overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;"
                                  th:text="${recruitmentArticle.articleName}"></div>
                         </div>
-
-                        <div>
-                            <span>여기는 여분 바텀</span>
-                        </div>
-
-                    </a>
-                </div>
+                    </div>
+                    <div class="card-footer bg-white">
+                        <div th:text="${recruitmentArticle.member.nickname}"></div>
+                    </div>
+                </a>
             </div>
-            <!--            class="col mb-5"-->
-            <!--            <div >-->
-
-            <!--                <section>-->
-            <!--                    &lt;!&ndash;                    <h2>커뮤니티 리스트</h2>&ndash;&gt;-->
-            <!--                </section>-->
-            <!--            </div>-->
         </div>
 
         <!-- 페이징처리 시작 -->
