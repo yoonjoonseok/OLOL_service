@@ -58,9 +58,12 @@ public class MemberService {
     }
 
     @Transactional
-    public RsData modifyMemberInfo(Member member, String nickname) {
+    public RsData modifyMemberInfo(Member member, String nickname, int ageRange, String gender, String email) {
         Member resultMember = memberRepository.findById(member.getId()).get();
         resultMember.setNickname(nickname);
+        resultMember.setAge(ageRange);
+        resultMember.setGender(gender);
+        resultMember.setEmail(email);
         memberRepository.save(resultMember);
         return RsData.of("S-1", "닉네임 수정 성공");
     }
