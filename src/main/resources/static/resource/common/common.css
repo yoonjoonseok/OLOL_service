@@ -14,8 +14,3 @@ html > body {
 html > body .label-text {
     font-size: 1rem;
 }
-
-.containerIn {
-    display: flex;
-}
-
