@@ -13,9 +13,15 @@ public class HomeController {
         return "usr/home/main";
     }
 
-    @GetMapping("/hee")
-    public String showHelloo() {
-        return "usr/layout/hello";
+
+    @GetMapping("/li")
+    public String showlist() {
+        return "usr/recruitment/list";
+    }
+
+    @GetMapping("/list")
+    public String showAlllist() {
+        return "usr/recruitment/allList";
     }
 
     @GetMapping("/hello")

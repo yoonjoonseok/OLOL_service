@@ -1,28 +1,18 @@
 package com.ll.olol.boundedContext.recruitment.entity;
 
-import static jakarta.persistence.GenerationType.IDENTITY;
-
 import com.ll.olol.boundedContext.comment.entity.Comment;
 import com.ll.olol.boundedContext.member.entity.Member;
-
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
-import lombok.experimental.SuperBuilder;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Getter
@@ -64,6 +54,14 @@ public class RecruitmentArticle {
         } else {
             return "번개";
         }
+    }
+
+    public boolean isImpromotu() {
+        return typeValue == 2;
+    }
+
+    public boolean isRegular() {
+        return typeValue == 1;
     }
 
     public String getCreateDateToString() {

@@ -6,10 +6,11 @@ import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticleForm;
 import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityManager;
-import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
 
 
 @Component
@@ -61,6 +62,12 @@ public class NotProd {
             em.persist(recruitmentArticle2);
             em.persist(recruitmentArticle3);
             em.persist(recruitmentArticle4);
+
+            for (int i = 5; i < 100; i++) {
+                em.persist(createRecruitmentArticle(LocalDateTime.now(),
+                        LocalDateTime.now().plusDays(1), 10L, member4, 2, String.format("테스트 데이터[%03d]", i),
+                        "테스트용 게시글 내용입니다."));
+            }
 
             Comment comment1 = createComment(recruitmentArticle1, member1, "안녕하세요11", LocalDateTime.now(),
                     LocalDateTime.now());

@@ -9,6 +9,7 @@ import com.ll.olol.boundedContext.recruitment.service.RecruitmentPeopleService;
 import com.ll.olol.boundedContext.recruitment.service.RecruitmentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -106,5 +107,13 @@ public class RecruitmentController {
         model.addAttribute("recruitmentArticle", recruitmentArticle.get());
         model.addAttribute("nowDate", LocalDateTime.now());
         return "usr/recruitment/detail";
+    }
+
+    @GetMapping("/list")
+    public String list(Model model, @RequestParam(defaultValue = "0") int page, String kw) { // int page 가 곧 name = page와 같다.
+        Page<RecruitmentArticle> paging = recruitmentService.getlist(page, kw);
+        model.addAttribute("paging", paging);
+        //model.addAttribute("kw",kw);
+        return "usr/recruitment/allList";
     }
 }

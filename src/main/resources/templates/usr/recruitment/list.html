@@ -1,0 +1,56 @@
+<html layout:decorate="~{usr/layout/layout.html}">
+
+<head>
+    <title>오름 오름(메인)</title>
+</head>
+
+<body>
+
+<main layout:fragment="main">
+    <div class="col-6">
+        <a th:href="@{/recruitment/create}" class="btn btn-primary">모집 공고 등록</a>
+        <a th:href="@{/recruitment/1}" class="btn btn-primary">공고 상세 페이지#1</a>
+        <a th:href="@{/member/bookmark}" class="btn btn-primary">찜한 공고 목록</a>
+    </div>
+
+    <div class="jumbotron jumbotron-fluid">
+        <div class="container">
+            <h1 class="display-4">환영합니다!</h1>
+            <p class="lead">오름오름 웹사이트에 오신 것을 환영합니다. 다양한 등산로 정보와 안전 가이드를 제공합니다.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <h2>커뮤니티 리스트</h2>
+        <nav class="nav fs-3">
+            <a class="nav-link active" aria-current="page" href="#">
+                <i class="bi bi-grid"> </i>
+                전체
+            </a>
+            <a class="nav-link" href="#">
+                Link
+            </a>
+            <a class="nav-link" href="#">
+                Link
+            </a>
+            <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">
+                Disabled
+            </a>
+        </nav>
+        <div class="row">
+            <div class="col-md-8">
+                <!--                <a href="#" class="btn btn-primary">전체</a>-->
+                <!--                <a href="#" class="btn btn-primary">번개</a>-->
+                <!--                <a href="#" class="btn btn-primary">정기</a>-->
+                <section>
+                    <!--                    <h2>커뮤니티 리스트</h2>-->
+
+                </section>
+            </div>
+        </div>
+    </div>
+</main>
+
+</body>
+
+</html>
