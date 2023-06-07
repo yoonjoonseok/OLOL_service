@@ -71,15 +71,7 @@ public class RecruitmentController {
         Optional<Member> member = memberRepository.findById(memberId);
         List<RecruitmentPeople> recruitmentPeople = member.get().getRecruitmentPeople();
 
-        List<RecruitmentPeople> list = new ArrayList<>();
-        //내가 신청한 목록들을 보여줍니다.
-
-        for (RecruitmentPeople people : recruitmentPeople) {
-            if (people.getMember().getId() == member.get().getId()) {
-                list.add(people);
-            }
-        }
-        model.addAttribute("peopleList", list);
+        model.addAttribute("peopleList", recruitmentPeople);
         return "usr/recruitment/attendList";
     }
 
@@ -135,10 +127,6 @@ public class RecruitmentController {
     @GetMapping("/{id}/attend")
     public String attendForm(@PathVariable Long id, Model model) {
         Optional<RecruitmentArticle> recruitmentArticle = recruitmentService.findById(id);
-
-        Long recruitsNumbers = recruitmentArticle.get().getRecruitmentArticleForm().getRecruitsNumbers();
-        //이제까지 신청한 인원들
-
         List<RecruitmentPeople> recruitmentPeople = recruitmentArticle.get().getRecruitmentPeople();
         //현재 로그인한 회원에 아이디
         Long memberId = rq.getMember().getId();
@@ -150,9 +138,7 @@ public class RecruitmentController {
                 return rq.historyBack("이미 신청된 공고입니다.");
             }
         }
-//        if (recruitmentPeople.size() == recruitsNumbers) {
-//            return rq.historyBack("이미 마감된 공고입니다.");
-//        }
+
         if (articleMemberId == memberId) {
             return rq.historyBack("게시글을 작성한 사람은 참가를 누를 수 없습니다.");
         }
@@ -167,7 +153,7 @@ public class RecruitmentController {
 
         recruitmentPeopleService.saveRecruitmentPeople(rq.getMember().getId(), id);
 
-        return "redirect:/recruitment/id";
+        return "redirect:/recruitment/" + id;
     }
 
     @PostMapping("/{id}/deadLine")
@@ -179,7 +165,7 @@ public class RecruitmentController {
         article.get().setDeadLineDate(LocalDateTime.now());
         //마감 버튼을 누르면 마감 시간을 현재 시간으로 바꿈
         recruitmentService.updateArticleForm(article.get());
-        return "redirect:/";
+        return "redirect:/recruitment/" + id;
     }
 
 
@@ -187,11 +173,10 @@ public class RecruitmentController {
     public String showDetail(@PathVariable Long id, Model model) {
         List<Comment> comments = commentService.findComments();
         List<Comment> commentList = new ArrayList<>();
-        if (!comments.isEmpty()) {
-            for (Comment comment : comments) {
-                if (comment.getRecruitmentArticle().getId() == id) {
-                    commentList.add(comment);
-                }
+
+        for (Comment comment : comments) {
+            if (comment.getRecruitmentArticle().getId() == id) {
+                commentList.add(comment);
             }
         }
 
@@ -206,8 +191,6 @@ public class RecruitmentController {
     @PostMapping("/{id}/comment")
     public String createComment(@PathVariable("id") Long id, @ModelAttribute Comment comment,
                                 String writer) {
-        System.out.println("id = " + id);
-        System.out.println("comment = " + comment.getContent());
         comment.setCreateDate(LocalDateTime.now());
         commentService.commentSave(comment, writer, id);
 
@@ -217,8 +200,6 @@ public class RecruitmentController {
     @GetMapping("/comment/{id}/delete")
     public String deleteComment(@PathVariable("id") Long id) {
         RsData rsData = commentService.isEqualMemberById(id);
-//        System.out.println("rq.getId()=" + rq.getMember().getId());
-//        System.out.println("commentId = " + commentId);
         if (rsData.isFail()) {
             return rq.historyBack(rsData.getMsg());
         }
@@ -233,8 +214,7 @@ public class RecruitmentController {
     public String editCommentForm(@PathVariable("id") Long id, Model model) {
         Comment comment = commentService.findOne(id);
         RsData rsData = commentService.isEqualMemberById(id);
-//        System.out.println("rq.getId()=" + rq.getMember().getId());
-//        System.out.println("commentId = " + commentId);
+
         if (rsData.isFail()) {
             return rq.historyBack(rsData.getMsg());
         }
@@ -245,12 +225,9 @@ public class RecruitmentController {
 
     @PostMapping("/comment/{id}/edit")
     public String editComment(@PathVariable("id") Long id, @ModelAttribute Comment comment) {
-        System.out.println("comment = " + comment.getId());
-        System.out.println("comment = " + comment.getContent());
         Comment one = commentService.findOne(id);
         one.setContent(comment.getContent());
-        System.out.println("one = " + one.getRecruitmentArticle().getId());
-        System.out.println("one = " + one.getId());
+
         commentService.update(one);
         Long articleId = one.getRecruitmentArticle().getId();
 
