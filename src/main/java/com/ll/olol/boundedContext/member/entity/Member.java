@@ -17,7 +17,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -32,7 +31,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 @AllArgsConstructor
 @SuperBuilder
 @EntityListeners(AuditingEntityListener.class)
-@ToString
+
 public class Member {
     @Id
     @GeneratedValue(strategy = IDENTITY)
@@ -72,7 +71,6 @@ public class Member {
     private String imageLink;
 
     @OneToMany(mappedBy = "member")
-    
     private List<RecruitmentPeople> recruitmentPeople;
 
 //    @OneToMany(mappedBy = "fromMember", cascade = {CascadeType.ALL})
