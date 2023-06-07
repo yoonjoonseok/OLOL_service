@@ -6,12 +6,11 @@ import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticleForm;
 import com.ll.olol.boundedContext.recruitment.repository.RecruitmentFormRepository;
 import com.ll.olol.boundedContext.recruitment.repository.RecruitmentRepository;
-import jakarta.validation.constraints.NotNull;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -25,7 +24,8 @@ public class RecruitmentService {
     }
 
 
-    public RecruitmentArticle createArticle(String articleName, String content, Member member, Integer typeValue, @NotNull(message = "마감일 지정은 필수항목입니다.") LocalDateTime deadLineDate) {
+    public RecruitmentArticle createArticle(String articleName, String content, Member member, Integer typeValue,
+                                            LocalDateTime deadLineDate) {
         RecruitmentArticle recruitmentArticle = new RecruitmentArticle();
         recruitmentArticle.setMember(member);
         recruitmentArticle.setArticleName(articleName);
@@ -38,7 +38,9 @@ public class RecruitmentService {
         return recruitmentArticle;
     }
 
-    public void createArticleForm(RecruitmentArticle recruitmentArticle, Integer dayNight, Long recruitsNumber, String mountainName, String mtAddress, Long ageRange, String connectType, LocalDateTime startTime, LocalDateTime courseTime) {
+    public void createArticleForm(RecruitmentArticle recruitmentArticle, Integer dayNight, Long recruitsNumber,
+                                  String mountainName, String mtAddress, Long ageRange, String connectType,
+                                  LocalDateTime startTime, LocalDateTime courseTime) {
         // 동만 붙은 부분만 가져옴
         RsData<String> checkMt = mtAddressChecked(mtAddress);
 
@@ -81,12 +83,18 @@ public class RecruitmentService {
             }
         }
 
-        if (realMtAddress != null) return RsData.of("S-1", "주소를 저장했습니다.", realMtAddress);
+        if (realMtAddress != null) {
+            return RsData.of("S-1", "주소를 저장했습니다.", realMtAddress);
+        }
 
         return RsData.of("F-1", "동을 저장 못함");
     }
 
     public void updateArticleForm(RecruitmentArticle recruitmentArticle) {
         recruitmentRepository.save(recruitmentArticle);
+    }
+
+    public List<RecruitmentArticle> findAll() {
+        return recruitmentRepository.findAll();
     }
 }
