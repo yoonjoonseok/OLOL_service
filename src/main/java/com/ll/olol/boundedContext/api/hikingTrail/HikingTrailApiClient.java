@@ -33,7 +33,7 @@ public class HikingTrailApiClient {
     }
 
     public double requestLongitude(String mountainName, String localCode) {
-        String url_getHikingTrail = url_base.formatted(key, domain, mountainName, localCode);
+        String url_getHikiㅎngTrail = url_base.formatted(key, domain, mountainName, localCode);
         return restTemplate.exchange(url_getHikingTrail, HttpMethod.GET, null, HikingTrailDTO.class).getBody().getLongitude();
     }
 }
