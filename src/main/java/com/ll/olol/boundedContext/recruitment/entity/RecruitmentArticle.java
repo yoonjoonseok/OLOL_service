@@ -4,14 +4,16 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 
 import com.ll.olol.boundedContext.comment.entity.Comment;
 import com.ll.olol.boundedContext.member.entity.Member;
-
-import jakarta.persistence.*;
-import lombok.*;
-import lombok.experimental.SuperBuilder;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
-
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
+import jakarta.persistence.OrderBy;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -19,7 +21,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -29,13 +30,12 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@SuperBuilder
-@ToString
 @EntityListeners(AuditingEntityListener.class)
+@SuperBuilder
+
 public class RecruitmentArticle {
     @Id
     @GeneratedValue(strategy = IDENTITY)
-    @Column(name = "RecruitmentArticle_ID")
     private Long id;
     @ManyToOne
     private Member member;
@@ -51,11 +51,10 @@ public class RecruitmentArticle {
     @OrderBy("id desc")
     private List<Comment> comment;
 
-    @OneToOne(mappedBy = "recruitmentArticle", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    @OneToOne(mappedBy = "recruitmentArticle")
     private RecruitmentArticleForm recruitmentArticleForm;
 
-    @OneToMany(mappedBy = "recruitmentArticle")
-
+    @OneToMany(mappedBy = "recruitmentArticle", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private List<RecruitmentPeople> recruitmentPeople;
 
     public String getTypeValueToString() {

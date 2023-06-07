@@ -32,6 +32,8 @@ public class CreateForm {
 
     private String mountainName;
 
+    private String mtAddress;
+
     @NotNull(message = "모집인원은 필수항목입니다.")
     @Min(value = 0, message = "올바른 인원수를 입력해주세요.")
     private Long recruitsNumber;
@@ -40,6 +42,9 @@ public class CreateForm {
     private LocalDateTime startTime;
 
     private LocalDateTime courseTime;
+
+    @NotNull(message = "마감일 지정은 필수항목입니다.")
+    private LocalDateTime deadLineDate;
 
     private Long ageRange;
 

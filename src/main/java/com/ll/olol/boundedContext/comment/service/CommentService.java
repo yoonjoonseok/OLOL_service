@@ -6,6 +6,7 @@ import com.ll.olol.boundedContext.comment.entity.Comment;
 import com.ll.olol.boundedContext.comment.repository.CommentRepository;
 import com.ll.olol.boundedContext.member.entity.Member;
 import com.ll.olol.boundedContext.member.repository.MemberRepository;
+import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
 import com.ll.olol.boundedContext.recruitment.repository.RecruitmentRepository;
 import java.util.List;
 import java.util.Optional;
@@ -40,14 +41,17 @@ public class CommentService {
 
 
     @Transactional
-    public Long commentSave(Comment comment, String writer) {
-
+    public Long commentSave(Comment comment, String writer, Long articleId) {
         Member member = rq.getMember();
         member.setNickname(writer);
         memberRepository.save(member);
-        comment.setMember(member);
+        Optional<RecruitmentArticle> article = recruitmentRepository.findById(articleId);
+        Comment savedComment = new Comment();
+        savedComment.setContent(comment.getContent());
+        savedComment.setRecruitmentArticle(article.get());
+        savedComment.setMember(member);
 
-        Comment save = commentRepository.save(comment);
+        Comment save = commentRepository.save(savedComment);
         return save.getId();
     }
 
@@ -59,10 +63,9 @@ public class CommentService {
         return commentRepository.findById(id).get();
     }
 
-    public Comment update(Long commentId, String content) {
-        Comment updateComment = findOne(commentId);
-        updateComment.setContent(content);
-        return commentRepository.save(updateComment);
+    public Comment update(Comment comment) {
+
+        return commentRepository.save(comment);
     }
 
     @Transactional
