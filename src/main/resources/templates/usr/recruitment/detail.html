@@ -28,7 +28,10 @@
                             <span class="font-weight-bold">산 이름</span>
                             <div class="vr"></div>
                             <span th:text="${recruitmentArticle.getRecruitmentArticleForm().getMountainName()}">산 이름</span>
-                            <button>지도</button>
+                            <button type="button" data-toggle="modal"
+                                    data-target="#hikingTrailModal">
+                                등산로
+                            </button>
                         </li>
                         <li class="list-group-item">
                             <span class="font-weight-bold">주야</span>
@@ -137,6 +140,8 @@
             <button type="submit">댓글 작성</button>
         </p>
     </form>
+
+    <th:block th:replace="~{/usr/api/hikingTrail :: hikingTrail()}"></th:block>
 </main>
 </body>
 </html>
