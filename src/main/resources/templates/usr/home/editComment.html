@@ -1,5 +1,5 @@
 <!-- edit-comment.html -->
-<form th:object="${comment}" method="post">
+<form th:object="${comment}" method="post" th:action="@{|/recruitment/comment/${comment.id}/edit|}">
     <textarea th:field="*{content}"></textarea>
     <button type="submit">수정</button>
 </form>

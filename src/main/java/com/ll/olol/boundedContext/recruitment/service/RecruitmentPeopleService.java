@@ -32,4 +32,16 @@ public class RecruitmentPeopleService {
         RecruitmentPeople saved = recruitmentPeopleRepository.save(recruitmentPeople);
         return saved.getId();
     }
+
+    public void delete(RecruitmentPeople recruitmentPeople) {
+        recruitmentPeopleRepository.delete(recruitmentPeople);
+    }
+
+    public RecruitmentPeople findOne(Long id) {
+        return recruitmentPeopleRepository.findById(id).get();
+    }
+
+    public void update(RecruitmentPeople recruitmentPeople) {
+        recruitmentPeopleRepository.save(recruitmentPeople);
+    }
 }
