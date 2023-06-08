@@ -16,7 +16,8 @@ public class HikingTrailApiController {
     @GetMapping("/api/hikingTrail")
     @ResponseBody
     public List getHikingTrail(@RequestParam String mountainName, @RequestParam String localCode) {
-        return hikingTrailApiClient.requestHikingTrail(mountainName, localCode);
+        System.out.println(mountainName + " " + localCode);
 
+        return hikingTrailApiClient.requestHikingTrail(mountainName, localCode);
     }
 }

@@ -30,7 +30,7 @@
                             <span th:text="${recruitmentArticle.getRecruitmentArticleForm().getMountainName()}">산 이름</span>
                             <button type="button" data-toggle="modal"
                                     data-target="#hikingTrailModal">
-                                지도
+                                등산로
                             </button>
                         </li>
                         <li class="list-group-item">
@@ -140,6 +140,7 @@
             <button type="submit">댓글 작성</button>
         </p>
     </form>
+
     <th:block th:replace="~{/usr/api/hikingTrail :: hikingTrail()}"></th:block>
 </main>
 </body>
