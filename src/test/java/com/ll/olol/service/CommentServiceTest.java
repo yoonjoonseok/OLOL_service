@@ -4,12 +4,11 @@ import com.ll.olol.boundedContext.comment.entity.Comment;
 import com.ll.olol.boundedContext.comment.repository.CommentRepository;
 import com.ll.olol.boundedContext.comment.service.CommentService;
 import com.ll.olol.boundedContext.member.repository.MemberRepository;
+import com.ll.olol.boundedContext.recruitment.repository.RecruitmentRepository;
+import com.ll.olol.boundedContext.recruitment.service.RecruitmentService;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
-import com.ll.olol.boundedContext.recruitment.repository.RecruitmentRepository;
-import com.ll.olol.boundedContext.recruitment.service.RecruitmentService;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
@@ -70,7 +69,7 @@ public class CommentServiceTest {
         List<Comment> all = commentRepository.findAll();
         Comment comment = all.get(0);
         //when
-        commentService.update(comment.getId(), "수정된댓글이에요.");
+        commentService.update(comment);
         //then
         assertEquals(comment.getContent(), "수정된댓글이에요.");
     }

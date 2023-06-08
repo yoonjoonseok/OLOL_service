@@ -12,6 +12,7 @@ import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentPeople;
 import com.ll.olol.boundedContext.recruitment.service.RecruitmentPeopleService;
 import com.ll.olol.boundedContext.recruitment.service.RecruitmentService;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -184,6 +185,17 @@ public class RecruitmentController {
         model.addAttribute("recruitmentArticle", recruitmentArticle.get());
         model.addAttribute("nowDate", LocalDateTime.now());
         return "usr/recruitment/detail";
+    }
+
+    @Transactional
+    @DeleteMapping("/{id}/delete")
+    public String delete(@PathVariable Long id) {
+        Optional<RecruitmentArticle> recruitmentArticle = recruitmentService.findById(id);
+        RsData canDeleteRsData = recruitmentService.canDelete(recruitmentArticle, rq.getMember());
+        if (canDeleteRsData.isFail())
+            return rq.historyBack(canDeleteRsData);
+        recruitmentService.deleteArticle(recruitmentArticle.get());
+        return "redirect:/";
     }
 
     @PostMapping("/{id}/comment")
