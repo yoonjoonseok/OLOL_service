@@ -15,7 +15,7 @@
                     </script>
                     <div id="map" style="width:100%;height:400px;"></div>
                     <script th:inline="javascript">
-                        $('#hikingTrailModal').one('shown.bs.modal', function (){
+                        $('#hikingTrailModal').one('shown.bs.modal', function () {
                             const mountainName = /*[[${recruitmentArticle.getRecruitmentArticleForm().getMountainName()}]]*/ null;
                             const localCode = /*[[${recruitmentArticle.getRecruitmentArticleForm().getLocalCode()}]]*/ null;
 
@@ -41,24 +41,28 @@
                                     let polyline;
 
                                     let cnt = 0;
+                                    let latitude = 0;
+                                    let longitude = 0;
 
                                     hikingTrails.forEach((hikingTrail) => {
                                         coordinates = hikingTrail.coordinates;
                                         path = coordinates.map((coordinate) => {
                                             return new naver.maps.LatLng(coordinate[1], coordinate[0]);
                                         });
+                                        latitude += parseFloat(coordinates[0][1]);
+                                        longitude += parseFloat(coordinates[0][0]);
 
-                                        if (hikingTrail.catNam == "하")
-                                            color = colors[0];
-                                        else if (hikingTrail.catNam == "중")
-                                            color = colors[1];
-                                        else
-                                            color = colors[2];
+                                        // if (hikingTrail.catNam == "하")
+                                        //     color = colors[0];
+                                        // else if (hikingTrail.catNam == "중")
+                                        //     color = colors[1];
+                                        // else
+                                        //     color = colors[2];
 
                                         polyline = new naver.maps.Polyline({
                                             map: map,
                                             path: path,
-                                            strokeColor: color,
+                                            strokeColor: '#0000FF',
                                             strokeWeight: 3,
                                             clickable: true,
                                             startIcon: naver.maps.PointingIcon.CIRCLE,
@@ -115,9 +119,7 @@
                                         cnt++;
                                     });
 
-                                    var bounds = polyline.getBounds();
-                                    var center = bounds.getCenter();
-
+                                    const center = new naver.maps.LatLng(latitude/cnt, longitude/cnt);
                                     map.setCenter(center);
 
                                     function generateColors(numColors) {
