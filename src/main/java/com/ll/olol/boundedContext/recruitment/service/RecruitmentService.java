@@ -130,6 +130,28 @@ public class RecruitmentService {
         return recruitmentRepository.findAll(spec, pageable);
     }
 
+    public Page<RecruitmentArticle> getListByConditions(Long ageRange, int dayNight, int typeValue, String kw, Pageable pageable) {
+        Specification<RecruitmentArticle> spec = Specification.where(null);
+
+        if (ageRange != 0L) {
+            spec = spec.and((root, query, cb) -> cb.equal(root.get("recruitmentArticleForm").get("ageRange"), ageRange));
+        }
+
+        if (dayNight != 0) {
+            spec = spec.and((root, query, cb) -> cb.equal(root.get("recruitmentArticleForm").get("dayNight"), dayNight));
+        }
+
+        if (typeValue != 0) {
+            spec = spec.and((root, query, cb) -> cb.equal(root.get("typeValue"), typeValue));
+        }
+
+        if (kw != null && !kw.trim().isEmpty()) {
+            spec = spec.and(search(kw));
+        }
+
+        return recruitmentRepository.findAll(spec, pageable);
+    }
+
     public void updateArticleForm(RecruitmentArticle recruitmentArticle) {
         recruitmentRepository.save(recruitmentArticle);
     }

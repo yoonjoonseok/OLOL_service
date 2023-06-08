@@ -38,25 +38,119 @@
 
 
     <div class="container">
-        <div class="row">
-            <div class="col-6">
-                <!-- 왼쪽에 추가할 내용 -->
+        <!--        <div class="row">-->
+        <!--            <div class="col-6">-->
+        <form th:action class="d-flex  mb-3">
+            <div class="">
+                <div class="form-control p-2">
+                    <label class="label">
+                                <span class="label-text">
+                                    <i class="fa-solid fa-person-half-dress"></i>
+                                    나이대
+                                </span>
+                    </label>
+                    <select name="ageRange" class="select select-bordered w-full"
+                            onchange="$(this).closest('form').submit();">
+                        <option value="">전체</option>
+                        <option value="10">10대</option>
+                        <option value="20">20대</option>
+                        <option value="30">30대</option>
+                        <option value="40">40대</option>
+                        <option value="50">50대</option>
+                    </select>
+                    <script>
+                        if (params.ageRange) {
+                            $(`select[name="ageRange"]:last`).val(params.ageRange[0]);
+                        }
+                    </script>
+                </div>
+
+                <div class="form-control">
+                    <label class="label">
+                                <span class="label-text">
+                                    <i class="fa-solid fa-check"></i>
+                                    주간/야간
+                                </span>
+                    </label>
+                    <select name="dayNight" class="select select-bordered w-full"
+                            onchange="$(this).closest('form').submit();">
+                        <option value="">전체</option>
+                        <option value="1">주간</option>
+                        <option value="2">야간</option>
+                    </select>
+                    <script>
+                        if (params.dayNight) {
+                            $(`select[name="dayNight"]:last`).val(params.dayNight[0]);
+                        }
+                    </script>
+                </div>
+
+                <div class="form-control">
+                    <label class="label">
+                                <span class="label-text">
+                                    <i class="fa-solid fa-check"></i>
+                                    번개/정기
+                                </span>
+                    </label>
+                    <select name="typeValue" class="select select-bordered w-full"
+                            onchange="$(this).closest('form').submit();">
+                        <option value="">전체</option>
+                        <option value="1">정기</option>
+                        <option value="2">번개</option>
+                    </select>
+                    <script>
+                        if (params.typeValue) {
+                            $(`select[name="typeValue"]:last`).val(params.typeValue[0]);
+                        }
+                    </script>
+                </div>
+
+                <div class="form-control">
+                    <label class="label">
+                                <span class="label-text">
+                                    <i class="fa-solid fa-arrow-up-z-a"></i>
+                                    정렬
+                                </span>
+                    </label>
+                    <select name="sortCode" class="select select-bordered w-full"
+                            onchange="$(this).closest('form').submit();">
+                        <option value="1">최신순</option>
+                        <option value="2">날짜순</option>
+                        <option value="3">인기 많은 순</option>
+                        <option value="4">인기 적은 순</option>
+                        <option value="5">성별순</option>
+                        <option value="6">호감사유순</option>
+                    </select>
+                    <script>
+                        if (params.sortCode) {
+                            $(`select[name="sortCode"]:last`).val(params.sortCode[0]);
+                        }
+                    </script>
+                </div>
             </div>
-            <div class="col-6 d-flex justify-content-end">
-                <!-- 오른쪽에 검색창 추가 -->
-                <form th:action>
-                    <div class="input-group">
-                        <input type="text" class="form-control" name="kw" placeholder="검색어" th:value="${param.kw}">
-                        <button class="btn btn-outline-secondary" type="submit">찾기</button>
-                    </div>
-                </form>
+            <div class="ms-auto">
+                <div class="input-group">
+                    <input type="text" class="form-control" name="kw" placeholder="검색어" th:value="${param.kw}">
+                    <button class="btn btn-outline-secondary" type="submit">찾기</button>
+                </div>
             </div>
-        </div>
+
+        </form>
+        <!--            </div>-->
+        <!--                </div>-->
+        <!--            </div>-->
+        <!--            <div class="col-6 d-flex justify-content-end">-->
+        <!--                &lt;!&ndash; 오른쪽에 검색창 추가 &ndash;&gt;-->
+        <!--                <form th:action>-->
+        <!--                    <div class="input-group">-->
+        <!--                        <input type="text" class="form-control" name="kw" placeholder="검색어" th:value="${param.kw}">-->
+        <!--                        <button class="btn btn-outline-secondary" type="submit">찾기</button>-->
+        <!--                    </div>-->
+        <!--                </form>-->
+        <!--            </div>-->
+        <!--        </div>-->
     </div>
 
-    <!--    <div class="col-6">-->
-    <!--        -->
-    <!--    </div>-->
 
     <div class="container">
         <div class="row row-cols-1 row-cols-md-4">
