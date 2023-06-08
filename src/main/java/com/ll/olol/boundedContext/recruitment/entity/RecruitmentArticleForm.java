@@ -1,25 +1,29 @@
 package com.ll.olol.boundedContext.recruitment.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+
+import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
-@ToString
 @Setter
 public class RecruitmentArticleForm {
     @Id
+    @GeneratedValue(strategy = IDENTITY)
     private Long id;
     @MapsId
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
-    @JoinColumn(name = "RecruitmentArticle_ID")
+    @OneToOne
     private RecruitmentArticle recruitmentArticle;
 
     private int dayNight;

@@ -20,20 +20,20 @@ public class HikingTrailApiClient {
     @Value("${custom.site.baseUrl}")
     private String domain;
     @Value("${api.url.hikingTrail}")
-    private String url_getHikingTrail;
+    private String url_base;
 
     public List<HikingTrail> requestHikingTrail(String mountainName, String localCode) {
-        url_getHikingTrail = url_getHikingTrail.formatted(key, domain, mountainName, localCode);
+        String url_getHikingTrail = url_base.formatted(key, domain, mountainName, localCode);
         return restTemplate.exchange(url_getHikingTrail, HttpMethod.GET, null, HikingTrailDTO.class).getBody().getHikingTrails();
     }
 
     public double requestLatitude(String mountainName, String localCode) {
-        url_getHikingTrail = url_getHikingTrail.formatted(key, domain, mountainName, localCode);
+        String url_getHikingTrail = url_base.formatted(key, domain, mountainName, localCode);
         return restTemplate.exchange(url_getHikingTrail, HttpMethod.GET, null, HikingTrailDTO.class).getBody().getLatitude();
     }
 
     public double requestLongitude(String mountainName, String localCode) {
-        url_getHikingTrail = url_getHikingTrail.formatted(key, domain, mountainName, localCode);
+        String url_getHikingTrail = url_base.formatted(key, domain, mountainName, localCode);
         return restTemplate.exchange(url_getHikingTrail, HttpMethod.GET, null, HikingTrailDTO.class).getBody().getLongitude();
     }
 }
