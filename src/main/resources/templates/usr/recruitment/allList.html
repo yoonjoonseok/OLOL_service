@@ -171,15 +171,15 @@
                 </div>
             </div>
             <div class="search-container">
-                <div class="input-group">
+                <div class="input-group ">
                     <input type="text" class="form-control" name="kw" placeholder="검색어" th:value="${param.kw}">
                     <button class="btn btn-outline-secondary" type="submit">찾기</button>
                 </div>
             </div>
-
         </form>
     </div>
 
+    <br>
 
     <div class="container">
         <div class="row row-cols-1 row-cols-md-4">
@@ -225,7 +225,9 @@
         </div>
 
         <!-- 페이징처리 시작 -->
-        <nav th:if="${!paging.isEmpty()}" th:with="queryStrBase = '?kw=' + ${param.kw != null ? param.kw : ''}">
+        <!--        <nav th:if="${!paging.isEmpty()}" th:with="queryStrBase = '?kw=' + ${param.kw != null ? param.kw : ''}">-->
+        <nav th:if="${!paging.isEmpty()}"
+             th:with="queryStrBase = '?ageRange=' + ${param.ageRange != null ? param.ageRange : ''} + '&dayNight=' + ${param.dayNight != null ? param.dayNight : ''} + '&typeValue=' + ${param.typeValue != null ? param.typeValue : ''} + '&sortCode=' + ${param.sortCode != null ? param.sortCode : '1'} + '&kw=' + ${param.kw != null ? param.kw : ''}">
             <ul class="pagination justify-content-center">
                 <li class="page-item" th:classappend="${paging.number == 0} ? 'disabled'">
                     <a class="page-link" th:href="@{|${queryStrBase}&page=0|}">
