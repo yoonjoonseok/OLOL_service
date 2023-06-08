@@ -1,16 +1,18 @@
 package com.ll.olol.boundedContext.recruitment.service;
 
 import com.ll.olol.base.rsData.RsData;
+import com.ll.olol.boundedContext.api.localCode.LocalCodeApiClient;
 import com.ll.olol.boundedContext.member.entity.Member;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticleForm;
 import com.ll.olol.boundedContext.recruitment.repository.RecruitmentFormRepository;
 import com.ll.olol.boundedContext.recruitment.repository.RecruitmentRepository;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
@@ -18,6 +20,8 @@ public class RecruitmentService {
     private final RecruitmentRepository recruitmentRepository;
 
     private final RecruitmentFormRepository recruitmentFormRepository;
+
+    private final LocalCodeApiClient localCodeApiClient;
 
     public Optional<RecruitmentArticle> findById(Long id) {
         return recruitmentRepository.findById(id);
@@ -61,6 +65,8 @@ public class RecruitmentService {
         recruitmentArticleForm.setConnectType(connectType);
         recruitmentArticleForm.setStartTime(startTime);
         recruitmentArticleForm.setCourseTime(courseTime);
+
+        recruitmentArticleForm.setLocalCode(localCodeApiClient.requestLocalCode(realMountainAddress));
 
         recruitmentFormRepository.save(recruitmentArticleForm);
     }

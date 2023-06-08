@@ -1,19 +1,16 @@
 package com.ll.olol.boundedContext.recruitment.entity;
 
-import static jakarta.persistence.GenerationType.IDENTITY;
-
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.MapsId;
-import jakarta.persistence.OneToOne;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Getter
@@ -36,6 +33,8 @@ public class RecruitmentArticleForm {
     private String mountainName;
 
     private String mtAddress;
+
+    private String localCode;
 
     private Long ageRange;
 
