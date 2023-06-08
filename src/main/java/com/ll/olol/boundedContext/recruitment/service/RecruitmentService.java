@@ -116,10 +116,8 @@ public class RecruitmentService {
         return recruitmentRepository.findAll();
     }
 
-    public void addView(Optional<RecruitmentArticle> recruitmentArticle) {
-        if (recruitmentArticle.isPresent()) {
-            recruitmentArticle.get().setViews(recruitmentArticle.get().getViews() + 1);
-            recruitmentRepository.save(recruitmentArticle.get());
-        }
+    public void addView(RecruitmentArticle recruitmentArticle) {
+        recruitmentArticle.setViews(recruitmentArticle.getViews() + 1);
+        recruitmentRepository.save(recruitmentArticle);
     }
 }

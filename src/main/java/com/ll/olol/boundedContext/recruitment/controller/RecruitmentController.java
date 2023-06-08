@@ -169,6 +169,12 @@ public class RecruitmentController {
 
     @GetMapping("/{id}")
     public String showDetail(@PathVariable Long id, Model model) {
+        Optional<RecruitmentArticle> recruitmentArticle = recruitmentService.findById(id);
+        if (recruitmentArticle.isEmpty())
+            return rq.historyBack(RsData.of("F-1", "존재하지 않는 모임 공고입니다"));
+
+        recruitmentService.addView(recruitmentArticle.get());
+
         List<Comment> comments = commentService.findComments();
         List<Comment> commentList = new ArrayList<>();
 
@@ -178,12 +184,11 @@ public class RecruitmentController {
             }
         }
 
-        model.addAttribute("comments", commentList);
-
-        Optional<RecruitmentArticle> recruitmentArticle = recruitmentService.findById(id);
-        recruitmentService.addView(recruitmentArticle);
         model.addAttribute("recruitmentArticle", recruitmentArticle.get());
+
+        model.addAttribute("comments", commentList);
         model.addAttribute("nowDate", LocalDateTime.now());
+
         return "usr/recruitment/detail";
     }
 
