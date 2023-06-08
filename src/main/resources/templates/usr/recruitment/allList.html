@@ -15,6 +15,51 @@
         .card:hover {
             transform: scale(1.05);
         }
+
+
+        .form-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .form-container .form-control {
+            flex: 0 0 calc(25% - 10px);
+            width: 100%;
+            max-width: calc(25% - 10px);
+        }
+
+        .form-container .form-control:last-child {
+            flex-basis: 100%;
+        }
+
+        /*검색창 사이즈*/
+        /*.search-container {*/
+        /*    flex-shrink: 0;*/
+        /*    width: 200px;*/
+        /*    margin-left: auto;*/
+        /*}*/
+
+
+        @media (max-width: 995px) {
+            .search-container .input-group {
+                max-width: none;
+            }
+
+            .form-container .form-control {
+                flex: 0 1 100%;
+            }
+
+            .search-container .form-control {
+                max-width: none;
+            }
+
+            .form-container .form-control {
+                flex: 0 0 50%;
+                max-width: 50%;
+            }
+        }
+
     </style>
 </head>
 
@@ -36,13 +81,10 @@
         </div>
     </div>
 
-
     <div class="container">
-        <!--        <div class="row">-->
-        <!--            <div class="col-6">-->
-        <form th:action class="d-flex  mb-3">
-            <div class="">
-                <div class="form-control p-2">
+        <form th:action>
+            <div class="form-container mb-2">
+                <div class="form-control">
                     <label class="label">
                                 <span class="label-text">
                                     <i class="fa-solid fa-person-half-dress"></i>
@@ -128,7 +170,7 @@
                     </script>
                 </div>
             </div>
-            <div class="ms-auto">
+            <div class="search-container">
                 <div class="input-group">
                     <input type="text" class="form-control" name="kw" placeholder="검색어" th:value="${param.kw}">
                     <button class="btn btn-outline-secondary" type="submit">찾기</button>
@@ -136,19 +178,6 @@
             </div>
 
         </form>
-        <!--            </div>-->
-        <!--                </div>-->
-        <!--            </div>-->
-        <!--            <div class="col-6 d-flex justify-content-end">-->
-        <!--                &lt;!&ndash; 오른쪽에 검색창 추가 &ndash;&gt;-->
-        <!--                <form th:action>-->
-        <!--                    <div class="input-group">-->
-        <!--                        <input type="text" class="form-control" name="kw" placeholder="검색어" th:value="${param.kw}">-->
-        <!--                        <button class="btn btn-outline-secondary" type="submit">찾기</button>-->
-        <!--                    </div>-->
-        <!--                </form>-->
-        <!--            </div>-->
-        <!--        </div>-->
     </div>
 
 

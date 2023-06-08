@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class HomeController {
     @GetMapping("/")
     public String showMain() {
-        return "usr/home/main";
+        return "redirect:/recruitment/list";
     }
 
 
