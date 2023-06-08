@@ -76,7 +76,7 @@ public class NotProd {
             for (int i = 20; i < 70; i++) {
                 em.persist(createRecruitmentArticleForm(
                         createRecruitmentArticle(LocalDateTime.now(),
-                                LocalDateTime.now().plusDays(1), 20L, member4, 1, String.format("테스트 데이터[%03d]", i),
+                                LocalDateTime.now().plusDays(1), 30L, member4, 1, String.format("테스트 데이터[%03d]", i),
                                 "테스트용 게시글 내용입니다."),
                         2, 1L,
                         "삼성산", "석수동", "41171102", 20L, LocalDateTime.now(), LocalDateTime.now().plusDays(1), "카카오톡1")
@@ -86,7 +86,7 @@ public class NotProd {
             for (int i = 70; i < 100; i++) {
                 em.persist(createRecruitmentArticleForm(
                         createRecruitmentArticle(LocalDateTime.now(),
-                                LocalDateTime.now().plusDays(1), 30L, member1, 2, String.format("테스트 데이터[%03d]", i),
+                                LocalDateTime.now().plusDays(1), 20L, member1, 2, String.format("테스트 데이터[%03d]", i),
                                 "테스트용 게시글 내용입니다."),
                         1, 1L,
                         "삼성산", "석수동", "41171102", 40L, LocalDateTime.now(), LocalDateTime.now().plusDays(1), "카카오톡1")

@@ -253,7 +253,10 @@ public class RecruitmentController {
                        @RequestParam(defaultValue = "0") int page,
                        String kw) {
         List<Sort.Order> sorts = new ArrayList<>();
-        sorts.add(Sort.Order.desc("createDate"));
+        if (sortCode == 1) sorts.add(Sort.Order.desc("createDate"));
+        if (sortCode == 2) sorts.add(Sort.Order.asc("createDate"));
+        else if (sortCode == 3) sorts.add(Sort.Order.desc("views"));
+
 
         Pageable pageable = PageRequest.of(page, 20, Sort.by(sorts));
         Page<RecruitmentArticle> paging = recruitmentService.getListByConditions(ageRange, dayNight, typeValue, kw, pageable);
