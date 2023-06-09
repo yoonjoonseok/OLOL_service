@@ -1,0 +1,266 @@
+<html layout:decorate="~{usr/layout/layout.html}">
+<link rel="stylesheet" href="common.css">
+
+<head>
+    <title>오름 오름(메인)</title>
+    <style>
+        .smaller-text {
+            font-size: 13px;
+        }
+
+        .card {
+            transition: transform 0.2s;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+        }
+
+
+        .form-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .form-container .form-control {
+            flex: 0 0 calc(25% - 10px);
+            width: 100%;
+            max-width: calc(25% - 10px);
+        }
+
+        .form-container .form-control:last-child {
+            flex-basis: 100%;
+        }
+
+        /*검색창 사이즈*/
+        /*.search-container {*/
+        /*    flex-shrink: 0;*/
+        /*    width: 200px;*/
+        /*    margin-left: auto;*/
+        /*}*/
+
+
+        @media (max-width: 995px) {
+            .search-container .input-group {
+                max-width: none;
+            }
+
+            .form-container .form-control {
+                flex: 0 1 100%;
+            }
+
+            .search-container .form-control {
+                max-width: none;
+            }
+
+            .form-container .form-control {
+                flex: 0 0 50%;
+                max-width: 50%;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+
+<main layout:fragment="main">
+    <div class="col-6">
+        <a th:href="@{/recruitment/create}" class="btn btn-primary">모집 공고 등록</a>
+        <a th:href="@{/recruitment/1}" class="btn btn-primary">공고 상세 페이지#1</a>
+        <a th:href="@{/member/bookmark}" class="btn btn-primary">찜한 공고 목록</a>
+        <a th:href="@{/recruitment/attendList}" class="btn btn-primary">신청한 공고 목록</a>
+        <a th:href="@{/recruitment/fromList}" class="btn btn-primary">참가자 목록</a>
+    </div>
+
+    <div class="jumbotron jumbotron-fluid">
+        <div class="container">
+            <h1 class="display-4">환영합니다!</h1>
+            <p class="lead">오름오름 웹사이트에 오신 것을 환영합니다. 다양한 등산로 정보와 안전 가이드를 제공합니다.</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <form th:action>
+            <div class="form-container mb-2">
+                <div class="form-control">
+                    <label class="label">
+                                <span class="label-text">
+                                    <i class="fa-solid fa-person-half-dress"></i>
+                                    나이대
+                                </span>
+                    </label>
+                    <select name="ageRange" class="select select-bordered w-full"
+                            onchange="$(this).closest('form').submit();">
+                        <option value="">전체</option>
+                        <option value="10">10대</option>
+                        <option value="20">20대</option>
+                        <option value="30">30대</option>
+                        <option value="40">40대</option>
+                        <option value="50">50대</option>
+                    </select>
+                    <script>
+                        if (params.ageRange) {
+                            $(`select[name="ageRange"]:last`).val(params.ageRange[0]);
+                        }
+                    </script>
+                </div>
+
+                <div class="form-control">
+                    <label class="label">
+                                <span class="label-text">
+                                    <i class="fa-solid fa-check"></i>
+                                    주간/야간
+                                </span>
+                    </label>
+                    <select name="dayNight" class="select select-bordered w-full"
+                            onchange="$(this).closest('form').submit();">
+                        <option value="">전체</option>
+                        <option value="1">주간</option>
+                        <option value="2">야간</option>
+                    </select>
+                    <script>
+                        if (params.dayNight) {
+                            $(`select[name="dayNight"]:last`).val(params.dayNight[0]);
+                        }
+                    </script>
+                </div>
+
+                <div class="form-control">
+                    <label class="label">
+                                <span class="label-text">
+                                    <i class="fa-solid fa-check"></i>
+                                    번개/정기
+                                </span>
+                    </label>
+                    <select name="typeValue" class="select select-bordered w-full"
+                            onchange="$(this).closest('form').submit();">
+                        <option value="">전체</option>
+                        <option value="1">정기</option>
+                        <option value="2">번개</option>
+                    </select>
+                    <script>
+                        if (params.typeValue) {
+                            $(`select[name="typeValue"]:last`).val(params.typeValue[0]);
+                        }
+                    </script>
+                </div>
+
+                <div class="form-control">
+                    <label class="label">
+                                <span class="label-text">
+                                    <i class="fa-solid fa-arrow-up-z-a"></i>
+                                    정렬
+                                </span>
+                    </label>
+                    <select name="sortCode" class="select select-bordered w-full"
+                            onchange="$(this).closest('form').submit();">
+                        <option value="1">최신순</option>
+                        <option value="2">날짜순</option>
+                        <option value="3">조회순</option>
+                        <option value="4">인기 적은 순</option>
+                        <option value="5">성별순</option>
+                        <option value="6">호감사유순</option>
+                    </select>
+                    <script>
+                        if (params.sortCode) {
+                            $(`select[name="sortCode"]:last`).val(params.sortCode[0]);
+                        }
+                    </script>
+                </div>
+            </div>
+            <div class="search-container">
+                <div class="input-group ">
+                    <input type="text" class="form-control" name="kw" placeholder="검색어" th:value="${param.kw}">
+                    <button class="btn btn-outline-secondary" type="submit">찾기</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <br>
+
+    <div class="container">
+        <div class="row row-cols-1 row-cols-md-4">
+            <div class="col mb-4" th:each="recruitmentArticle, loop : ${paging}">
+                <a class="card mb-4 text-dark" style="width: 100%; height: 18rem; text-decoration: none;"
+                   th:href="@{|/recruitment/${recruitmentArticle.id}|}">
+                    <div class="card-header bg-white">
+                        <div class="card-title mt-3">
+                            <div class="smaller-text mb-2">
+                                <div th:if="${recruitmentArticle.isImpromotu()}">
+                                    <span class="border bg-light rounded-4 p-1">
+                                        <i class="fa-solid fa-cloud-bolt"></i>
+                                        <span class="fw-bold"
+                                              th:text="${recruitmentArticle.getTypeValueToString()}"></span>
+                                    </span>
+                                </div>
+                                <div th:if="${recruitmentArticle.isRegular()}">
+                                    <span class="border bg-light rounded-4 p-1">
+                                        <i class="fa-solid fa-user-group"></i>
+                                        <span class="fw-bold"
+                                              th:text="${recruitmentArticle.getTypeValueToString()}"></span>
+                                    </span>
+                                </div>
+
+                                <div class="smaller-text text-secondary mt-1 fw-bold"
+                                     th:text="|마감일 ${#temporals.format(recruitmentArticle.deadLineDate, 'yyyy.MM.dd')}|"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body ml-2" style="text-decoration: none;">
+
+                        <div class="card-text" style="height: 4rem; /* 예시로 높이를 조절 */">
+                            <div class="fw-bold fs-5 mt-2"
+                                 style="overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;"
+                                 th:text="${recruitmentArticle.articleName}"></div>
+                        </div>
+                    </div>
+                    <div class="card-footer bg-white">
+                        <div th:text="${recruitmentArticle.member.nickname}"></div>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <!-- 페이징처리 시작 -->
+        <!--        <nav th:if="${!paging.isEmpty()}" th:with="queryStrBase = '?kw=' + ${param.kw != null ? param.kw : ''}">-->
+        <nav th:if="${!paging.isEmpty()}"
+             th:with="queryStrBase = '?ageRange=' + ${param.ageRange != null ? param.ageRange : ''} + '&dayNight=' + ${param.dayNight != null ? param.dayNight : ''} + '&typeValue=' + ${param.typeValue != null ? param.typeValue : ''} + '&sortCode=' + ${param.sortCode != null ? param.sortCode : '1'} + '&kw=' + ${param.kw != null ? param.kw : ''}">
+            <ul class="pagination justify-content-center">
+                <li class="page-item" th:classappend="${paging.number == 0} ? 'disabled'">
+                    <a class="page-link" th:href="@{|${queryStrBase}&page=0|}">
+                        <span>&laquo;</span>
+                    </a>
+                </li>
+                <li class="page-item" th:classappend="${!paging.hasPrevious} ? 'disabled'">
+                    <a class="page-link"
+                       th:href="@{|${queryStrBase}&page=${paging.number - 1}|}">
+                        <span>이전</span>
+                    </a>
+                </li>
+                <li class="page-item" th:each="page: ${#numbers.sequence(0, paging.totalPages - 1)}"
+                    th:classappend="${page == paging.number} ? 'active'"
+                    th:if="${page >= paging.number - 5 and page <= paging.number + 5}">
+                    <a th:text="${page}" class="page-link" th:href="@{|${queryStrBase}&page=${page}|}"></a>
+                </li>
+                <li class="page-item" th:classappend="${!paging.hasNext} ? 'disabled'">
+                    <a class="page-link" th:href="@{|${queryStrBase}&page=${paging.number+1}|}">
+                        <span>다음</span>
+                    </a>
+                </li>
+                <li class="page-item" th:classappend="${paging.number == paging.totalPages - 1} ? 'disabled'">
+                    <a class="page-link" th:href="@{|${queryStrBase}&page=${paging.totalPages - 1}|}">
+                        <span>&raquo;</span>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+        <!-- 페이징처리 끝 -->
+    </div>
+</main>
+
+</body>
+
+</html>
