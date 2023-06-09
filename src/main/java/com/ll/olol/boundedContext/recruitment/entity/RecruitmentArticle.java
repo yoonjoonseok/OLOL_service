@@ -57,6 +57,14 @@ public class RecruitmentArticle {
         }
     }
 
+    public boolean isImpromotu() {
+        return typeValue == 2;
+    }
+
+    public boolean isRegular() {
+        return typeValue == 1;
+    }
+
     public String getCreateDateToString() {
         return createDate.format(DateTimeFormatter.ofPattern("yyyy.MM.dd"));
     }
