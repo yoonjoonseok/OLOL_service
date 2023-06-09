@@ -8,14 +8,14 @@
         <div class="row">
             <div class="col-md-8">
                 <section>
-                    <h2 th:text="${recruitmentArticle.getArticleName()}">제목</h2>
+                    <h2 th:text="${recruitmentArticle.articleName}">제목</h2>
                     <div>
-                        <span th:text="${recruitmentArticle.getMember().getNickname()}">닉네임</span>
+                        <span th:text="${recruitmentArticle.member.nickname}">닉네임</span>
                         <div class="vr"></div>
                         <span th:text="${recruitmentArticle.getCreateDateToString()}">게시글 날짜</span>
                         <div class="vr"></div>
                         <i class="bi bi-eye"></i>
-                        <span th:text="${recruitmentArticle.getViews()}">조회수</span>
+                        <span th:text="${recruitmentArticle.views}">조회수</span>
                     </div>
                     <hr>
                     <ul class="list-group">
@@ -27,41 +27,49 @@
                         <li class="list-group-item">
                             <span class="font-weight-bold">산 이름</span>
                             <div class="vr"></div>
-                            <span th:text="${recruitmentArticle.getRecruitmentArticleForm().getMountainName()}">산 이름</span>
+                            <span th:text="${recruitmentArticle.recruitmentArticleForm.mountainName}">산 이름</span>
                             <button type="button" data-toggle="modal"
                                     data-target="#hikingTrailModal">
                                 등산로
+                            </button>
+                            <button type="button" data-toggle="modal"
+                                    data-target="#restaurant">
+                                주변 맛집
+                            </button>
+                            <button type="button" data-toggle="modal"
+                                    data-target="#parkingLot">
+                                주변 주차장
                             </button>
                         </li>
                         <li class="list-group-item">
                             <span class="font-weight-bold">주야</span>
                             <div class="vr"></div>
-                            <span th:text="${recruitmentArticle.getRecruitmentArticleForm().getDayNightToString()}">주1 야2</span>
+                            <span th:text="${recruitmentArticle.recruitmentArticleForm.getDayNightToString()}">주1 야2</span>
                         </li>
                         <li class="list-group-item">
                             <span class="font-weight-bold">모집 인원</span>
                             <div class="vr"></div>
-                            <span th:text="${recruitmentArticle.getRecruitmentArticleForm().getRecruitsNumbers()}">모집 인원</span>
+                            <span th:text="${recruitmentArticle.recruitmentArticleForm.recruitsNumbers}">모집 인원</span>
                         </li>
                         <li class="list-group-item">
                             <span class="font-weight-bold">연령대</span>
                             <div class="vr"></div>
-                            <span th:text="${recruitmentArticle.getRecruitmentArticleForm().getAgeRange()}">연령대</span>
+                            <span th:text="${recruitmentArticle.recruitmentArticleForm.ageRange}">연령대</span>
                         </li>
                         <li class="list-group-item">
                             <span class="font-weight-bold">등산 시작 시각</span>
                             <div class="vr"></div>
-                            <span th:text="${recruitmentArticle.getRecruitmentArticleForm().getStartTimeToString()}">등산 시작 시각</span>
+                            <span th:text="${recruitmentArticle.recruitmentArticleForm.getStartTimeToString()}">등산 시작 시각</span>
                         </li>
                         <li class="list-group-item">
                             <span class="font-weight-bold">예상 도착 시간</span>
                             <div class="vr"></div>
-                            <span th:text="${recruitmentArticle.getRecruitmentArticleForm().getCourseTimeToString()}">예상 도착 시각</span>
+                            <span th:text="${recruitmentArticle.recruitmentArticleForm.getCourseTimeToString()}">예상 도착 시각</span>
                         </li>
                         <li class="list-group-item">
                             <span class="font-weight-bold">연락 방법</span>
                             <div class="vr"></div>
-                            <span th:text="${recruitmentArticle.getRecruitmentArticleForm().getConnectType()}">연락 방법</span>
+                            <span th:text="${recruitmentArticle.recruitmentArticleForm.connectType}">연락 방법</span>
                         </li>
                         <div class="containerIn">
                             <li class="list-group-item">
@@ -89,7 +97,7 @@
                         </div>
                     </ul>
                     <hr>
-                    <div th:text="${recruitmentArticle.getContent()}">게시글 내용</div>
+                    <div th:text="${recruitmentArticle.content}">게시글 내용</div>
                     <hr>
                     <button>수정</button>
                     <button href="javascript:" onclick="if ( confirm('삭제하시겠습니까?') ) $(this).next().submit();">
@@ -147,6 +155,8 @@
     </form>
 
     <th:block th:replace="~{/usr/api/hikingTrail :: hikingTrail()}"></th:block>
+    <th:block th:replace="~{/usr/api/restaurant :: restaurant}"></th:block>
+    <th:block th:replace="~{/usr/api/parkingLot :: parkingLot}"></th:block>
 </main>
 </body>
 </html>
