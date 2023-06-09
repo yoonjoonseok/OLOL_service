@@ -100,7 +100,24 @@ public class RecruitmentService {
         recruitmentRepository.save(recruitmentArticle);
     }
 
+    public void deleteArticle(RecruitmentArticle recruitmentArticle) {
+        recruitmentRepository.delete(recruitmentArticle);
+    }
+
+    public RsData canDelete(Optional<RecruitmentArticle> recruitmentArticle, Member member) {
+        if (recruitmentArticle.isEmpty())
+            return RsData.of("F-1", "존재하지 않는 모임 공고입니다");
+        if (recruitmentArticle.get().getMember().getId() != member.getId())
+            return RsData.of("F-2", "모집자만이 삭제 가능합니다");
+        return RsData.of("S-1", "모임 공고 삭제 가능");
+    }
+
     public List<RecruitmentArticle> findAll() {
         return recruitmentRepository.findAll();
+    }
+
+    public void addView(RecruitmentArticle recruitmentArticle) {
+        recruitmentArticle.setViews(recruitmentArticle.getViews() + 1);
+        recruitmentRepository.save(recruitmentArticle);
     }
 }

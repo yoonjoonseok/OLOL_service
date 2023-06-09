@@ -12,21 +12,19 @@ import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentPeople;
 import com.ll.olol.boundedContext.recruitment.service.RecruitmentPeopleService;
 import com.ll.olol.boundedContext.recruitment.service.RecruitmentService;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
+
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/recruitment")
@@ -171,6 +169,12 @@ public class RecruitmentController {
 
     @GetMapping("/{id}")
     public String showDetail(@PathVariable Long id, Model model) {
+        Optional<RecruitmentArticle> recruitmentArticle = recruitmentService.findById(id);
+        if (recruitmentArticle.isEmpty())
+            return rq.historyBack(RsData.of("F-1", "존재하지 않는 모임 공고입니다"));
+
+        recruitmentService.addView(recruitmentArticle.get());
+
         List<Comment> comments = commentService.findComments();
         List<Comment> commentList = new ArrayList<>();
 
@@ -180,12 +184,23 @@ public class RecruitmentController {
             }
         }
 
-        model.addAttribute("comments", commentList);
-
-        Optional<RecruitmentArticle> recruitmentArticle = recruitmentService.findById(id);
         model.addAttribute("recruitmentArticle", recruitmentArticle.get());
+
+        model.addAttribute("comments", commentList);
         model.addAttribute("nowDate", LocalDateTime.now());
+
         return "usr/recruitment/detail";
+    }
+
+    @Transactional
+    @DeleteMapping("/{id}/delete")
+    public String delete(@PathVariable Long id) {
+        Optional<RecruitmentArticle> recruitmentArticle = recruitmentService.findById(id);
+        RsData canDeleteRsData = recruitmentService.canDelete(recruitmentArticle, rq.getMember());
+        if (canDeleteRsData.isFail())
+            return rq.historyBack(canDeleteRsData);
+        recruitmentService.deleteArticle(recruitmentArticle.get());
+        return "redirect:/";
     }
 
     @PostMapping("/{id}/comment")
