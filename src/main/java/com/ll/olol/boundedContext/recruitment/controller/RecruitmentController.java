@@ -1,13 +1,29 @@
 package com.ll.olol.boundedContext.recruitment.controller;
 
 import com.ll.olol.base.rq.Rq;
+import com.ll.olol.base.rsData.RsData;
+import com.ll.olol.boundedContext.comment.entity.Comment;
+import com.ll.olol.boundedContext.comment.service.CommentService;
+import com.ll.olol.boundedContext.member.entity.Member;
+import com.ll.olol.boundedContext.member.repository.MemberRepository;
 import com.ll.olol.boundedContext.member.service.MemberService;
 import com.ll.olol.boundedContext.recruitment.CreateForm;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentPeople;
 import com.ll.olol.boundedContext.recruitment.service.RecruitmentPeopleService;
 import com.ll.olol.boundedContext.recruitment.service.RecruitmentService;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,8 +32,18 @@ import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/recruitment")
@@ -26,7 +52,10 @@ public class RecruitmentController {
     private final Rq rq;
     private final RecruitmentService recruitmentService;
     private final MemberService memberService;
+    private final MemberRepository memberRepository;
+    private final CommentService commentService;
     private final RecruitmentPeopleService recruitmentPeopleService;
+    private int limitPeople = 0;
 
     @GetMapping("/create")
     // @Valid를 붙여야 QuestionForm.java내의 NotBlank나 Size가 동작한다.
@@ -43,20 +72,78 @@ public class RecruitmentController {
             return "recruitmentArticle/createRecruitment_form";
         }
 
-
-        RecruitmentArticle recruitmentArticle = recruitmentService.createArticle(createForm.getArticleName(), createForm.getContent(), rq.getMember(), createForm.getTypeValue(), createForm.getDeadLineDate());
-        recruitmentService.createArticleForm(recruitmentArticle, createForm.getDayNight(), createForm.getRecruitsNumber(), createForm.getMountainName(), createForm.getMtAddress(),
-                createForm.getAgeRange(), createForm.getConnectType(), createForm.getStartTime(), createForm.getCourseTime());
+        RecruitmentArticle recruitmentArticle = recruitmentService.createArticle(createForm.getArticleName(),
+                createForm.getContent(), rq.getMember(), createForm.getTypeValue(), createForm.getDeadLineDate());
+        recruitmentService.createArticleForm(recruitmentArticle, createForm.getDayNight(),
+                createForm.getRecruitsNumber(), createForm.getMountainName(), createForm.getMtAddress(),
+                createForm.getAgeRange(), createForm.getConnectType(), createForm.getStartTime(),
+                createForm.getCourseTime());
 
         return "redirect:/";
+    }
+
+    @GetMapping("/attendList")
+    public String showAttendList(Model model) {
+        Long memberId = rq.getMember().getId();
+        Optional<Member> member = memberRepository.findById(memberId);
+        List<RecruitmentPeople> recruitmentPeople = member.get().getRecruitmentPeople();
+
+        model.addAttribute("peopleList", recruitmentPeople);
+        return "usr/recruitment/attendList";
+    }
+
+    @GetMapping("/fromList")
+    public String showFromAttendList(Model model) {
+        Long memberId = rq.getMember().getId();
+        Optional<Member> member = memberRepository.findById(memberId);
+        List<RecruitmentArticle> all = recruitmentService.findAll();
+        List<RecruitmentPeople> list = new ArrayList<>();
+        //모든 게시물중에서
+        //내가 쓴 게시물을 찾아서
+        //내가 쓴 게시물에 신청자들을 다 뽑아온다.
+
+        for (RecruitmentArticle recruitmentArticle : all) {
+            if (recruitmentArticle.getMember().getId() == memberId) {
+                List<RecruitmentPeople> recruitmentPeople = recruitmentArticle.getRecruitmentPeople();
+                for (RecruitmentPeople recruitmentPeople1 : recruitmentPeople) {
+                    //신청자가 false일 경우만 추가
+                    if (!recruitmentPeople1.isAttend()) {
+                        list.add(recruitmentPeople1);
+                    }
+                }
+            }
+        }
+
+        model.addAttribute("attendList", list);
+        return "usr/recruitment/fromAttendList";
+    }
+
+
+    @PostMapping("/{id}/attend/delete")
+    public String deleteAttend(@PathVariable Long id) {
+        RecruitmentPeople one = recruitmentPeopleService.findOne(id);
+        recruitmentPeopleService.delete(one);
+        return "redirect:/recruitment/fromList";
+    }
+
+    @PostMapping("/{id}/attend/create")
+    public String createAttend(@PathVariable Long id) {
+        RecruitmentPeople person = recruitmentPeopleService.findOne(id);
+        RecruitmentArticle recruitmentArticle = person.getRecruitmentArticle();
+        Long recruitsNumbers = recruitmentArticle.getRecruitmentArticleForm().getRecruitsNumbers();
+        if (limitPeople >= recruitsNumbers) {
+            return rq.historyBack("이미 참가 인원이 꽉 찼습니다.");
+        }
+
+        person.setAttend(true);
+        recruitmentPeopleService.update(person);
+        limitPeople++;
+        return "redirect:/recruitment/fromList";
     }
 
     @GetMapping("/{id}/attend")
     public String attendForm(@PathVariable Long id, Model model) {
         Optional<RecruitmentArticle> recruitmentArticle = recruitmentService.findById(id);
-
-        Long recruitsNumbers = recruitmentArticle.get().getRecruitmentArticleForm().getRecruitsNumbers();
-        //이제까지 신청한 인원들
         List<RecruitmentPeople> recruitmentPeople = recruitmentArticle.get().getRecruitmentPeople();
         //현재 로그인한 회원에 아이디
         Long memberId = rq.getMember().getId();
@@ -68,9 +155,7 @@ public class RecruitmentController {
                 return rq.historyBack("이미 신청된 공고입니다.");
             }
         }
-        if (recruitmentPeople.size() == recruitsNumbers) {
-            return rq.historyBack("이미 마감된 공고입니다.");
-        }
+
         if (articleMemberId == memberId) {
             return rq.historyBack("게시글을 작성한 사람은 참가를 누를 수 없습니다.");
         }
@@ -83,9 +168,9 @@ public class RecruitmentController {
     public String attend(@PathVariable Long id, @ModelAttribute RecruitmentArticle recruitmentArticle) {
         Optional<RecruitmentArticle> article = recruitmentService.findById(id);
 
-        recruitmentPeopleService.saveRecruitmentPeople(article.get().getMember().getId(), id);
+        recruitmentPeopleService.saveRecruitmentPeople(rq.getMember().getId(), id);
 
-        return "redirect:/";
+        return "redirect:/recruitment/" + id;
     }
 
     @PostMapping("/{id}/deadLine")
@@ -97,14 +182,147 @@ public class RecruitmentController {
         article.get().setDeadLineDate(LocalDateTime.now());
         //마감 버튼을 누르면 마감 시간을 현재 시간으로 바꿈
         recruitmentService.updateArticleForm(article.get());
-        return "redirect:/";
+        return "redirect:/recruitment/" + id;
     }
+
 
     @GetMapping("/{id}")
     public String showDetail(@PathVariable Long id, Model model) {
         Optional<RecruitmentArticle> recruitmentArticle = recruitmentService.findById(id);
+        if (recruitmentArticle.isEmpty())
+            return rq.historyBack(RsData.of("F-1", "존재하지 않는 모임 공고입니다"));
+
+        recruitmentService.addView(recruitmentArticle.get());
+
+        List<Comment> comments = commentService.findComments();
+        List<Comment> commentList = new ArrayList<>();
+
+        for (Comment comment : comments) {
+            if (comment.getRecruitmentArticle().getId() == id) {
+                commentList.add(comment);
+            }
+        }
+
         model.addAttribute("recruitmentArticle", recruitmentArticle.get());
+
+        model.addAttribute("comments", commentList);
         model.addAttribute("nowDate", LocalDateTime.now());
+
         return "usr/recruitment/detail";
     }
+
+    @Transactional
+    @DeleteMapping("/{id}/delete")
+    public String delete(@PathVariable Long id) {
+        Optional<RecruitmentArticle> recruitmentArticle = recruitmentService.findById(id);
+        RsData canDeleteRsData = recruitmentService.canDelete(recruitmentArticle, rq.getMember());
+        if (canDeleteRsData.isFail())
+            return rq.historyBack(canDeleteRsData);
+        recruitmentService.deleteArticle(recruitmentArticle.get());
+        return "redirect:/";
+    }
+
+    @PostMapping("/{id}/comment")
+    public String createComment(@PathVariable("id") Long id, @ModelAttribute Comment comment,
+                                String writer) {
+        comment.setCreateDate(LocalDateTime.now());
+        commentService.commentSave(comment, writer, id);
+
+        return "redirect:/recruitment/" + id;
+    }
+
+    @GetMapping("/comment/{id}/delete")
+    public String deleteComment(@PathVariable("id") Long id) {
+        RsData rsData = commentService.isEqualMemberById(id);
+        if (rsData.isFail()) {
+            return rq.historyBack(rsData.getMsg());
+        }
+        Comment comment = commentService.findOne(id);
+        Long articleId = comment.getRecruitmentArticle().getId();
+        commentService.commentDelete(id);
+        return "redirect:/recruitment/" + articleId;
+    }
+
+
+    @GetMapping("/comment/{id}/edit")
+    public String editCommentForm(@PathVariable("id") Long id, Model model) {
+        Comment comment = commentService.findOne(id);
+        RsData rsData = commentService.isEqualMemberById(id);
+
+        if (rsData.isFail()) {
+            return rq.historyBack(rsData.getMsg());
+        }
+
+        model.addAttribute("comment", comment);
+        return "usr/home/editComment";
+    }
+
+    @PostMapping("/comment/{id}/edit")
+    public String editComment(@PathVariable("id") Long id, @ModelAttribute Comment comment) {
+        Comment one = commentService.findOne(id);
+        one.setContent(comment.getContent());
+
+        commentService.update(one);
+        Long articleId = one.getRecruitmentArticle().getId();
+
+        return "redirect:/recruitment/" + articleId;
+    }
+
+
+//    @GetMapping("/list")
+//    public String list(Model model, @RequestParam(defaultValue = "0L") Long ageRange, @RequestParam(defaultValue = "0") int dayNight, @RequestParam(defaultValue = "0") int typeValue, @RequestParam(defaultValue = "1") int sortCode, @RequestParam(defaultValue = "0") int page, String kw) { // int page 가 곧 name = page와 같다.
+//        Page<RecruitmentArticle> paging = recruitmentService.getlist(page, kw);
+//        model.addAttribute("paging", paging);
+//        //model.addAttribute("kw",kw);
+//        return "usr/recruitment/allList";
+//    }
+
+    @GetMapping("/list")
+    public String list(Model model,
+                       @RequestParam(defaultValue = "0") Long ageRange,
+                       @RequestParam(defaultValue = "0") int dayNight,
+                       @RequestParam(defaultValue = "0") int typeValue,
+                       @RequestParam(defaultValue = "1") int sortCode,
+                       @RequestParam(defaultValue = "0") int page,
+                       String kw) {
+        List<Sort.Order> sorts = new ArrayList<>();
+        if (sortCode == 1) sorts.add(Sort.Order.desc("createDate"));
+        if (sortCode == 2) sorts.add(Sort.Order.asc("createDate"));
+        else if (sortCode == 3) sorts.add(Sort.Order.desc("views"));
+
+
+        Pageable pageable = PageRequest.of(page, 20, Sort.by(sorts));
+        Page<RecruitmentArticle> paging = recruitmentService.getListByConditions(ageRange, dayNight, typeValue, kw, pageable);
+
+        model.addAttribute("paging", paging);
+        return "usr/recruitment/allList";
+    }
+//    @PreAuthorize("isAuthenticated()")
+//    @GetMapping("/toList")
+//    public String showToList(Model model, @RequestParam(defaultValue = "") String gender, @RequestParam(defaultValue = "0") int attractiveTypeCode, @RequestParam(defaultValue = "1") int sortCode) {
+//        if (gender.trim().equals("")) gender = null;
+//
+//        InstaMember instaMember = rq.getMember().getInstaMember();
+//
+//        // 인스타인증을 했는지 체크
+//        if (instaMember != null) {
+//            Stream<LikeablePerson> likeablePeopleStream = instaMember.getToLikeablePeople().stream();
+//
+//            if (gender != null) {
+//                likeablePeopleStream = likeablePersonService.filterByGender(likeablePeopleStream, gender).getData();
+//            }
+//
+//            if (attractiveTypeCode != 0) {
+//                likeablePeopleStream = likeablePersonService.filterByAttractiveTypeCode(likeablePeopleStream, attractiveTypeCode).getData();
+//            }
+//
+//            likeablePeopleStream = likeablePersonService.sortCodeSroted(likeablePeopleStream, sortCode).getData();
+//
+//            List<LikeablePerson> likeablePeople = likeablePeopleStream.collect(Collectors.toList());
+//
+//            model.addAttribute("likeablePeople", likeablePeople);
+//        }
+//
+//        return "usr/likeablePerson/toList";
+//    }
 }

@@ -4,6 +4,7 @@ import com.ll.olol.base.rq.Rq;
 import com.ll.olol.base.rsData.RsData;
 import com.ll.olol.boundedContext.member.service.MemberService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -35,12 +36,20 @@ public class MemberController {
         @NotBlank
         @Size(min = 2, max = 10)
         private final String nickname;
+
+        @NotBlank
+        @Email
+        @Size(min = 5, max = 40)
+        private final String email;
+
+        private final String gender;
+        private final int ageRange;
     }
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/mypage")
     public String editInfo(@Valid EditForm editForm) {
-        RsData result = memberService.modifyMemberInfo(rq.getMember(), editForm.getNickname());
+        RsData result = memberService.modifyMemberInfo(rq.getMember(), editForm.getNickname(), editForm.getAgeRange(), editForm.getGender(), editForm.getEmail());
 
         if (result.isFail()) {
             rq.historyBack("다시시도해주세요");
@@ -48,6 +57,4 @@ public class MemberController {
 
         return "redirect:/";
     }
-
-
 }

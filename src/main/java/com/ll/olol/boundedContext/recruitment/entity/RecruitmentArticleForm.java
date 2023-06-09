@@ -1,34 +1,29 @@
 package com.ll.olol.boundedContext.recruitment.entity;
 
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.MapsId;
-import jakarta.persistence.OneToOne;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 import lombok.experimental.SuperBuilder;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
+import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
-@ToString
 @Setter
 public class RecruitmentArticleForm {
     @Id
+    @GeneratedValue(strategy = IDENTITY)
     private Long id;
     @MapsId
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
-    @JoinColumn(name = "RecruitmentArticle_ID")
+    @OneToOne
     private RecruitmentArticle recruitmentArticle;
 
     private int dayNight;
@@ -38,6 +33,8 @@ public class RecruitmentArticleForm {
     private String mountainName;
 
     private String mtAddress;
+
+    private String localCode;
 
     private Long ageRange;
 

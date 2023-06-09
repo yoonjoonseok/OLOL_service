@@ -1,28 +1,21 @@
 package com.ll.olol.boundedContext.recruitment.entity;
 
-import static jakarta.persistence.GenerationType.IDENTITY;
-
 import com.ll.olol.boundedContext.comment.entity.Comment;
 import com.ll.olol.boundedContext.member.entity.Member;
-
 import jakarta.persistence.*;
-import lombok.*;
-import lombok.experimental.SuperBuilder;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
-
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.List;
+
+import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Getter
@@ -31,11 +24,10 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 @SuperBuilder
-@ToString
+
 public class RecruitmentArticle {
     @Id
     @GeneratedValue(strategy = IDENTITY)
-    @Column(name = "RecruitmentArticle_ID")
     private Long id;
     @ManyToOne
     private Member member;
@@ -51,11 +43,10 @@ public class RecruitmentArticle {
     @OrderBy("id desc")
     private List<Comment> comment;
 
-    @OneToOne(mappedBy = "recruitmentArticle", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    @OneToOne(cascade = CascadeType.REMOVE, mappedBy = "recruitmentArticle")
     private RecruitmentArticleForm recruitmentArticleForm;
 
-    @OneToMany(mappedBy = "recruitmentArticle")
-
+    @OneToMany(mappedBy = "recruitmentArticle", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private List<RecruitmentPeople> recruitmentPeople;
 
     public String getTypeValueToString() {
@@ -64,6 +55,14 @@ public class RecruitmentArticle {
         } else {
             return "번개";
         }
+    }
+
+    public boolean isImpromotu() {
+        return typeValue == 2;
+    }
+
+    public boolean isRegular() {
+        return typeValue == 1;
     }
 
     public String getCreateDateToString() {
