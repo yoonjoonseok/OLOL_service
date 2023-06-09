@@ -110,7 +110,7 @@ public class NotProd {
             RecruitmentArticleForm recruitmentArticleForm1 = createRecruitmentArticleForm(recruitmentArticle1, 1, 1L,
                     "삼성산", "석수동", "41171102", 30L, LocalDateTime.now(), LocalDateTime.now().plusDays(1), "카카오톡1");
             RecruitmentArticleForm recruitmentArticleForm2 = createRecruitmentArticleForm(recruitmentArticle2, 2, 2L,
-                    "지리산", "마천면", "48220370", 40L, LocalDateTime.now(), LocalDateTime.now().plusDays(2), "카카오톡2");
+                    "지리산", "사량면", "48220370", 40L, LocalDateTime.now(), LocalDateTime.now().plusDays(2), "카카오톡2");
             RecruitmentArticleForm recruitmentArticleForm3 = createRecruitmentArticleForm(recruitmentArticle3, 1, 2L,
                     "한라산", null, null, 40L, LocalDateTime.now(), LocalDateTime.now().plusDays(2), "카카오톡3");
             RecruitmentArticleForm recruitmentArticleForm4 = createRecruitmentArticleForm(recruitmentArticle4, 2, 4L,
