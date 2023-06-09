@@ -8,9 +8,6 @@ import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticleForm;
 import com.ll.olol.boundedContext.recruitment.repository.RecruitmentFormRepository;
 import com.ll.olol.boundedContext.recruitment.repository.RecruitmentRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
-
 import jakarta.persistence.criteria.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -119,6 +116,7 @@ public class RecruitmentService {
                 Join<Comment, Member> u2 = a.join("member", JoinType.LEFT);
                 return cb.or(cb.like(q.get("articleName"), "%" + kw + "%"), // 제목
                         cb.like(q.get("content"), "%" + kw + "%"),      // 내용
+                        cb.like(q.get("recruitmentArticleForm").get("mountainName"), "%" + kw + "%"),      // 산
                         cb.like(u1.get("nickname"), "%" + kw + "%"),    // 질문 작성자
                         cb.like(a.get("content"), "%" + kw + "%"),      // 답변 내용
                         cb.like(u2.get("nickname"), "%" + kw + "%"));   // 답변 작성자
