@@ -10,12 +10,18 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class HomeController {
     @GetMapping("/")
     public String showMain() {
-        return "usr/home/main";
+        return "redirect:/recruitment/list";
     }
 
-    @GetMapping("/hee")
-    public String showHelloo() {
-        return "usr/layout/hello";
+
+    @GetMapping("/li")
+    public String showlist() {
+        return "usr/recruitment/list";
+    }
+
+    @GetMapping("/list")
+    public String showAlllist() {
+        return "usr/recruitment/allList";
     }
 
     @GetMapping("/hello")
