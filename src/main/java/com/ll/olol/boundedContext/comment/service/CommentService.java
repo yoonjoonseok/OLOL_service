@@ -11,20 +11,16 @@ import com.ll.olol.boundedContext.recruitment.repository.RecruitmentRepository;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 public class CommentService {
-    @Autowired
+
     private final CommentRepository commentRepository;
-    @Autowired
     private final RecruitmentRepository recruitmentRepository;
-    @Autowired
     private final MemberRepository memberRepository;
-    @Autowired
     private final Rq rq;
 //    @Transactional
 //    public Long commentSave(Long id, CommentDto dto){
