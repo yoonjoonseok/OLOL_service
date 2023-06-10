@@ -41,18 +41,22 @@ public class CommentService {
 
 
     @Transactional
-    public Long commentSave(Comment comment, String writer, Long articleId) {
+    public RsData commentSave(Comment comment, String writer, Long articleId) {
         Member member = rq.getMember();
         member.setNickname(writer);
         memberRepository.save(member);
+
         Optional<RecruitmentArticle> article = recruitmentRepository.findById(articleId);
+        if (article.isEmpty()) {
+            return RsData.of("F-1", "게시물이 없습니다.");
+        }
         Comment savedComment = new Comment();
         savedComment.setContent(comment.getContent());
         savedComment.setRecruitmentArticle(article.get());
         savedComment.setMember(member);
 
         Comment save = commentRepository.save(savedComment);
-        return save.getId();
+        return RsData.of("S-1", "댓글 작성 성공");
     }
 
     public List<Comment> findComments() {
@@ -63,9 +67,11 @@ public class CommentService {
         return commentRepository.findById(id).get();
     }
 
-    public Comment update(Comment comment) {
-
-        return commentRepository.save(comment);
+    @Transactional
+    public Comment update(Long id, String content) {
+        Comment updateComment = findOne(id);
+        updateComment.setContent(content);
+        return updateComment;
     }
 
     @Transactional
