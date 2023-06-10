@@ -111,6 +111,11 @@
                     </button>
                     <form hidden th:action="@{|/member/bookmark/${recruitmentArticle.id}|}" method="POST">
                     </form>
+                    <button href="javascript:" onclick="if ( confirm('신고하시겠습니까?') ) $(this).next().submit();">
+                        신고
+                    </button>
+                    <form hidden th:action="@{|/recruitment/report/${recruitmentArticle.id}|}" method="POST">
+                    </form>
                 </section>
             </div>
         </div>
