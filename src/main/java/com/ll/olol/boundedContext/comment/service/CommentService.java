@@ -64,17 +64,23 @@ public class CommentService {
     }
 
     @Transactional
-    public Comment update(Long id, String content) {
+    public RsData update(Long id, String content) {
         Comment updateComment = findOne(id);
+        if (updateComment == null) {
+            return RsData.of("F-1", "업데이트 하려는 댓글이 없습니다.");
+        }
         updateComment.setContent(content);
-        return updateComment;
+        return RsData.of("S-1", "댓글 수정 성공");
     }
 
     @Transactional
-    public void commentDelete(Long id) {
+    public RsData commentDelete(Long id) {
         Optional<Comment> id1 = commentRepository.findById(id);
-
+        if (id1.isEmpty()) {
+            return RsData.of("F-1", "삭제하려는 댓글이 없습니다.");
+        }
         commentRepository.delete(id1.get());
+        return RsData.of("S-1", "댓글 삭제 성공");
     }
 
     public RsData isEqualMemberById(Long id) {

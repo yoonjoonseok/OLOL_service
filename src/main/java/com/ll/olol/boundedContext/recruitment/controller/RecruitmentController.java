@@ -251,8 +251,9 @@ public class RecruitmentController {
 
     @PostMapping("/comment/{id}/edit")
     public String editComment(@PathVariable("id") Long id, @ModelAttribute Comment comment) {
-        Comment updateComment = commentService.update(id, comment.getContent());
-        Long articleId = updateComment.getRecruitmentArticle().getId();
+        commentService.update(id, comment.getContent());
+        Comment comment1 = commentService.findOne(id);
+        Long articleId = comment1.getRecruitmentArticle().getId();
 
         return "redirect:/recruitment/" + articleId;
     }
