@@ -5,10 +5,17 @@ import com.ll.olol.boundedContext.member.entity.Member;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
 import com.ll.olol.boundedContext.report.entity.ArticleReport;
 import com.ll.olol.boundedContext.report.repository.ReportRepository;
+import jakarta.persistence.criteria.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -53,5 +60,52 @@ public class ReportService {
     public boolean isExistReportArticle(RecruitmentArticle recruitmentArticle) {
         ArticleReport articleReport = reportRepository.findByRecruitmentArticle(recruitmentArticle);
         return articleReport != null;
+    }
+
+
+    private Specification<ArticleReport> search(String kw) {
+        return new Specification<>() {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public Predicate toPredicate(Root<ArticleReport> q, CriteriaQuery<?> query, CriteriaBuilder cb) {
+                query.distinct(true);  // 중복을 제거
+                Join<ArticleReport, Member> u1 = q.join("member", JoinType.LEFT);
+                Join<ArticleReport, RecruitmentArticle> a = q.join("recruitmentArticle", JoinType.LEFT);
+                Join<RecruitmentArticle, Member> u2 = a.join("member", JoinType.LEFT);
+                return cb.or(cb.like(a.get("articleName"), "%" + kw + "%"), // 제목
+                        cb.like(a.get("content"), "%" + kw + "%"),      // 내용
+                        cb.like(a.get("recruitmentArticleForm").get("mountainName"), "%" + kw + "%"),      // 산
+                        cb.like(u1.get("nickname"), "%" + kw + "%"),
+                        cb.like(a.get("content"), "%" + kw + "%"),      // 답변 내용
+                        cb.like(u2.get("nickname"), "%" + kw + "%"));   // 답변 작성자
+            }
+        };
+    }
+
+    public Page<ArticleReport> getlist(int page, String kw) {
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("createDate"));
+
+        Pageable pageable = PageRequest.of(page, 20, Sort.by(sorts));
+        if (kw == null || kw.trim().length() == 0) {
+            return reportRepository.findAll(pageable);
+        }
+        Specification<ArticleReport> spec = search(kw);
+        return reportRepository.findAll(spec, pageable);
+    }
+
+    public Page<ArticleReport> getListByConditions(int reason, String kw, Pageable pageable) {
+        Specification<ArticleReport> spec = Specification.where(null);
+
+        if (reason != 0) {
+            spec = spec.and((root, query, cb) -> cb.equal(root.get("reason"), reason));
+        }
+
+        if (kw != null && !kw.trim().isEmpty()) {
+            spec = spec.and(search(kw));
+        }
+
+        return reportRepository.findAll(spec, pageable);
     }
 }

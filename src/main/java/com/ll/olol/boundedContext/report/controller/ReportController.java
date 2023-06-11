@@ -5,14 +5,20 @@ import com.ll.olol.base.rsData.RsData;
 import com.ll.olol.boundedContext.member.entity.Member;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
 import com.ll.olol.boundedContext.recruitment.service.RecruitmentService;
+import com.ll.olol.boundedContext.report.entity.ArticleReport;
 import com.ll.olol.boundedContext.report.service.ReportService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -59,7 +65,28 @@ public class ReportController {
 //    @PreAuthorize("hasAuthority('admin')")
 //    @GetMapping("/report/list")
 //    public String allReport(Model model) {
-//        List<ArticleReport> ArticleReportList = reportService.findAll();
+//        List<ArticleReport> articleReportList = reportService.findAll();
+//        model.addAttribute(articleReportList);
+//
+//        return "adm/reportRecruitment/reportArticlelist";
 //    }
+
+
+    @PreAuthorize("hasAuthority('admin')")
+    @GetMapping("/report/list")
+    public String list(Model model,
+                       @RequestParam(defaultValue = "0") int reason,
+                       @RequestParam(defaultValue = "0") int page,
+                       String kw) {
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("createDate"));
+
+
+        Pageable pageable = PageRequest.of(page, 20, Sort.by(sorts));
+        Page<ArticleReport> paging = reportService.getListByConditions(reason, kw, pageable);
+
+        model.addAttribute("paging", paging);
+        return "adm/reportRecruitment/reportArticlelist";
+    }
 
 }
