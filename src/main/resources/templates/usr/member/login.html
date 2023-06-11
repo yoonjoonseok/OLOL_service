@@ -1,0 +1,98 @@
+<html layout:decorate="~{usr/layout/layout.html}">
+
+<head>
+    <title>로그인</title>
+</head>
+
+<body>
+
+<main layout:fragment="main" class="d-flex align-items-center justify-content-center">
+    <div class="d-none" id="msg-loginFormNeedInputUsername" th:text="#{c.loginFormNeedInputUsername}"></div>
+    <div class="d-none" id="msg-loginFormNeedInputUsernameMoreThan"
+         th:text="${@rq.getCText('c.loginFormNeedInputUsernameMoreThan', loginFormInputUsernameValueMinLength)}"></div>
+    <div class="d-none" id="msg-loginFormNeedInputPassword" th:text="#{c.loginFormNeedInputPassword}"></div>
+    <div class="d-none" id="msg-loginFormNeedInputPasswordMoreThan"
+         th:text="#{c.loginFormNeedInputPasswordMoreThan(${loginFormInputPasswordValueMinLength})}"></div>
+
+    <script>
+        const loginFormInputUsernameValueMinLength = 4;
+        const loginFormInputPasswordValueMinLength = 4;
+
+        function LoginForm__submit(form) {
+            form.username.value = form.username.value.trim();
+
+            if (form.username.value.length === 0) {
+                toastWarning($("#msg-loginFormNeedInputUsername").text());
+                form.username.focus();
+                return;
+            }
+
+            if (form.username.value.length < loginFormInputUsernameValueMinLength) {
+                toastWarning($("#msg-loginFormNeedInputUsernameMoreThan").text());
+                form.username.focus();
+                return;
+            }
+
+            form.password.value = form.password.value.trim();
+
+            if (form.password.value.length === 0) {
+                toastWarning($("#msg-loginFormNeedInputPassword").text());
+                form.password.focus();
+                toastWarning(msgNeedInputPassword);
+                return;
+            }
+
+            if (form.password.value.length < loginFormInputPasswordValueMinLength) {
+                toastWarning($("#msg-loginFormNeedInputPasswordMoreThan").text());
+                form.password.focus();
+                return;
+            }
+
+            form.submit();
+        }
+    </script>
+
+    <div class="container-xl">
+        <h1 class="mb-4">
+            <i class="fas fa-arrow-right"></i>
+            <span th:text="#{c.pageNameStart}"></span>
+        </h1>
+
+        <form th:action method="POST" class="d-flex flex-column gap-4"
+              onsubmit="LoginForm__submit(this); return false;">
+            <div class="mb-3">
+                <label for="username" class="form-label">
+                    <i class="far fa-id-badge"></i>
+                    <span th:text="#{c.loginFormUsername}"></span>
+                </label>
+                <input type="text" id="username" name="username" placeholder="아이디" class="form-control" autofocus/>
+            </div>
+
+            <div class="mb-3">
+                <label for="password" class="form-label">
+                    <i class="fas fa-key"></i>
+                    <span th:text="#{c.loginFormPassword}"></span>
+                </label>
+                <input type="password" id="password" name="password" placeholder="비밀번호" class="form-control"/>
+            </div>
+
+            <button id="btn-login-1" class="btn btn-primary btn-block gap-1">
+                <i class="fas fa-arrow-right"></i>
+                <span class="text-capitalize" th:text="#{c.pageNameStart}"></span>
+            </button>
+
+            <div class="d-flex justify-content-center">
+                <a href="/usr/home/about" class="btn btn-link">
+                    <span>
+                        <i class="fas fa-info-circle me-1"></i>
+                        <span class="text-capitalize" th:text="#{c.whatIsThisService}"></span>
+                    </span>
+                </a>
+            </div>
+        </form>
+    </div>
+</main>
+</body>
+
+</html>
+

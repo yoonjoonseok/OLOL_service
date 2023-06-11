@@ -43,8 +43,12 @@ public class SecurityConfig {
                 .cors(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
+                .formLogin(
+                        formLogin -> formLogin
+                                .loginPage("/member/login")
+                )
         ;
-        
+
         return http.build();
     }
 
