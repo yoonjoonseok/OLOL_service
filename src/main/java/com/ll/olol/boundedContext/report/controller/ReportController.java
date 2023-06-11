@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Optional;
 
@@ -34,7 +35,7 @@ public class ReportController {
 //    }
 
     @PostMapping("/report/{id}")
-    public String add(@PathVariable Long id) {
+    public String add(@PathVariable Long id, @RequestParam int reason) {
         Optional<RecruitmentArticle> or = recruitmentService.findById(id);
 
         RecruitmentArticle recruitmentArticle = null;
@@ -48,9 +49,17 @@ public class ReportController {
         if (canAddRsData.isFail())
             return rq.historyBack(canAddRsData);
 
-        reportService.report(recruitmentArticle, actor);
+
+        reportService.report(recruitmentArticle, actor, reason);
 
         return "redirect:/recruitment/" + id;
         //return "redirect:/recruit/bookmark";
     }
+
+//    @PreAuthorize("hasAuthority('admin')")
+//    @GetMapping("/report/list")
+//    public String allReport(Model model) {
+//        List<ArticleReport> ArticleReportList = reportService.findAll();
+//    }
+
 }

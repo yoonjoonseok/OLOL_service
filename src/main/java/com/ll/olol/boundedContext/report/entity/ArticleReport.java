@@ -37,5 +37,18 @@ public class ArticleReport {
     @ManyToOne
     private Member fromMember;
 
+    private int reason;
+
+    private int reportCount;
+
+    public String getReasonToString() {
+        if (reason == 1) {
+            return "과도한 광고";
+        } else if (reason == 2) {
+            return "욕설";
+        } else {
+            return "부적절한 콘텐츠";
+        }
+    }
 
 }

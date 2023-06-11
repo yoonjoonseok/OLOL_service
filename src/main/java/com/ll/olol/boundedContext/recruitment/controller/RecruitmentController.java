@@ -19,6 +19,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -42,11 +43,13 @@ public class RecruitmentController {
     private final RecruitmentPeopleService recruitmentPeopleService;
     private int limitPeople = 0;
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/create")
     // @Valid를 붙여야 QuestionForm.java내의 NotBlank나 Size가 동작한다.
     public String questionCreate2(CreateForm createForm) {
         return "recruitmentArticle/createRecruitment_form";
     }
+
 
     @PostMapping("/create")
     // @Valid QuestionForm questionForm
@@ -274,5 +277,5 @@ public class RecruitmentController {
         return "usr/recruitment/allList";
     }
 
-    
+
 }

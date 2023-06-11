@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true) // 아래 메서드들이 전부 readonly 라는 것을 명시, 나중을 위해
@@ -19,11 +21,14 @@ public class ReportService {
 //    }
 
     @Transactional
-    public void report(RecruitmentArticle recruitmentArticle, Member actor) {
+    public void report(RecruitmentArticle recruitmentArticle, Member actor, int reason) {
+
+
         ArticleReport articleReport = ArticleReport
                 .builder()
                 .recruitmentArticle(recruitmentArticle)
                 .fromMember(actor)
+                .reason(reason)
                 .build();
 
         reportRepository.save(articleReport);
@@ -39,5 +44,14 @@ public class ReportService {
             return RsData.of("F-2", "이미 신고한 모임 공고입니다");
 
         return RsData.of("S-1", "신고 가능한 모임 공고입니다");
+    }
+
+    public List<ArticleReport> findAll() {
+        return reportRepository.findAll();
+    }
+
+    public boolean isExistReportArticle(RecruitmentArticle recruitmentArticle) {
+        ArticleReport articleReport = reportRepository.findByRecruitmentArticle(recruitmentArticle);
+        return articleReport != null;
     }
 }

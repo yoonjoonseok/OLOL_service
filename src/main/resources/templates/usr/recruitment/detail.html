@@ -111,11 +111,10 @@
                     </button>
                     <form hidden th:action="@{|/member/bookmark/${recruitmentArticle.id}|}" method="POST">
                     </form>
-                    <button href="javascript:" onclick="if ( confirm('신고하시겠습니까?') ) $(this).next().submit();">
+                    <button type="button" data-toggle="modal"
+                            data-target="#reportingArticleModal">
                         신고
                     </button>
-                    <form hidden th:action="@{|/recruitment/report/${recruitmentArticle.id}|}" method="POST">
-                    </form>
                 </section>
             </div>
         </div>
@@ -159,9 +158,11 @@
         </p>
     </form>
 
+
     <th:block th:replace="~{/usr/api/hikingTrail :: hikingTrail()}"></th:block>
     <th:block th:replace="~{/usr/api/restaurant :: restaurant}"></th:block>
     <th:block th:replace="~{/usr/api/parkingLot :: parkingLot}"></th:block>
+    <th:block th:replace="~{/report/report :: reporting()}"></th:block>
 </main>
 </body>
 </html>

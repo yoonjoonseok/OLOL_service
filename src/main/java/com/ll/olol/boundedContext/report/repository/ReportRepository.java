@@ -7,4 +7,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ReportRepository extends JpaRepository<ArticleReport, Long> {
     ArticleReport findByRecruitmentArticleAndFromMember(RecruitmentArticle recruitmentArticle, Member actor);
+
+    ArticleReport findByRecruitmentArticle(RecruitmentArticle recruitmentArticle);
 }

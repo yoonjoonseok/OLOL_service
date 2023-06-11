@@ -30,7 +30,8 @@ public class SecurityConfig {
                                 XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN
                         )
                 ))
-                .oauth2Login((loginUser) -> loginUser.loginPage("/**"))
+//                .oauth2Login((loginUser) -> loginUser.loginPage("/**"))
+                .oauth2Login((loginUser) -> loginUser.loginPage("/adm/login"))
                 .logout((loginUser) -> loginUser
                         .logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))
                         .logoutSuccessUrl("/")
