@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/notification")
@@ -24,6 +25,8 @@ public class NotificationController {
     public String showList(Model model) {
 
         List<Notification> notifications = notificationService.findByToInstaMember(rq.getMember());
+
+        notifications = notifications.stream().filter(n -> !n.isRead()).collect(Collectors.toList());
 
         notificationService.markAsRead(notifications);
 
