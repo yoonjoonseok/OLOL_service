@@ -78,26 +78,26 @@
                             <div class="vr"></div>
                             <span th:text="${recruitmentArticle.getDeadLineDateToString()}">마감일</span>
                             <div class="containerIn">
-                            <form>
-                            <button type="button"
-                                    class="btn btn-primary"
-                                    th:if="${recruitmentArticle.getDeadLineDate().isAfter(nowDate)}"
-                                    th:onclick="|location.href='@{/recruitment/{id}/attend (id=${recruitmentArticle.id})}'|">
-                                신청
-                            </button>
-                            </form>
-                            <span class="font-weight-bold"
-                                  th:unless="${recruitmentArticle.getDeadLineDate().isAfter(nowDate)}">
+                                <form>
+                                    <button type="button"
+                                            class="btn btn-primary"
+                                            th:if="${recruitmentArticle.getDeadLineDate().isAfter(nowDate)}"
+                                            th:onclick="|location.href='@{/recruitment/{id}/attend (id=${recruitmentArticle.id})}'|">
+                                        신청
+                                    </button>
+                                </form>
+                                <span class="font-weight-bold"
+                                      th:unless="${recruitmentArticle.getDeadLineDate().isAfter(nowDate)}">
                                 마감 시간이 지났어요. 다음에 신청해주세요!
                                 </span>
-                            <form th:action="@{/recruitment/{id}/deadLine (id=${recruitmentArticle.id})}"
-                                  method="post">
-                                <button type="submit"
-                                        class="btn btn-primary"
-                                        th:if="${recruitmentArticle.getDeadLineDate().isAfter(nowDate)}">
-                                    마감
-                                </button>
-                            </form>
+                                <form th:action="@{/recruitment/{id}/deadLine (id=${recruitmentArticle.id})}"
+                                      method="post">
+                                    <button type="submit"
+                                            class="btn btn-primary"
+                                            th:if="${recruitmentArticle.getDeadLineDate().isAfter(nowDate)}">
+                                        마감
+                                    </button>
+                                </form>
                             </div>
 
                         </li>
@@ -124,17 +124,11 @@
                         신고
                     </button>
                     <form th:object="${comments}">
-
-
-                        <!--        <div class="card-header bi bi-chat-dots">-->
-                        <!--            <span th:if="${comments.size() > 0}" th:text="${comments.size()}"></span> Comments-->
-                        <!--        </div>-->
-
                         <li class="list-group-item" th:each="comment : ${comments}">
 
                         <span th:if="${comment.member==writer}" style="font-size: x-large"
                               th:text="작성자"></span>
-                            <span th:if="${comment.member==me}" style="font-size: x-large"
+                            <span th:unless="${comment.member==me}" style="font-size: x-large"
                                   th:text="나"></span>
                             <span style="font-size: large" th:text="${comment.member.nickname}"></span>
                             <span style="font-size: small" th:text=" ${comment.createDate}"></span>&nbsp;
@@ -153,21 +147,20 @@
 
 
                         </li>
-
                     </form>
                     <form th:object="${comments}" method="post"
                           th:action="@{|/recruitment/${recruitmentArticle.id}/comment|}">
 
 
-                        <div class="form-floating">
-                            <textarea class="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style="height: 100px"></textarea>
-                            <label for="floatingTextarea2">Comments</label>
-                        </div>
                         <p>
-                            <button type="submit" class="btn btn-primary">댓글작성</button>
+                            <textarea rows="5" cols="50" name="content"></textarea>
+                        </p>
+                        <p>
+                            <button class="btn btn-primary" type="submit">댓글 작성</button>
                         </p>
 
                     </form>
+
                 </section>
             </div>
         </div>

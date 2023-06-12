@@ -9,13 +9,12 @@ import com.ll.olol.boundedContext.member.repository.MemberRepository;
 import com.ll.olol.boundedContext.notification.event.EventAfterComment;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
 import com.ll.olol.boundedContext.recruitment.repository.RecruitmentRepository;
+import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -44,7 +43,6 @@ public class CommentService {
     public RsData commentSave(Comment comment, String writer, Long articleId) {
         Member member = rq.getMember();
         member.setNickname(writer);
-        memberRepository.save(member);
 
         Optional<RecruitmentArticle> article = recruitmentRepository.findById(articleId);
         if (article.isEmpty()) {
