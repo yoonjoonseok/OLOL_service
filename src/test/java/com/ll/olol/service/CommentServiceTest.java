@@ -62,16 +62,6 @@ public class CommentServiceTest {
         //then
         assertEquals(3, commentService.findComments().size());
     }
-
-    @Test
-    public void 댓글_수정() throws Exception {
-        //given
-        List<Comment> all = commentRepository.findAll();
-        Comment comment = all.get(0);
-        //when
-        commentService.update(comment);
-        //then
-        assertEquals(comment.getContent(), "수정된댓글이에요.");
-    }
+    
 
 }

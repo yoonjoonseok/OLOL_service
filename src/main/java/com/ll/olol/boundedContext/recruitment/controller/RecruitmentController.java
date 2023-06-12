@@ -14,11 +14,6 @@ import com.ll.olol.boundedContext.recruitment.service.RecruitmentPeopleService;
 import com.ll.olol.boundedContext.recruitment.service.RecruitmentService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
-import java.security.Principal;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -28,13 +23,13 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/recruitment")
@@ -296,33 +291,5 @@ public class RecruitmentController {
         model.addAttribute("paging", paging);
         return "usr/recruitment/allList";
     }
-
-//    @PreAuthorize("isAuthenticated()")
-//    @GetMapping("/toList")
-//    public String showToList(Model model, @RequestParam(defaultValue = "") String gender, @RequestParam(defaultValue = "0") int attractiveTypeCode, @RequestParam(defaultValue = "1") int sortCode) {
-//        if (gender.trim().equals("")) gender = null;
-//
-//        InstaMember instaMember = rq.getMember().getInstaMember();
-//
-//        // 인스타인증을 했는지 체크
-//        if (instaMember != null) {
-//            Stream<LikeablePerson> likeablePeopleStream = instaMember.getToLikeablePeople().stream();
-//
-//            if (gender != null) {
-//                likeablePeopleStream = likeablePersonService.filterByGender(likeablePeopleStream, gender).getData();
-//            }
-//
-//            if (attractiveTypeCode != 0) {
-//                likeablePeopleStream = likeablePersonService.filterByAttractiveTypeCode(likeablePeopleStream, attractiveTypeCode).getData();
-//            }
-//
-//            likeablePeopleStream = likeablePersonService.sortCodeSroted(likeablePeopleStream, sortCode).getData();
-//
-//            List<LikeablePerson> likeablePeople = likeablePeopleStream.collect(Collectors.toList());
-//
-//            model.addAttribute("likeablePeople", likeablePeople);
-//        }
-//
-//        return "usr/likeablePerson/toList";
-//    }
+    
 }
