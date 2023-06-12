@@ -1,23 +1,44 @@
 package com.ll.olol.boundedContext.notification.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.ll.olol.boundedContext.member.entity.Member;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 import lombok.experimental.SuperBuilder;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import java.time.LocalDateTime;
+
+import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Getter
 @NoArgsConstructor
+@EntityListeners(AuditingEntityListener.class)
 @SuperBuilder
-@ToString(callSuper = true)
-
 public class Notification {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
+    @ManyToOne
+    private Member member;
+
+    private int type;
+
+    @CreatedDate
+    private LocalDateTime createDate;
+
+    private LocalDateTime readDate;
+
+    private String content;
+
+    public boolean isRead() {
+        return readDate != null;
+    }
+
+    public void markAsRead() {
+        readDate = LocalDateTime.now();
+    }
 }
