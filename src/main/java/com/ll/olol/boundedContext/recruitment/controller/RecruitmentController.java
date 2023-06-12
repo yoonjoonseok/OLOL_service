@@ -24,6 +24,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.time.LocalDateTime;
@@ -31,6 +32,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import java.security.Principal;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/recruitment")
@@ -175,6 +181,7 @@ public class RecruitmentController {
     @GetMapping("/{id}")
     public String showDetail(@PathVariable Long id, Model model) {
         Optional<RecruitmentArticle> recruitmentArticle = recruitmentService.findById(id);
+
         if (recruitmentArticle.isEmpty()) {
             return rq.historyBack(RsData.of("F-1", "존재하지 않는 모임 공고입니다"));
         }
@@ -203,9 +210,11 @@ public class RecruitmentController {
     public String delete(@PathVariable Long id) {
         Optional<RecruitmentArticle> recruitmentArticle = recruitmentService.findById(id);
         RsData canDeleteRsData = recruitmentService.canDelete(recruitmentArticle, rq.getMember());
+
         if (canDeleteRsData.isFail()) {
             return rq.historyBack(canDeleteRsData);
         }
+
         recruitmentService.deleteArticle(recruitmentArticle.get());
         return "redirect:/";
     }
@@ -254,6 +263,13 @@ public class RecruitmentController {
         return "redirect:/recruitment/" + articleId;
     }
 
+//    @GetMapping("/list")
+//    public String list(Model model, @RequestParam(defaultValue = "0L") Long ageRange, @RequestParam(defaultValue = "0") int dayNight, @RequestParam(defaultValue = "0") int typeValue, @RequestParam(defaultValue = "1") int sortCode, @RequestParam(defaultValue = "0") int page, String kw) { // int page 가 곧 name = page와 같다.
+//        Page<RecruitmentArticle> paging = recruitmentService.getlist(page, kw);
+//        model.addAttribute("paging", paging);
+//        //model.addAttribute("kw",kw);
+//        return "usr/recruitment/allList";
+//    }
 
     @GetMapping("/list")
     public String list(Model model,
@@ -264,6 +280,7 @@ public class RecruitmentController {
                        @RequestParam(defaultValue = "0") int page,
                        String kw) {
         List<Sort.Order> sorts = new ArrayList<>();
+
         if (sortCode == 1) {
             sorts.add(Sort.Order.desc("createDate"));
         }
@@ -281,5 +298,32 @@ public class RecruitmentController {
         return "usr/recruitment/allList";
     }
 
-
+//    @PreAuthorize("isAuthenticated()")
+//    @GetMapping("/toList")
+//    public String showToList(Model model, @RequestParam(defaultValue = "") String gender, @RequestParam(defaultValue = "0") int attractiveTypeCode, @RequestParam(defaultValue = "1") int sortCode) {
+//        if (gender.trim().equals("")) gender = null;
+//
+//        InstaMember instaMember = rq.getMember().getInstaMember();
+//
+//        // 인스타인증을 했는지 체크
+//        if (instaMember != null) {
+//            Stream<LikeablePerson> likeablePeopleStream = instaMember.getToLikeablePeople().stream();
+//
+//            if (gender != null) {
+//                likeablePeopleStream = likeablePersonService.filterByGender(likeablePeopleStream, gender).getData();
+//            }
+//
+//            if (attractiveTypeCode != 0) {
+//                likeablePeopleStream = likeablePersonService.filterByAttractiveTypeCode(likeablePeopleStream, attractiveTypeCode).getData();
+//            }
+//
+//            likeablePeopleStream = likeablePersonService.sortCodeSroted(likeablePeopleStream, sortCode).getData();
+//
+//            List<LikeablePerson> likeablePeople = likeablePeopleStream.collect(Collectors.toList());
+//
+//            model.addAttribute("likeablePeople", likeablePeople);
+//        }
+//
+//        return "usr/likeablePerson/toList";
+//    }
 }
