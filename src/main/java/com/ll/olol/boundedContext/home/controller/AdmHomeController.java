@@ -21,6 +21,4 @@ public class AdmHomeController {
     public String showMain() {
         return "adm/home/main";
     }
-
-    
 }

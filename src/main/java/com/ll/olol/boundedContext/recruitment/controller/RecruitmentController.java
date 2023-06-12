@@ -130,7 +130,8 @@ public class RecruitmentController {
         }
 
         person.setAttend(true);
-        recruitmentPeopleService.update(person);
+
+        recruitmentPeopleService.attend(person);
         limitPeople++;
         return "redirect:/recruitment/fromList";
     }
@@ -198,10 +199,10 @@ public class RecruitmentController {
         }
 
         model.addAttribute("recruitmentArticle", recruitmentArticle.get());
-
         model.addAttribute("comments", commentList);
         model.addAttribute("nowDate", LocalDateTime.now());
-
+        model.addAttribute("writer", recruitmentArticle.get().getMember());
+        model.addAttribute("me", rq.getMember());
         return "usr/recruitment/detail";
     }
 
@@ -298,32 +299,4 @@ public class RecruitmentController {
         return "usr/recruitment/allList";
     }
 
-//    @PreAuthorize("isAuthenticated()")
-//    @GetMapping("/toList")
-//    public String showToList(Model model, @RequestParam(defaultValue = "") String gender, @RequestParam(defaultValue = "0") int attractiveTypeCode, @RequestParam(defaultValue = "1") int sortCode) {
-//        if (gender.trim().equals("")) gender = null;
-//
-//        InstaMember instaMember = rq.getMember().getInstaMember();
-//
-//        // 인스타인증을 했는지 체크
-//        if (instaMember != null) {
-//            Stream<LikeablePerson> likeablePeopleStream = instaMember.getToLikeablePeople().stream();
-//
-//            if (gender != null) {
-//                likeablePeopleStream = likeablePersonService.filterByGender(likeablePeopleStream, gender).getData();
-//            }
-//
-//            if (attractiveTypeCode != 0) {
-//                likeablePeopleStream = likeablePersonService.filterByAttractiveTypeCode(likeablePeopleStream, attractiveTypeCode).getData();
-//            }
-//
-//            likeablePeopleStream = likeablePersonService.sortCodeSroted(likeablePeopleStream, sortCode).getData();
-//
-//            List<LikeablePerson> likeablePeople = likeablePeopleStream.collect(Collectors.toList());
-//
-//            model.addAttribute("likeablePeople", likeablePeople);
-//        }
-//
-//        return "usr/likeablePerson/toList";
-//    }
 }
