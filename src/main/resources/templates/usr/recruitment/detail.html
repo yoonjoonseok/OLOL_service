@@ -71,30 +71,32 @@
                             <div class="vr"></div>
                             <span th:text="${recruitmentArticle.recruitmentArticleForm.connectType}">연락 방법</span>
                         </li>
-                        <div class="containerIn">
-                            <li class="list-group-item">
-                                <span class="font-weight-bold">마감일</span>
-                                <div class="vr"></div>
-                                <span th:text="${recruitmentArticle.getDeadLineDateToString()}">마감일</span>
-                                <button type="button"
-                                        th:if="${recruitmentArticle.getDeadLineDate().isAfter(nowDate)}"
-                                        th:onclick="|location.href='@{/recruitment/{id}/attend (id=${recruitmentArticle.id})}'|">
-                                    신청
-                                </button>
 
-                                <span class="font-weight-bold"
-                                      th:unless="${recruitmentArticle.getDeadLineDate().isAfter(nowDate)}">
+                        <li class="list-group-item">
+
+                            <span class="font-weight-bold">마감일</span>
+                            <div class="vr"></div>
+                            <span th:text="${recruitmentArticle.getDeadLineDateToString()}">마감일</span>
+                            <button type="button"
+                                    th:if="${recruitmentArticle.getDeadLineDate().isAfter(nowDate)}"
+                                    th:onclick="|location.href='@{/recruitment/{id}/attend (id=${recruitmentArticle.id})}'|">
+                                신청
+                            </button>
+
+                            <span class="font-weight-bold"
+                                  th:unless="${recruitmentArticle.getDeadLineDate().isAfter(nowDate)}">
                                 마감 시간이 지났어요. 다음에 신청해주세요!
                                 </span>
-                                <form th:action="@{/recruitment/{id}/deadLine (id=${recruitmentArticle.id})}"
-                                      method="post">
-                                    <button type="submit"
-                                            th:if="${recruitmentArticle.getDeadLineDate().isAfter(nowDate)}">
-                                        마감
-                                    </button>
-                                </form>
-                            </li>
-                        </div>
+                            <form th:action="@{/recruitment/{id}/deadLine (id=${recruitmentArticle.id})}"
+                                  method="post">
+                                <button type="submit"
+                                        th:if="${recruitmentArticle.getDeadLineDate().isAfter(nowDate)}">
+                                    마감
+                                </button>
+                            </form>
+
+                        </li>
+
                     </ul>
                     <hr>
                     <div th:text="${recruitmentArticle.content}">게시글 내용</div>
@@ -134,16 +136,18 @@
                       th:text="작성자"></span>
                 <span th:if="${comment.member==me}" style="font-size: x-large"
                       th:text="나"></span>
-                <span style="font-size: x-large" th:text="${comment.member.nickname}"></span>
-                <span style="font-size: xx-small" th:text="${comment.createDate}"></span>&nbsp;
+                <span style="font-size: large" th:text="${comment.member.nickname}"></span>
+                <span style="font-size: small" th:text="${comment.createDate}"></span>&nbsp;
 
-
+                <div class="container1">
                 <button type="button" class="badge bi bi-pencil-square"
                         th:onclick="|location.href='@{/recruitment/comment/{id}/edit (id=${comment.id})}'|">수정</button>
                 <button type="button" class="badge bi bi-trash"
                         th:onclick="|location.href='@{/recruitment/comment/{id}/delete (id=${comment.id})}'|">삭제</button>
+                </div>
+                <span style="font-size: large" th:text="${comment.content}"></span>
             </span>
-                    <div th:text="${comment.content}"></div>
+
                 </li>
             </ul>
         </form>
