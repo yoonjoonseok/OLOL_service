@@ -1,6 +1,5 @@
 package com.ll.olol.boundedContext.notification.repository;
 
-
 import com.ll.olol.boundedContext.member.entity.Member;
 import com.ll.olol.boundedContext.notification.entity.Notification;
 import org.springframework.data.jpa.repository.JpaRepository;

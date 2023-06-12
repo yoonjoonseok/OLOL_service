@@ -1,0 +1,31 @@
+<th:block th:fragment="reporting()">
+    <div class="modal fade" id="reportingArticleModal" tabindex="-1" role="dialog"
+         aria-labelledby="hikingTrailModalTitle" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="reportingArticleModalLabel">게시글 신고하기</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="reportForm" method="post" th:action="@{|/recruitment/report/${recruitmentArticle.id}|}">
+                        <div class="form-group">
+                            <label for="reason">신고 사유</label>
+                            <select class="form-control" id="reason" name="reason">
+                                <option value="1">광고</option>
+                                <option value="2">욕설</option>
+                                <option value="3">부적절한 콘텐츠</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+                    <button type="submit" form="reportForm" class="btn btn-primary">신고하기</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</th:block>

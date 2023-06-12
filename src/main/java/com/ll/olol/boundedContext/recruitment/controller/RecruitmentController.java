@@ -19,6 +19,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -42,11 +43,13 @@ public class RecruitmentController {
     private final RecruitmentPeopleService recruitmentPeopleService;
     private int limitPeople = 0;
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/create")
     // @Valid를 붙여야 QuestionForm.java내의 NotBlank나 Size가 동작한다.
     public String questionCreate2(CreateForm createForm) {
         return "recruitmentArticle/createRecruitment_form";
     }
+
 
     @PostMapping("/create")
     // @Valid QuestionForm questionForm
@@ -80,7 +83,6 @@ public class RecruitmentController {
     @GetMapping("/fromList")
     public String showFromAttendList(Model model) {
         Long memberId = rq.getMember().getId();
-        Optional<Member> member = memberRepository.findById(memberId);
         List<RecruitmentArticle> all = recruitmentService.findAll();
         List<RecruitmentPeople> list = new ArrayList<>();
         //모든 게시물중에서
@@ -151,8 +153,6 @@ public class RecruitmentController {
 
     @PostMapping("/{id}/attend")
     public String attend(@PathVariable Long id, @ModelAttribute RecruitmentArticle recruitmentArticle) {
-        Optional<RecruitmentArticle> article = recruitmentService.findById(id);
-
         recruitmentPeopleService.saveRecruitmentPeople(rq.getMember().getId(), id);
 
         return "redirect:/recruitment/" + id;
@@ -174,8 +174,10 @@ public class RecruitmentController {
     @GetMapping("/{id}")
     public String showDetail(@PathVariable Long id, Model model) {
         Optional<RecruitmentArticle> recruitmentArticle = recruitmentService.findById(id);
-        if (recruitmentArticle.isEmpty())
+
+        if (recruitmentArticle.isEmpty()) {
             return rq.historyBack(RsData.of("F-1", "존재하지 않는 모임 공고입니다"));
+        }
 
         recruitmentService.addView(recruitmentArticle.get());
 
@@ -201,8 +203,11 @@ public class RecruitmentController {
     public String delete(@PathVariable Long id) {
         Optional<RecruitmentArticle> recruitmentArticle = recruitmentService.findById(id);
         RsData canDeleteRsData = recruitmentService.canDelete(recruitmentArticle, rq.getMember());
-        if (canDeleteRsData.isFail())
+
+        if (canDeleteRsData.isFail()) {
             return rq.historyBack(canDeleteRsData);
+        }
+
         recruitmentService.deleteArticle(recruitmentArticle.get());
         return "redirect:/";
     }
@@ -244,15 +249,12 @@ public class RecruitmentController {
 
     @PostMapping("/comment/{id}/edit")
     public String editComment(@PathVariable("id") Long id, @ModelAttribute Comment comment) {
-        Comment one = commentService.findOne(id);
-        one.setContent(comment.getContent());
-
-        commentService.update(one);
-        Long articleId = one.getRecruitmentArticle().getId();
+        commentService.update(id, comment.getContent());
+        Comment comment1 = commentService.findOne(id);
+        Long articleId = comment1.getRecruitmentArticle().getId();
 
         return "redirect:/recruitment/" + articleId;
     }
-
 
 //    @GetMapping("/list")
 //    public String list(Model model, @RequestParam(defaultValue = "0L") Long ageRange, @RequestParam(defaultValue = "0") int dayNight, @RequestParam(defaultValue = "0") int typeValue, @RequestParam(defaultValue = "1") int sortCode, @RequestParam(defaultValue = "0") int page, String kw) { // int page 가 곧 name = page와 같다.
@@ -271,17 +273,24 @@ public class RecruitmentController {
                        @RequestParam(defaultValue = "0") int page,
                        String kw) {
         List<Sort.Order> sorts = new ArrayList<>();
-        if (sortCode == 1) sorts.add(Sort.Order.desc("createDate"));
-        if (sortCode == 2) sorts.add(Sort.Order.asc("createDate"));
-        else if (sortCode == 3) sorts.add(Sort.Order.desc("views"));
 
+        if (sortCode == 1) {
+            sorts.add(Sort.Order.desc("createDate"));
+        }
+        if (sortCode == 2) {
+            sorts.add(Sort.Order.asc("createDate"));
+        } else if (sortCode == 3) {
+            sorts.add(Sort.Order.desc("views"));
+        }
 
         Pageable pageable = PageRequest.of(page, 20, Sort.by(sorts));
-        Page<RecruitmentArticle> paging = recruitmentService.getListByConditions(ageRange, dayNight, typeValue, kw, pageable);
+        Page<RecruitmentArticle> paging = recruitmentService.getListByConditions(ageRange, dayNight, typeValue, kw,
+                pageable);
 
         model.addAttribute("paging", paging);
         return "usr/recruitment/allList";
     }
+
 //    @PreAuthorize("isAuthenticated()")
 //    @GetMapping("/toList")
 //    public String showToList(Model model, @RequestParam(defaultValue = "") String gender, @RequestParam(defaultValue = "0") int attractiveTypeCode, @RequestParam(defaultValue = "1") int sortCode) {

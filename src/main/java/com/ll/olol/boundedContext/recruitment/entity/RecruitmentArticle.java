@@ -24,7 +24,6 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @AllArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
 @SuperBuilder
-
 public class RecruitmentArticle {
     @Id
     @GeneratedValue(strategy = IDENTITY)
@@ -46,7 +45,7 @@ public class RecruitmentArticle {
     @OneToOne(cascade = CascadeType.REMOVE, mappedBy = "recruitmentArticle")
     private RecruitmentArticleForm recruitmentArticleForm;
 
-    @OneToMany(mappedBy = "recruitmentArticle", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "recruitmentArticle", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<RecruitmentPeople> recruitmentPeople;
 
     public String getTypeValueToString() {
