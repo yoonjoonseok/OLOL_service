@@ -192,10 +192,10 @@ public class RecruitmentController {
         }
 
         model.addAttribute("recruitmentArticle", recruitmentArticle.get());
-
         model.addAttribute("comments", commentList);
         model.addAttribute("nowDate", LocalDateTime.now());
-
+        model.addAttribute("writer", recruitmentArticle.get().getMember());
+        model.addAttribute("me", rq.getMember());
         return "usr/recruitment/detail";
     }
 
@@ -291,5 +291,5 @@ public class RecruitmentController {
         model.addAttribute("paging", paging);
         return "usr/recruitment/allList";
     }
-    
+
 }
