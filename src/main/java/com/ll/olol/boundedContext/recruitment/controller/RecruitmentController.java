@@ -85,7 +85,6 @@ public class RecruitmentController {
     @GetMapping("/fromList")
     public String showFromAttendList(Model model) {
         Long memberId = rq.getMember().getId();
-        Optional<Member> member = memberRepository.findById(memberId);
         List<RecruitmentArticle> all = recruitmentService.findAll();
         List<RecruitmentPeople> list = new ArrayList<>();
         //모든 게시물중에서
@@ -156,8 +155,6 @@ public class RecruitmentController {
 
     @PostMapping("/{id}/attend")
     public String attend(@PathVariable Long id, @ModelAttribute RecruitmentArticle recruitmentArticle) {
-        Optional<RecruitmentArticle> article = recruitmentService.findById(id);
-
         recruitmentPeopleService.saveRecruitmentPeople(rq.getMember().getId(), id);
 
         return "redirect:/recruitment/" + id;
