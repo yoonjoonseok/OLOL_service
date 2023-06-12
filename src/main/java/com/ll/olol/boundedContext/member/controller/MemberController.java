@@ -57,4 +57,10 @@ public class MemberController {
 
         return "redirect:/";
     }
+
+    @PreAuthorize("isAnonymous()")
+    @GetMapping("/login") // 로그인 폼, 로그인 폼 처리는 스프링 시큐리티가 구현, 폼 처리시에 CustomUserDetailsService 가 사용됨
+    public String showLogin() {
+        return "usr/member/login";
+    }
 }

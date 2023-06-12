@@ -11,20 +11,16 @@ import com.ll.olol.boundedContext.recruitment.repository.RecruitmentRepository;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 public class CommentService {
-    @Autowired
+
     private final CommentRepository commentRepository;
-    @Autowired
     private final RecruitmentRepository recruitmentRepository;
-    @Autowired
     private final MemberRepository memberRepository;
-    @Autowired
     private final Rq rq;
 //    @Transactional
 //    public Long commentSave(Long id, CommentDto dto){
@@ -41,18 +37,22 @@ public class CommentService {
 
 
     @Transactional
-    public Long commentSave(Comment comment, String writer, Long articleId) {
+    public RsData commentSave(Comment comment, String writer, Long articleId) {
         Member member = rq.getMember();
         member.setNickname(writer);
         memberRepository.save(member);
+
         Optional<RecruitmentArticle> article = recruitmentRepository.findById(articleId);
+        if (article.isEmpty()) {
+            return RsData.of("F-1", "게시물이 없습니다.");
+        }
         Comment savedComment = new Comment();
         savedComment.setContent(comment.getContent());
         savedComment.setRecruitmentArticle(article.get());
         savedComment.setMember(member);
 
         Comment save = commentRepository.save(savedComment);
-        return save.getId();
+        return RsData.of("S-1", "댓글 작성 성공");
     }
 
     public List<Comment> findComments() {
@@ -63,16 +63,24 @@ public class CommentService {
         return commentRepository.findById(id).get();
     }
 
-    public Comment update(Comment comment) {
-
-        return commentRepository.save(comment);
+    @Transactional
+    public RsData update(Long id, String content) {
+        Comment updateComment = findOne(id);
+        if (updateComment == null) {
+            return RsData.of("F-1", "업데이트 하려는 댓글이 없습니다.");
+        }
+        updateComment.setContent(content);
+        return RsData.of("S-1", "댓글 수정 성공");
     }
 
     @Transactional
-    public void commentDelete(Long id) {
+    public RsData commentDelete(Long id) {
         Optional<Comment> id1 = commentRepository.findById(id);
-
+        if (id1.isEmpty()) {
+            return RsData.of("F-1", "삭제하려는 댓글이 없습니다.");
+        }
         commentRepository.delete(id1.get());
+        return RsData.of("S-1", "댓글 삭제 성공");
     }
 
     public RsData isEqualMemberById(Long id) {
