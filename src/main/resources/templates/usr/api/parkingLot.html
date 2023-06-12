@@ -1,0 +1,28 @@
+<th:block th:fragment="parkingLot">
+    <div class="modal fade" id="parkingLot" tabindex="-1" role="dialog"
+         aria-labelledby="parkingLotTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="parkingLotTitle">주차장 정보</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <iframe
+                            width="600"
+                            height="450"
+                            style="border:0"
+                            loading="lazy"
+                            allowfullscreen
+                            referrerpolicy="no-referrer-when-downgrade"
+                            th:src="@{|https://www.google.com/maps/embed/v1/search?key=AIzaSyBsdHUpIu7XBFl9iDIr439o61uhsINqNSI&q=
+                            ${recruitmentArticle.recruitmentArticleForm.mtAddress} ${recruitmentArticle.recruitmentArticleForm.mountainName} 주변 주차장|}">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+    </div>
+    </script>
+</th:block>
