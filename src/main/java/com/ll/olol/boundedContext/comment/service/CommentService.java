@@ -6,13 +6,16 @@ import com.ll.olol.boundedContext.comment.entity.Comment;
 import com.ll.olol.boundedContext.comment.repository.CommentRepository;
 import com.ll.olol.boundedContext.member.entity.Member;
 import com.ll.olol.boundedContext.member.repository.MemberRepository;
+import com.ll.olol.boundedContext.notification.event.EventAfterComment;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
 import com.ll.olol.boundedContext.recruitment.repository.RecruitmentRepository;
-import java.util.List;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +25,7 @@ public class CommentService {
     private final RecruitmentRepository recruitmentRepository;
     private final MemberRepository memberRepository;
     private final Rq rq;
+    private final ApplicationEventPublisher publisher;
 //    @Transactional
 //    public Long commentSave(Long id, CommentDto dto){
 //        RecruitmentArticle recruitmentArticle = recruitmentRepository.findById(id).orElseThrow(() ->
@@ -52,6 +56,8 @@ public class CommentService {
         savedComment.setMember(member);
 
         Comment save = commentRepository.save(savedComment);
+        publisher.publishEvent(new EventAfterComment(this, save.getRecruitmentArticle(), save));
+
         return RsData.of("S-1", "댓글 작성 성공");
     }
 
