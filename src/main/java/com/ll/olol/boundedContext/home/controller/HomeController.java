@@ -13,6 +13,10 @@ public class HomeController {
         return "redirect:/recruitment/list";
     }
 
+    @GetMapping("/adm/login")
+    public String showAdmHome() {
+        return "redirect:/member/login";
+    }
 
     @GetMapping("/li")
     public String showlist() {

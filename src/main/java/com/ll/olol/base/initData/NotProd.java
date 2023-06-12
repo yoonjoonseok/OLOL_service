@@ -7,6 +7,7 @@ import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticleForm;
 import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,6 +19,7 @@ import java.time.LocalDateTime;
 public class NotProd {
 
     private final InitService initService;
+
 
     @PostConstruct
     //여기에 그냥 코드를 넣어도 될거같은데 스프링 라이프 사이클 때문에 트랜잭션이 잘 처리가 안됨.
@@ -31,6 +33,9 @@ public class NotProd {
     static class InitService {
         private final EntityManager em;
 
+
+        private final PasswordEncoder passwordEncoder;
+
         public void dbInit1() {
             Member member1 = createMember(18, "남자", "홍길동", "1234", "1111@1111", "도사", LocalDateTime.now(),
                     LocalDateTime.now());
@@ -40,10 +45,13 @@ public class NotProd {
                     LocalDateTime.now());
             Member member4 = createMember(55, "남자", "공유", "2368", "1111@4444", "도깨비", LocalDateTime.now(),
                     LocalDateTime.now());
+            Member member5 = createMember(10, "남자", "admin", passwordEncoder.encode("1234"), "1111@5555", "관리자", LocalDateTime.now(),
+                    LocalDateTime.now());
             em.persist(member1);
             em.persist(member2);
             em.persist(member3);
             em.persist(member4);
+            em.persist(member5);
 
             RecruitmentArticle recruitmentArticle1 = createRecruitmentArticle(LocalDateTime.now(), LocalDateTime.now(),
                     1L, member1, 1, "테스트용1",
@@ -110,7 +118,7 @@ public class NotProd {
             RecruitmentArticleForm recruitmentArticleForm1 = createRecruitmentArticleForm(recruitmentArticle1, 1, 1L,
                     "삼성산", "석수동", "41171102", 30L, LocalDateTime.now(), LocalDateTime.now().plusDays(1), "카카오톡1");
             RecruitmentArticleForm recruitmentArticleForm2 = createRecruitmentArticleForm(recruitmentArticle2, 2, 2L,
-                    "지리산", "마천면", "48220370", 40L, LocalDateTime.now(), LocalDateTime.now().plusDays(2), "카카오톡2");
+                    "지리산", "사량면", "48220370", 40L, LocalDateTime.now(), LocalDateTime.now().plusDays(2), "카카오톡2");
             RecruitmentArticleForm recruitmentArticleForm3 = createRecruitmentArticleForm(recruitmentArticle3, 1, 2L,
                     "한라산", null, null, 40L, LocalDateTime.now(), LocalDateTime.now().plusDays(2), "카카오톡3");
             RecruitmentArticleForm recruitmentArticleForm4 = createRecruitmentArticleForm(recruitmentArticle4, 2, 4L,
