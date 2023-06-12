@@ -75,7 +75,7 @@ public class ReportService {
                 Join<RecruitmentArticle, Member> u2 = a.join("member", JoinType.LEFT);
                 return cb.or(cb.like(a.get("articleName"), "%" + kw + "%"), // 제목
                         cb.like(a.get("content"), "%" + kw + "%"),      // 내용
-                        cb.like(a.get("recruitmentArticleForm").get("mountainName"), "%" + kw + "%"),      // 산
+                        cb.like(a.get("recruitmentArticleForm").get("mountainName"), "%" + kw + "%"),
                         cb.like(u1.get("nickname"), "%" + kw + "%"),
                         cb.like(a.get("content"), "%" + kw + "%"),      // 답변 내용
                         cb.like(u2.get("nickname"), "%" + kw + "%"));   // 답변 작성자
