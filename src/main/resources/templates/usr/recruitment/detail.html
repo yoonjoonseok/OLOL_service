@@ -132,6 +132,8 @@
             <span>
                 <span th:if="${comment.member==writer}" style="font-size: x-large"
                       th:text="작성자"></span>
+                <span th:if="${comment.member==me}" style="font-size: x-large"
+                      th:text="나"></span>
                 <span style="font-size: x-large" th:text="${comment.member.nickname}"></span>
                 <span style="font-size: xx-small" th:text="${comment.createDate}"></span>&nbsp;
 

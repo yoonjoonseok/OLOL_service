@@ -200,6 +200,7 @@ public class RecruitmentController {
         model.addAttribute("comments", commentList);
         model.addAttribute("nowDate", LocalDateTime.now());
         model.addAttribute("writer", recruitmentArticle.get().getMember());
+        model.addAttribute("me", rq.getMember());
         return "usr/recruitment/detail";
     }
 
