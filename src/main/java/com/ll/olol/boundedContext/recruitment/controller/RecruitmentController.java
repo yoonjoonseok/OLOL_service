@@ -14,22 +14,29 @@ import com.ll.olol.boundedContext.recruitment.service.RecruitmentPeopleService;
 import com.ll.olol.boundedContext.recruitment.service.RecruitmentService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
-import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+
 
 @Controller
 @RequestMapping("/recruitment")
@@ -83,7 +90,6 @@ public class RecruitmentController {
     @GetMapping("/fromList")
     public String showFromAttendList(Model model) {
         Long memberId = rq.getMember().getId();
-        Optional<Member> member = memberRepository.findById(memberId);
         List<RecruitmentArticle> all = recruitmentService.findAll();
         List<RecruitmentPeople> list = new ArrayList<>();
         //모든 게시물중에서
@@ -154,8 +160,6 @@ public class RecruitmentController {
 
     @PostMapping("/{id}/attend")
     public String attend(@PathVariable Long id, @ModelAttribute RecruitmentArticle recruitmentArticle) {
-        Optional<RecruitmentArticle> article = recruitmentService.findById(id);
-
         recruitmentPeopleService.saveRecruitmentPeople(rq.getMember().getId(), id);
 
         return "redirect:/recruitment/" + id;
@@ -177,8 +181,9 @@ public class RecruitmentController {
     @GetMapping("/{id}")
     public String showDetail(@PathVariable Long id, Model model) {
         Optional<RecruitmentArticle> recruitmentArticle = recruitmentService.findById(id);
-        if (recruitmentArticle.isEmpty())
+        if (recruitmentArticle.isEmpty()) {
             return rq.historyBack(RsData.of("F-1", "존재하지 않는 모임 공고입니다"));
+        }
 
         recruitmentService.addView(recruitmentArticle.get());
 
@@ -204,8 +209,9 @@ public class RecruitmentController {
     public String delete(@PathVariable Long id) {
         Optional<RecruitmentArticle> recruitmentArticle = recruitmentService.findById(id);
         RsData canDeleteRsData = recruitmentService.canDelete(recruitmentArticle, rq.getMember());
-        if (canDeleteRsData.isFail())
+        if (canDeleteRsData.isFail()) {
             return rq.historyBack(canDeleteRsData);
+        }
         recruitmentService.deleteArticle(recruitmentArticle.get());
         return "redirect:/";
     }
@@ -247,14 +253,13 @@ public class RecruitmentController {
 
     @PostMapping("/comment/{id}/edit")
     public String editComment(@PathVariable("id") Long id, @ModelAttribute Comment comment) {
-        Comment one = commentService.findOne(id);
-        one.setContent(comment.getContent());
-
-        commentService.update(one);
-        Long articleId = one.getRecruitmentArticle().getId();
+        commentService.update(id, comment.getContent());
+        Comment comment1 = commentService.findOne(id);
+        Long articleId = comment1.getRecruitmentArticle().getId();
 
         return "redirect:/recruitment/" + articleId;
     }
+
 
     @GetMapping("/list")
     public String list(Model model,
@@ -265,13 +270,18 @@ public class RecruitmentController {
                        @RequestParam(defaultValue = "0") int page,
                        String kw) {
         List<Sort.Order> sorts = new ArrayList<>();
-        if (sortCode == 1) sorts.add(Sort.Order.desc("createDate"));
-        if (sortCode == 2) sorts.add(Sort.Order.asc("createDate"));
-        else if (sortCode == 3) sorts.add(Sort.Order.desc("views"));
-
+        if (sortCode == 1) {
+            sorts.add(Sort.Order.desc("createDate"));
+        }
+        if (sortCode == 2) {
+            sorts.add(Sort.Order.asc("createDate"));
+        } else if (sortCode == 3) {
+            sorts.add(Sort.Order.desc("views"));
+        }
 
         Pageable pageable = PageRequest.of(page, 20, Sort.by(sorts));
-        Page<RecruitmentArticle> paging = recruitmentService.getListByConditions(ageRange, dayNight, typeValue, kw, pageable);
+        Page<RecruitmentArticle> paging = recruitmentService.getListByConditions(ageRange, dayNight, typeValue, kw,
+                pageable);
 
         model.addAttribute("paging", paging);
         return "usr/recruitment/allList";
