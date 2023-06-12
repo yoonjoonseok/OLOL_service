@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/adm")
 @PreAuthorize("hasAuthority('admin')") // admin 권한을 가진 사람만 접근 가능하다는 뜻
 public class AdmHomeController {
-    @PreAuthorize("isAuthenticated()")
+    //@PreAuthorize("isAuthenticated()")
     @GetMapping("")
     public String showIndex() {
         return "redirect:/adm/home/main";
@@ -22,5 +22,5 @@ public class AdmHomeController {
         return "adm/home/main";
     }
 
-    
+
 }
