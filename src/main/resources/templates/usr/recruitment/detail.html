@@ -131,7 +131,7 @@
                             <span th:unless="${comment.member==me}" style="font-size: x-large"
                                   th:text="나"></span>
                             <span style="font-size: large" th:text="${comment.member.nickname}"></span>
-                            <span style="font-size: small" th:text=" ${comment.createDate}"></span>&nbsp;
+                            <span style="font-size: small" th:text="${#temporals.format(comment.createDate, 'yyyy년MM월dd일HH시mm분')}"></span>
 
                             <div class="container1">
                                 <button type="button" class="btn btn-warning"
