@@ -1,6 +1,12 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 
 <th:block th:fragment="setLogin(login)">
+
+    <script>
+        // 현재 페이지의 URL을 localStorage에 저장합니다.
+        localStorage.setItem('previousUrl', window.location.href);
+    </script>
+
     <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
          aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
