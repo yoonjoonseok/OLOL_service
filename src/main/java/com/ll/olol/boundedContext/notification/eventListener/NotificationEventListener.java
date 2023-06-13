@@ -45,6 +45,7 @@ public class NotificationEventListener {
         } else {
             content = recruitmentPeople.getRecruitmentArticle().getMember().getId() + "가 참가 거절을 했습니다.";
         }
+
         notificationService.make(member, 1, content);
     }
 

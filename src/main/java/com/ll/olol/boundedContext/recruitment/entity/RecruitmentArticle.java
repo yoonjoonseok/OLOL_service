@@ -3,6 +3,7 @@ package com.ll.olol.boundedContext.recruitment.entity;
 import com.ll.olol.boundedContext.comment.entity.Comment;
 import com.ll.olol.boundedContext.member.entity.Member;
 import com.ll.olol.boundedContext.recruitment.CreateForm;
+import com.ll.olol.boundedContext.report.entity.ArticleReport;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -27,6 +28,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @EntityListeners(AuditingEntityListener.class)
 @SuperBuilder
 @DynamicUpdate
+
 public class RecruitmentArticle {
     @Id
     @GeneratedValue(strategy = IDENTITY)
@@ -44,6 +46,9 @@ public class RecruitmentArticle {
     @OneToMany(mappedBy = "recruitmentArticle", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     @OrderBy("id desc")
     private List<Comment> comment;
+
+    @OneToMany(mappedBy = "recruitmentArticle", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    private List<ArticleReport> articleReports;
 
     @OneToOne(cascade = CascadeType.REMOVE, mappedBy = "recruitmentArticle")
     private RecruitmentArticleForm recruitmentArticleForm;
