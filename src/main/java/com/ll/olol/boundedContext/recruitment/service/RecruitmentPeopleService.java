@@ -13,6 +13,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 
@@ -47,6 +48,10 @@ public class RecruitmentPeopleService {
 
     public RecruitmentPeople findOne(Long id) {
         return recruitmentPeopleRepository.findById(id).get();
+    }
+
+    public List findByRecruitmentArticle(RecruitmentArticle recruitmentArticle) {
+        return recruitmentPeopleRepository.findAllByRecruitmentArticle(recruitmentArticle);
     }
 
     @Transactional

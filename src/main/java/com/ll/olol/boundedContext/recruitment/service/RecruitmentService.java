@@ -4,12 +4,15 @@ import com.ll.olol.base.rsData.RsData;
 import com.ll.olol.boundedContext.api.localCode.LocalCodeApiClient;
 import com.ll.olol.boundedContext.comment.entity.Comment;
 import com.ll.olol.boundedContext.member.entity.Member;
+import com.ll.olol.boundedContext.notification.event.EventAfterUpdateArticle;
+import com.ll.olol.boundedContext.recruitment.CreateForm;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticleForm;
 import com.ll.olol.boundedContext.recruitment.repository.RecruitmentFormRepository;
 import com.ll.olol.boundedContext.recruitment.repository.RecruitmentRepository;
 import jakarta.persistence.criteria.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -32,6 +35,8 @@ public class RecruitmentService {
     private final RecruitmentFormRepository recruitmentFormRepository;
 
     private final LocalCodeApiClient localCodeApiClient;
+
+    private final ApplicationEventPublisher publisher;
 
     public Optional<RecruitmentArticle> findById(Long id) {
         return recruitmentRepository.findById(id);
@@ -166,6 +171,14 @@ public class RecruitmentService {
     @Transactional
     public void updateArticleForm(RecruitmentArticle recruitmentArticle) {
         recruitmentRepository.save(recruitmentArticle);
+    }
+
+    @Transactional
+    public void update(RecruitmentArticle recruitmentArticle, CreateForm createForm) {
+        recruitmentArticle.update(createForm);
+        recruitmentArticle.getRecruitmentArticleForm().update(createForm);
+
+        publisher.publishEvent(new EventAfterUpdateArticle(this, recruitmentArticle));
     }
 
     public RsData canUpdate(Optional<RecruitmentArticle> recruitmentArticle, Member member) {

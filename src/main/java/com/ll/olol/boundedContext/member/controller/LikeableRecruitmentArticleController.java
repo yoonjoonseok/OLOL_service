@@ -13,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,11 +25,13 @@ public class LikeableRecruitmentArticleController {
     private final Rq rq;
     private final LikeableRecruitmentArticleService likeableRecruitmentArticleService;
     private final RecruitmentService recruitmentService;
-    
+
     @GetMapping("/bookmark")
     public String bookmark(Model model) {
         Member actor = rq.getMember();
         List<LikeableRecruitmentArticle> likeableRecruitmentArticles = likeableRecruitmentArticleService.findByFromMember(actor);
+
+        Collections.reverse(likeableRecruitmentArticles);
 
         model.addAttribute("likeableRecruitmentArticles", likeableRecruitmentArticles);
         return "usr/member/bookmark";

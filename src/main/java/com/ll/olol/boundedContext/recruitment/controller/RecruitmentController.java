@@ -99,6 +99,8 @@ public class RecruitmentController {
         if (canUpdateRsData.isFail())
             return rq.historyBack(canUpdateRsData);
 
+        recruitmentService.update(recruitmentArticle.get(), createForm);
+
         recruitmentArticle.get().update(createForm);
         recruitmentArticle.get().getRecruitmentArticleForm().update(createForm);
 

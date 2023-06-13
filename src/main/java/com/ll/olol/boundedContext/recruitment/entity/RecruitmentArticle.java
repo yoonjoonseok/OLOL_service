@@ -47,7 +47,7 @@ public class RecruitmentArticle {
     @OrderBy("id desc")
     private List<Comment> comment;
 
-    @OneToMany(mappedBy = "recruitmentArticle", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "recruitmentArticle", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private List<ArticleReport> articleReports;
 
     @OneToOne(cascade = CascadeType.REMOVE, mappedBy = "recruitmentArticle")
