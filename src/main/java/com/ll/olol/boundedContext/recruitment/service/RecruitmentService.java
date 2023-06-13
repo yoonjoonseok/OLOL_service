@@ -162,6 +162,17 @@ public class RecruitmentService {
         recruitmentRepository.save(recruitmentArticle);
     }
 
+    public RsData canUpdate(Optional<RecruitmentArticle> recruitmentArticle, Member member) {
+        if (recruitmentArticle.isEmpty())
+            return RsData.of("F-1", "존재하지 않는 모임 공고입니다");
+        if (recruitmentArticle.get().getMember().getId() != member.getId())
+            return RsData.of("F-2", "모집자만이 수정 가능합니다");
+        if (recruitmentArticle.get().getDeadLineDate().isBefore(LocalDateTime.now()))
+            return RsData.of("F-3", " 마감 후에는 수정이 불가능합니다");
+
+        return RsData.of("S-1", "모임 공고 수정 가능");
+    }
+
     public void deleteArticle(RecruitmentArticle recruitmentArticle) {
         recruitmentRepository.delete(recruitmentArticle);
     }
@@ -169,6 +180,8 @@ public class RecruitmentService {
     public RsData canDelete(Optional<RecruitmentArticle> recruitmentArticle, Member member) {
         if (recruitmentArticle.isEmpty())
             return RsData.of("F-1", "존재하지 않는 모임 공고입니다");
+        if (recruitmentArticle.get().getMember().getId() != member.getId())
+            return RsData.of("F-2", "모집자만이 삭제 가능합니다");
         if (recruitmentArticle.get().getMember().getId() != member.getId() && !member.isAdmin())
             return RsData.of("F-2", "모집자만이 삭제 가능합니다");
 //        if (member.isAdmin())

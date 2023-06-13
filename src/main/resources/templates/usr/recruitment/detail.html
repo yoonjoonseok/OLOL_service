@@ -101,7 +101,13 @@
                     <hr>
                     <div th:text="${recruitmentArticle.content}">게시글 내용</div>
                     <hr>
-                    <button>수정</button>
+
+                    <button href="javascript:" onclick="if ( confirm('수정하시겠습니까?') ) $(this).next().submit();">
+                        수정
+                    </button>
+                    <form hidden th:action="@{|/recruitment/${recruitmentArticle.id}/update|}" method="GET">
+                    </form>
+
                     <button href="javascript:" onclick="if ( confirm('삭제하시겠습니까?') ) $(this).next().submit();">
                         삭제
                     </button>
@@ -167,7 +173,6 @@
     </div>
 
     </div>
-
 
     <th:block th:replace="~{/usr/api/hikingTrail :: hikingTrail()}"></th:block>
     <th:block th:replace="~{/usr/api/restaurant :: restaurant}"></th:block>
