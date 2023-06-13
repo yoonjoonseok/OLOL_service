@@ -1,13 +1,12 @@
-<html layout:decorate="~{usr/layout/layout.html}">
 <head>
 </head>
 <body>
-<main layout:fragment="main">
-    <div class="container">
+<main layout:fragment="attendList">
+    <div class="container mt-5">
+        <h2>신청한 공고 목록</h2>
         <div class="row">
             <div class="col-md-8">
                 <section>
-                    <h2>신청한 공고 목록</h2>
                     <ul th:if="${!#lists.isEmpty(peopleList)}" class="list-group">
                         <li th:each="likeableRecruitmentArticle: ${peopleList}"
                             class="list-group-item">
@@ -37,4 +36,3 @@
     </div>
 </main>
 </body>
-</html>

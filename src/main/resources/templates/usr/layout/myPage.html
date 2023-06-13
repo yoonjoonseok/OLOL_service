@@ -1,4 +1,4 @@
-<html layout:decorate="~{usr/layout/layout.html}" xmlns="http://www.w3.org/1999/html" lang="ko">
+<html layout:decorate="~{usr/layout/layout.html}">
 
 <body>
 <main layout:fragment="main" class="container mt-5">
@@ -17,7 +17,7 @@
                 toastWarning('연령대를 입력해주세요.');
                 return;
             }
-            
+
 
             if (form.email.value.length === 0) {
                 form.email.focus();
@@ -97,6 +97,8 @@
             <button type="button" class="btn btn-secondary" onclick="window.history.back()">취소</button>
         </div>
     </form>
+    <th:block th:replace="~{/usr/recruitment/attendList}"></th:block>
+    <th:block th:replace="~{/usr/member/bookmark}"></th:block>
 </main>
 
 </body>
