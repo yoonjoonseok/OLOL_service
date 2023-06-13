@@ -3,6 +3,7 @@ package com.ll.olol.boundedContext.recruitment.controller;
 import com.ll.olol.base.rq.Rq;
 import com.ll.olol.base.rsData.RsData;
 import com.ll.olol.boundedContext.comment.entity.Comment;
+import com.ll.olol.boundedContext.comment.entity.CommentDto;
 import com.ll.olol.boundedContext.comment.service.CommentService;
 import com.ll.olol.boundedContext.member.entity.Member;
 import com.ll.olol.boundedContext.member.repository.MemberRepository;
@@ -195,7 +196,7 @@ public class RecruitmentController {
                 commentList.add(comment);
             }
         }
-
+        model.addAttribute("commentForm", new CommentDto());
         model.addAttribute("recruitmentArticle", recruitmentArticle.get());
         model.addAttribute("comments", commentList);
         model.addAttribute("nowDate", LocalDateTime.now());
@@ -219,10 +220,15 @@ public class RecruitmentController {
     }
 
     @PostMapping("/{id}/comment")
-    public String createComment(@PathVariable("id") Long id, @ModelAttribute Comment comment,
+    public String createComment(@PathVariable("id") Long id,
+                                @Valid CommentDto commentDto, BindingResult bindingResult,
                                 String writer) {
-        comment.setCreateDate(LocalDateTime.now());
-        commentService.commentSave(comment, writer, id);
+        if (bindingResult.hasErrors()) {
+            return "redirect:/recruitment/" + id;
+        }
+
+        commentDto.setCreateDate(LocalDateTime.now());
+        commentService.commentSave(commentDto, writer, id);
 
         return "redirect:/recruitment/" + id;
     }

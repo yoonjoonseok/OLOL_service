@@ -3,6 +3,7 @@ package com.ll.olol.boundedContext.comment.service;
 import com.ll.olol.base.rq.Rq;
 import com.ll.olol.base.rsData.RsData;
 import com.ll.olol.boundedContext.comment.entity.Comment;
+import com.ll.olol.boundedContext.comment.entity.CommentDto;
 import com.ll.olol.boundedContext.comment.repository.CommentRepository;
 import com.ll.olol.boundedContext.member.entity.Member;
 import com.ll.olol.boundedContext.member.repository.MemberRepository;
@@ -40,7 +41,7 @@ public class CommentService {
 
 
     @Transactional
-    public RsData commentSave(Comment comment, String writer, Long articleId) {
+    public RsData commentSave(CommentDto commentDto, String writer, Long articleId) {
         Member member = rq.getMember();
         member.setNickname(writer);
 
@@ -49,7 +50,7 @@ public class CommentService {
             return RsData.of("F-1", "게시물이 없습니다.");
         }
         Comment savedComment = new Comment();
-        savedComment.setContent(comment.getContent());
+        savedComment.setContent(commentDto.getContent());
         savedComment.setRecruitmentArticle(article.get());
         savedComment.setMember(member);
 

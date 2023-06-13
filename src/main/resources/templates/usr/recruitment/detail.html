@@ -148,13 +148,16 @@
 
                         </li>
                     </form>
-                    <form th:object="${comments}" method="post"
+
+                    <form th:object="${commentForm}" method="post"
                           th:action="@{|/recruitment/${recruitmentArticle.id}/comment|}">
 
 
-                        <p>
-                            <textarea rows="5" cols="50" name="content"></textarea>
-                        </p>
+                            <p>
+                                <textarea th:field="*{content}" rows="5" cols="50" name="content" style="background-color: white"></textarea>
+                            </p>
+                        <p th:if="${#fields.hasErrors('content')}" th:errors="*{content}" class="fieldError" th:field="as">Incorrect content</p>
+
                         <p>
                             <button class="btn btn-primary" type="submit">댓글 작성</button>
                         </p>
