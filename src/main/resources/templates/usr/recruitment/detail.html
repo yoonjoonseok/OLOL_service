@@ -4,124 +4,289 @@
 <head>
     <!-- CSS only -->
     <!-- JavaScript Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
-<!--    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+            crossorigin="anonymous"></script>
+    <!--    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">-->
     <style>
         .sidebar {
             width: 280px;
-            height: 700px;
-            /*background-color: #f2f2f2;*/
+            height: 350px;
             background-color: #ffffff;
-            background-color: rgba( 255, 255, 255, 0.5 );
+            background-color: rgba(255, 255, 255, 0.5);
             padding: 10px;
             padding-top: 20%;
             position: sticky;
             top: 0;
         }
+
+        .fa-triangle-exclamation:hover {
+            transform: scale(1.2); /* 호버 시에 크기를 1.2배로 확대 */
+        }
+
+        .fa-trash-can:hover {
+            transform: scale(1.2); /* 호버 시에 크기를 1.2배로 확대 */
+        }
+
+        /*@media (max-width: 1200px) {*/
+        /*    .sidebar {*/
+        /*        display: none;*/
+        /*    }*/
+
+        /*    .age-deadline-wrapper {*/
+        /*        display: flex;*/
+        /*        align-items: center;*/
+        /*        margin-bottom: 1rem;*/
+        /*    }*/
+
+        /*    .age-deadline-wrapper .deadline-info {*/
+        /*        margin-left: 1rem;*/
+        /*    }*/
+        /*}*/
     </style>
 
 </head>
 <body>
 <main layout:fragment="main">
-    <div class="container py-3">
+    <div class="container py-3 ">
         <div class="row justify-content-center p-4">
-            <div class="col-md-8">
-<!--                <section>-->
-                    <h2 class="mt-5 fs-1 fw-bolder mb-4" th:text="${recruitmentArticle.articleName}">제목</h2>
-                    <div>
-                        <span th:text="${recruitmentArticle.member.nickname}">닉네임</span>
-                        <div class="vr"></div>
-                        <span th:text="${recruitmentArticle.getCreateDateToString()}">게시글 날짜</span>
-                        <div class="vr"></div>
-                        <i class="bi bi-eye"></i>
-                        <span th:text="${recruitmentArticle.views}">조회수</span>
+            <!--            <div class="col-md-8">-->
+            <div class="col-lg-9">
+                <!--                <section>-->
+                <div class="mt-5">
+                    <h2 class="fs-1 fw-bolder mb-4 "
+                        th:text="${recruitmentArticle.articleName}">제목</h2>
+                    <div class="d-flex align-items-center">
+                        <div>
+                            <span th:text="${recruitmentArticle.member.nickname}">닉네임</span>
+                            <div class="vr"></div>
+                            <span th:text="${recruitmentArticle.getCreateDateToString()}">게시글 날짜</span>
+                            <div class="vr"></div>
+                            <i class="bi bi-eye"></i>
+                            <span th:text="${recruitmentArticle.views}">조회수</span>
+                        </div>
+                        <div class="ml-auto">
+                            <i class="fa-solid fa-trash-can" href="javascript:"
+                               onclick="if ( confirm('삭제하시겠습니까?') ) $(this).next().submit();"></i>
+                            <form hidden th:action="@{|/recruitment/${recruitmentArticle.id}/delete|}" method="POST">
+                                <input type="hidden" name="_method" value="delete">
+                            </form>
+                        </div>
+                        <div class="ml-2">
+                            <i class="fa-solid fa-triangle-exclamation" type="button" data-toggle="modal"
+                               data-target="#reportingArticleModal"></i>
+                            <!--                        <button type="button" data-toggle="modal"-->
+                            <!--                                data-target="#reportingArticleModal" >-->
+                            <!--                            신고-->
+                            <!--                        </button>-->
+                        </div>
                     </div>
-                    <hr>
+                </div>
 
-                    <hr>
-                    <div th:text="${recruitmentArticle.content}">게시글 내용</div>
-                    <hr>
+                <hr>
+                <div class="bg-success p-2 text-dark bg-opacity-10">
+                    <div class="d-flex justify-content-start mb-3">
+                        <div style="width: 22rem;">
+                            <span class="font-weight-bold fs-5 text-secondary">모임 구분</span>
+                            <div class="vr"></div>
+                            <span class="fs-5 fw-bold"
+                                  th:text="${recruitmentArticle.getTypeValueToString()}">모임 구분</span>
+                        </div>
+                        <div>
+                            <span class="font-weight-bold fs-5 text-secondary">모집 인원</span>
+                            <div class="vr"></div>
+                            <span class="fs-5 fw-bold"
+                                  th:text="${recruitmentArticle.recruitmentArticleForm.recruitsNumbers}">모집 인원</span>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-start mb-3">
+                        <div style="width: 22rem;">
+                            <span class="font-weight-bold fs-5 text-secondary">연락 방법</span>
+                            <div class="vr"></div>
+                            <span class="fs-5 fw-bold"
+                                  th:text="${recruitmentArticle.recruitmentArticleForm.connectType}">연락 방법</span>
+                        </div>
 
-                    <button href="javascript:" onclick="if ( confirm('수정하시겠습니까?') ) $(this).next().submit();">
-                        수정
-                    </button>
-                    <form hidden th:action="@{|/recruitment/${recruitmentArticle.id}/update|}" method="GET">
-                    </form>
-
-                    <button href="javascript:" onclick="if ( confirm('삭제하시겠습니까?') ) $(this).next().submit();">
-                        삭제
-                    </button>
-                    <form hidden th:action="@{|/recruitment/${recruitmentArticle.id}/delete|}" method="POST">
-                        <input type="hidden" name="_method" value="delete">
-                    </form>
-                    <button href="javascript:" onclick="if ( confirm('찜하시겠습니까?') ) $(this).next().submit();">
-                        찜
-                    </button>
-                    <form hidden th:action="@{|/member/bookmark/${recruitmentArticle.id}|}" method="POST">
-                    </form>
-                    <button type="button" data-toggle="modal"
-                            data-target="#reportingArticleModal">
-                        신고
-                    </button>
-                    <form th:object="${comments}">
-                        <li class="list-group-item" th:each="comment : ${comments}">
-
-                            <td>
-                                <th:block th:switch="${comment.getMember().id}">
-                                    <span th:case="${writer}" style="font-size: x-large" th:text="작성자"></span>
-                                    <span th:case="${me}" style="font-size: x-large" th:text="'나'"></span>
-                                    <span th:case="*" style="font-size: x-large" th:text="${comment.member.nickname}"></span>
-                                </th:block>
-                            </td>
-                            <span style="font-size: small"
-                                  th:text="${#temporals.format(comment.createDate, 'yyyy년MM월dd일 HH시mm분')}"></span>
-
-                            <div class="container1">
-                                <button type="button" class="btn btn-warning"
-                                        th:onclick="|location.href='@{/recruitment/comment/{id}/edit (id=${comment.id})}'|">
-                                    수정
-                                </button>
-                                <button type="button" class="btn btn-danger"
-                                        th:onclick="|location.href='@{/recruitment/comment/{id}/delete (id=${comment.id})}'|">
-                                    삭제
-                                </button>
+                        <div>
+                            <div>
+                                <span class="font-weight-bold fs-5 text-secondary">산 이름</span>
+                                <div class="vr"></div>
+                                <span class="fs-5 fw-bold"
+                                      th:text="${recruitmentArticle.recruitmentArticleForm.mountainName}">산 이름</span>
+                                <div class="btn-group btn-group-sm " role="group" aria-label="Basic outlined example">
+                                    <button type="button" data-toggle="modal"
+                                            data-target="#hikingTrailModal" class="btn btn-outline-success"> 등산로
+                                    </button>
+                                    <button type="button" data-toggle="modal"
+                                            data-target="#restaurant" class="btn btn-outline-success">주변 맛집
+                                    </button>
+                                    <button type="button" data-toggle="modal"
+                                            data-target="#parkingLot" class="btn btn-outline-success">주변 주차장
+                                    </button>
+                                </div>
                             </div>
-                            <span style="font-size: large" th:text="${comment.content}"></span>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-start mb-3">
+                        <div style="width: 22rem;">
+                            <span class="font-weight-bold fs-5 text-secondary">등산 시작 시각</span>
+                            <div class="vr"></div>
+                            <span class="fs-5 fw-bold"
+                                  th:text="${#temporals.format(recruitmentArticle.recruitmentArticleForm.startTime, 'yyyy-MM-dd HH:mm')}">등산 시작 시각</span>
+                        </div>
+
+                        <div>
+                            <span class="font-weight-bold fs-5 text-secondary">예상 도착 시각</span>
+                            <div class="vr"></div>
+                            <span class="fs-5 fw-bold"
+                                  th:text="${#temporals.format(recruitmentArticle.recruitmentArticleForm.courseTime, 'yyyy-MM-dd HH:mm')}">예상 도착 시각</span>
+                        </div>
+                    </div>
+
+                    <div class="d-flex justify-content-start mb-3">
+                        <div style="width: 22rem;">
+                            <span class="font-weight-bold fs-5 text-secondary">모집 연령대</span>
+                            <div class="vr"></div>
+                            <span class="fs-5 fw-bold"
+                                  th:text="|${recruitmentArticle.recruitmentArticleForm.ageRange} 대|">모집 연령대</span>
+                        </div>
+                        <div>
+                            <span class="font-weight-bold fs-5">마감일</span>
+                            <div class="vr"></div>
+                            <span class="fs-5 fw-bold"
+                                  th:text="${recruitmentArticle.getDeadLineDateToString()}">마감일</span>
+                            <div class="containerIn">
+                                <form>
+                                    <button type="button"
+                                            class="btn btn-outline-success btn-sm"
+                                            th:if="${recruitmentArticle.getDeadLineDate().isAfter(nowDate)}"
+                                            th:onclick="|location.href='@{/recruitment/{id}/attend (id=${recruitmentArticle.id})}'|">
+                                        신청
+                                    </button>
+                                </form>
+
+                                <span class="font-weight-bold"
+                                      th:unless="${recruitmentArticle.getDeadLineDate().isAfter(nowDate)}">
+            마감 시간이 지났어요. 다음에 신청해주세요!
+            </span>
+                                <form th:action="@{/recruitment/{id}/deadLine (id=${recruitmentArticle.id})}"
+                                      method="post">
+                                    <button type="submit"
+                                            class="btn btn-outline-success btn-sm ml-3"
+                                            th:if="${recruitmentArticle.getDeadLineDate().isAfter(nowDate)}">
+                                        마감
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+                <hr>
+                <div th:text="${recruitmentArticle.content}">게시글 내용</div>
+                <hr>
+
+                <button href="javascript:" onclick="if ( confirm('수정하시겠습니까?') ) $(this).next().submit();">
+                    수정
+                </button>
+                <form hidden th:action="@{|/recruitment/${recruitmentArticle.id}/update|}" method="GET">
+                </form>
+
+                <!--                <button href="javascript:" onclick="if ( confirm('삭제하시겠습니까?') ) $(this).next().submit();">-->
+                <!--                    삭제-->
+                <!--                </button>-->
+                <!--                <form hidden th:action="@{|/recruitment/${recruitmentArticle.id}/delete|}" method="POST">-->
+                <!--                    <input type="hidden" name="_method" value="delete">-->
+                <!--                </form>-->
+                <button href="javascript:" onclick="if ( confirm('찜하시겠습니까?') ) $(this).next().submit();">
+                    찜
+                </button>
+                <form hidden th:action="@{|/member/bookmark/${recruitmentArticle.id}|}" method="POST">
+                </form>
+                <!--                <button type="button" data-toggle="modal" data-target="#reportingArticleModal">-->
+                <!--                    신고-->
+                <!--                </button>-->
 
 
-                        </li>
-                    </form>
+                <form th:object="${comments}">
+                    <li class="list-group-item" th:each="comment : ${comments}">
 
-                    <form th:object="${commentForm}" method="post"
-                          th:action="@{|/recruitment/${recruitmentArticle.id}/comment|}">
+                        <td>
+                            <th:block th:switch="${comment.getMember().id}">
+                                <span th:case="${writer}" style="font-size: x-large" th:text="작성자"></span>
+                                <span th:case="${me}" style="font-size: x-large" th:text="'나'"></span>
+                                <span th:case="*" style="font-size: x-large"
+                                      th:text="${comment.member.nickname}"></span>
+                            </th:block>
+                        </td>
+                        <span style="font-size: small"
+                              th:text="${#temporals.format(comment.createDate, 'yyyy년MM월dd일 HH시mm분')}"></span>
+
+                        <div class="container1">
+                            <button type="button" class="btn btn-warning"
+                                    th:onclick="|location.href='@{/recruitment/comment/{id}/edit (id=${comment.id})}'|">
+                                수정
+                            </button>
+                            <button type="button" class="btn btn-danger"
+                                    th:onclick="|location.href='@{/recruitment/comment/{id}/delete (id=${comment.id})}'|">
+                                삭제
+                            </button>
+                        </div>
+                        <span style="font-size: large" th:text="${comment.content}"></span>
+                    </li>
+                </form>
+
+                <form th:object="${commentForm}" method="post"
+                      th:action="@{|/recruitment/${recruitmentArticle.id}/comment|}">
 
 
-                        <p>
+                    <p>
                             <textarea th:field="*{content}" rows="5" cols="50" name="content"
                                       style="background-color: white"></textarea>
-                        </p>
-                        <p th:if="${#fields.hasErrors('content')}" th:errors="*{content}" class="fieldError"
-                           th:field="as">Incorrect content</p>
+                    </p>
+                    <p th:if="${#fields.hasErrors('content')}" th:errors="*{content}" class="fieldError"
+                       th:field="as">Incorrect content</p>
 
-                        <p>
-                            <button class="btn btn-primary" type="submit">댓글 작성</button>
-                        </p>
+                    <p>
+                        <button class="btn btn-primary" type="submit">댓글 작성</button>
+                    </p>
 
-                    </form>
-<!--                </section>-->
+                </form>
+                <!--                </section>-->
             </div>
-            <div class="col-md-3">
-                <div class="sidebar mt-5">
-                    <h3>사이드바</h3>
-                    <div>
+            <!--            <div class="col-md-3 ">-->
+            <div class="col-lg-3 d-none d-lg-block mt-5">
+                <div class="sidebar " style="background-color: #FAF0E6;">
+                    <h2>모집 정보</h2>
+                    <hr>
+                    <div class="mt-2">
+                        <span class="font-weight-bold mt-2 fs-5">주간 / 야간</span>
+                        <div class="vr"></div>
+                        <span class="fs-5" th:text="${recruitmentArticle.recruitmentArticleForm.getDayNightToString()}">주1 야2</span>
 
                     </div>
 
-                    <div>
+                    <div class="mt-2">
+                        <span class="font-weight-bold mt-2 fs-5">산 이름</span>
+                        <div class="vr"></div>
+                        <span class="fs-5"
+                              th:text="${recruitmentArticle.recruitmentArticleForm.mountainName}">산 이름</span>
+                    </div>
+
+                    <div class="mt-2">
+                        <span class="font-weight-bold fs-5">모집 인원</span>
+                        <div class="vr"></div>
+                        <span class="fs-5"
+                              th:text="${recruitmentArticle.recruitmentArticleForm.recruitsNumbers}">모집 인원</span>
+
+                    </div>
+
+                    <div class="mt-2">
                         <span class="font-weight-bold fs-5">마감일</span>
                         <div class="vr"></div>
                         <span class="fs-5" th:text="${recruitmentArticle.getDeadLineDateToString()}">마감일</span>
-                        <div class="containerIn">
+                        <div class="containerIn d-flex justify-content-end mb-3">
                             <form>
                                 <button type="button"
                                         class="btn btn-outline-success btn-sm"
@@ -145,13 +310,11 @@
                         </div>
                     </div>
 
-
                 </div>
             </div>
         </div>
     </div>
 
-    </div>
 
     <th:block th:replace="~{/usr/api/hikingTrail :: hikingTrail()}"></th:block>
     <th:block th:replace="~{/usr/api/restaurant :: restaurant}"></th:block>
