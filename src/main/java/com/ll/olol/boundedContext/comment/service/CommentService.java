@@ -28,9 +28,8 @@ public class CommentService {
     private final ApplicationEventPublisher publisher;
 
     @Transactional
-    public RsData commentSave(CommentDto commentDto, String writer, Long articleId) {
+    public RsData commentSave(CommentDto commentDto, Long articleId) {
         Member member = rq.getMember();
-        member.setNickname(writer);
 
         Optional<RecruitmentArticle> article = recruitmentRepository.findById(articleId);
         if (article.isEmpty()) {
