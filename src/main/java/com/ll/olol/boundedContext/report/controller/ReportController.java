@@ -31,7 +31,7 @@ public class ReportController {
 
     private final RecruitmentService recruitmentService;
 
-//    @GetMapping("/report")
+    //    @GetMapping("/report")
 //    public String bookmark(Model model) {
 //        Member actor = rq.getMember();
 //        List<ArticleReport> reportRecruitmentArticles = reportService.findByFromMember(actor);
@@ -39,7 +39,7 @@ public class ReportController {
 //        model.addAttribute("likeableRecruitmentArticles", likeableRecruitmentArticles);
 //        return "usr/member/bookmark";
 //    }
-
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/report/{id}")
     public String add(@PathVariable Long id, @RequestParam int reason) {
         Optional<RecruitmentArticle> or = recruitmentService.findById(id);

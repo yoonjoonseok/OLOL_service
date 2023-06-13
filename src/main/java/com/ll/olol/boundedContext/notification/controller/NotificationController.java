@@ -16,12 +16,12 @@ import java.util.stream.Collectors;
 @Controller
 @RequestMapping("/notification")
 @RequiredArgsConstructor
+@PreAuthorize("isAuthenticated()")
 public class NotificationController {
     private final Rq rq;
     private final NotificationService notificationService;
 
     @GetMapping("/list")
-    @PreAuthorize("isAuthenticated()")
     public String showList(Model model) {
 
         List<Notification> notifications = notificationService.findByToInstaMember(rq.getMember());

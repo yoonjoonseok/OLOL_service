@@ -16,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -24,6 +25,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true) // 아래 메서드들이 전부 readonly 라는 것을 명시, 나중을 위해
 public class RecruitmentService {
     private final RecruitmentRepository recruitmentRepository;
 
@@ -35,7 +37,7 @@ public class RecruitmentService {
         return recruitmentRepository.findById(id);
     }
 
-
+    @Transactional
     public RecruitmentArticle createArticle(String articleName, String content, Member member, Integer typeValue,
                                             LocalDateTime deadLineDate) {
         RecruitmentArticle recruitmentArticle = RecruitmentArticle
@@ -48,18 +50,11 @@ public class RecruitmentService {
                 .deadLineDate(deadLineDate)
                 .build();
 
-//        RecruitmentArticle recruitmentArticle = new RecruitmentArticle();
-//        recruitmentArticle.setMember(member);
-//        recruitmentArticle.setArticleName(articleName);
-//        recruitmentArticle.setContent(content);
-//        recruitmentArticle.setViews(0L);
-//        recruitmentArticle.setTypeValue(typeValue);
-//        recruitmentArticle.setDeadLineDate(deadLineDate);
-
         recruitmentRepository.save(recruitmentArticle);
         return recruitmentArticle;
     }
 
+    @Transactional
     public void createArticleForm(RecruitmentArticle recruitmentArticle, Integer dayNight, Long recruitsNumber,
                                   String mountainName, String mtAddress, Long ageRange, String connectType,
                                   LocalDateTime startTime, LocalDateTime courseTime) {
@@ -85,21 +80,6 @@ public class RecruitmentService {
                 .courseTime(courseTime)
                 .localCode(localCodeApiClient.requestLocalCode(realMountainAddress))
                 .build();
-
-
-//        RecruitmentArticleForm recruitmentArticleForm = new RecruitmentArticleForm();
-//
-//        recruitmentArticleForm.setRecruitmentArticle(recruitmentArticle);
-//        recruitmentArticleForm.setDayNight(dayNight);
-//        recruitmentArticleForm.setRecruitsNumbers(recruitsNumber);
-//        recruitmentArticleForm.setMountainName(mountainName);
-//        recruitmentArticleForm.setMtAddress(realMountainAddress);
-//        recruitmentArticleForm.setAgeRange(ageRange);
-//        recruitmentArticleForm.setConnectType(connectType);
-//        recruitmentArticleForm.setStartTime(startTime);
-//        recruitmentArticleForm.setCourseTime(courseTime);
-//
-//        recruitmentArticleForm.setLocalCode(localCodeApiClient.requestLocalCode(realMountainAddress));
 
         recruitmentFormRepository.save(recruitmentArticleForm);
     }
@@ -183,6 +163,7 @@ public class RecruitmentService {
         return recruitmentRepository.findAll(spec, pageable);
     }
 
+    @Transactional
     public void updateArticleForm(RecruitmentArticle recruitmentArticle) {
         recruitmentRepository.save(recruitmentArticle);
     }
@@ -198,6 +179,7 @@ public class RecruitmentService {
         return RsData.of("S-1", "모임 공고 수정 가능");
     }
 
+    @Transactional
     public void deleteArticle(RecruitmentArticle recruitmentArticle) {
         recruitmentRepository.delete(recruitmentArticle);
     }
@@ -218,6 +200,7 @@ public class RecruitmentService {
         return recruitmentRepository.findAll();
     }
 
+    @Transactional
     public void addView(RecruitmentArticle recruitmentArticle) {
         recruitmentArticle.setViews(recruitmentArticle.getViews() + 1);
         recruitmentRepository.save(recruitmentArticle);

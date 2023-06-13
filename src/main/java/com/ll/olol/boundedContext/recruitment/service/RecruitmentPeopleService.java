@@ -8,15 +8,17 @@ import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentPeople;
 import com.ll.olol.boundedContext.recruitment.repository.RecruitmentPeopleRepository;
 import com.ll.olol.boundedContext.recruitment.repository.RecruitmentRepository;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true) // 아래 메서드들이 전부 readonly 라는 것을 명시, 나중을 위해
 public class RecruitmentPeopleService {
 
     private final RecruitmentPeopleRepository recruitmentPeopleRepository;
@@ -24,6 +26,7 @@ public class RecruitmentPeopleService {
     private final RecruitmentRepository recruitmentRepository;
     private final ApplicationEventPublisher publisher;
 
+    @Transactional
     public Long saveRecruitmentPeople(Long memberId, Long recruitmentId) {
         Optional<Member> member = memberRepository.findById(memberId);
         Optional<RecruitmentArticle> article = recruitmentRepository.findById(recruitmentId);
@@ -36,6 +39,7 @@ public class RecruitmentPeopleService {
         return saved.getId();
     }
 
+    @Transactional
     public void delete(RecruitmentPeople recruitmentPeople) {
         publisher.publishEvent(new EventAfterRecruitmentAttend(this, recruitmentPeople));
         recruitmentPeopleRepository.delete(recruitmentPeople);
