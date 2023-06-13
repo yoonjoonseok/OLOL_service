@@ -7,6 +7,8 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
+import java.util.NoSuchElementException;
+
 @ControllerAdvice
 @RequiredArgsConstructor
 public class CustomExceptionHandler {
@@ -14,11 +16,11 @@ public class CustomExceptionHandler {
 
     @ExceptionHandler(AccessDeniedException.class)
     public String handleAccessDeniedException(AccessDeniedException ex, HttpServletRequest request) {
-        if (request.getRequestURI().equals("/recruitment/create") || request.getRequestURI().equals("/notification/list")) {
-            return rq.historyBack("로그인을 선행해주세요");
-        } else {
-            // 다른 URL에 대한 처리 로직
-            return "error-page";
-        }
+        return rq.historyBack("로그인을 선행해주세요");
+    }
+
+    @ExceptionHandler(NoSuchElementException.class)
+    public String handleNoSuchElementException(NoSuchElementException ex, HttpServletRequest request) {
+        return rq.historyBack("존재하지 않는 유저입니다");
     }
 }

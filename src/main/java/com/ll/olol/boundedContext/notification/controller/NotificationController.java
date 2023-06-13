@@ -10,23 +10,25 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/notification")
 @RequiredArgsConstructor
+@PreAuthorize("isAuthenticated()")
 public class NotificationController {
     private final Rq rq;
     private final NotificationService notificationService;
 
     @GetMapping("/list")
-    @PreAuthorize("isAuthenticated()")
     public String showList(Model model) {
 
         List<Notification> notifications = notificationService.findByToInstaMember(rq.getMember());
 
-        notifications = notifications.stream().filter(n -> !n.isRead()).collect(Collectors.toList());
+        //notifications = notifications.stream().filter(n -> !n.isRead()).collect(Collectors.toList());
+
+        Collections.reverse(notifications);
 
         notificationService.markAsRead(notifications);
 

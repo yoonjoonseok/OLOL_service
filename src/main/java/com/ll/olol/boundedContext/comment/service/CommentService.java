@@ -6,24 +6,24 @@ import com.ll.olol.boundedContext.comment.entity.Comment;
 import com.ll.olol.boundedContext.comment.entity.CommentDto;
 import com.ll.olol.boundedContext.comment.repository.CommentRepository;
 import com.ll.olol.boundedContext.member.entity.Member;
-import com.ll.olol.boundedContext.member.repository.MemberRepository;
 import com.ll.olol.boundedContext.notification.event.EventAfterComment;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
 import com.ll.olol.boundedContext.recruitment.repository.RecruitmentRepository;
-import java.util.List;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true) // 아래 메서드들이 전부 readonly 라는 것을 명시, 나중을 위해
 public class CommentService {
 
     private final CommentRepository commentRepository;
     private final RecruitmentRepository recruitmentRepository;
-    private final MemberRepository memberRepository;
     private final Rq rq;
     private final ApplicationEventPublisher publisher;
 
