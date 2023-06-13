@@ -26,19 +26,6 @@ public class CommentService {
     private final MemberRepository memberRepository;
     private final Rq rq;
     private final ApplicationEventPublisher publisher;
-//    @Transactional
-//    public Long commentSave(Long id, CommentDto dto){
-//        RecruitmentArticle recruitmentArticle = recruitmentRepository.findById(id).orElseThrow(() ->
-//                new IllegalArgumentException("해당 게시물이 존재하지 않습니다."));
-//
-////        dto.setRecruitmentArticle(recruitmentArticle);
-//
-//        Comment comment = dto.toEntity();
-//        commentRepository.save(comment);
-//
-//        return dto.getId();
-//    }
-
 
     @Transactional
     public RsData commentSave(Comment comment, String writer, Long articleId) {
