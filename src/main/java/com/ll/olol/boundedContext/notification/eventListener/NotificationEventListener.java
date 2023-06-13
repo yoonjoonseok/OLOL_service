@@ -41,7 +41,8 @@ public class NotificationEventListener {
         Member member = recruitmentPeople.getMember();
         String content = "";
         if (recruitmentPeople.isAttend()) {
-            content = recruitmentPeople.getRecruitmentArticle().getMember().getId() + "가 참가 수락을 했습니다.";
+            content = recruitmentPeople.getRecruitmentArticle().getMember().getId() + "가 참가 수락을 했습니다."
+                    + "링크는 " + recruitmentPeople.getRecruitmentArticle().getRecruitmentArticleForm().getConnectType();
         } else {
             content = recruitmentPeople.getRecruitmentArticle().getMember().getId() + "가 참가 거절을 했습니다.";
         }

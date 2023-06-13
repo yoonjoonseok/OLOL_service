@@ -9,6 +9,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -41,9 +42,12 @@ public class Comment {
     @ManyToOne
     @JoinColumn(name = "member_id")
     private Member member;
+
+    @NotBlank(message = "내용은 필수입니다.")
     private String content;
 
     @CreatedDate
+
     private LocalDateTime createDate;
 
     @LastModifiedDate

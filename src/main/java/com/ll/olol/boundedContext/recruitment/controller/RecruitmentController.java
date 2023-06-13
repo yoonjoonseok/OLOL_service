@@ -3,6 +3,7 @@ package com.ll.olol.boundedContext.recruitment.controller;
 import com.ll.olol.base.rq.Rq;
 import com.ll.olol.base.rsData.RsData;
 import com.ll.olol.boundedContext.comment.entity.Comment;
+import com.ll.olol.boundedContext.comment.entity.CommentDto;
 import com.ll.olol.boundedContext.comment.service.CommentService;
 import com.ll.olol.boundedContext.member.entity.Member;
 import com.ll.olol.boundedContext.member.repository.MemberRepository;
@@ -24,13 +25,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.*;
-
-import java.security.Principal;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 import java.security.Principal;
 import java.time.LocalDateTime;
@@ -75,6 +69,43 @@ public class RecruitmentController {
                 createForm.getCourseTime());
 
         return "redirect:/";
+    }
+
+    //@PreAuthorize("isAuthenticated()")
+    @GetMapping("/{id}/update")
+    // @Valid를 붙여야 QuestionForm.java내의 NotBlank나 Size가 동작한다.
+    public String update(@PathVariable Long id, CreateForm createForm) {
+        Optional<RecruitmentArticle> recruitmentArticle = recruitmentService.findById(id);
+
+        RsData canUpdateRsData = recruitmentService.canUpdate(recruitmentArticle, rq.getMember());
+        if (canUpdateRsData.isFail())
+            return rq.historyBack(canUpdateRsData);
+
+        createForm.set(recruitmentArticle.get());
+
+        return "recruitmentArticle/updateRecruitment_form";
+    }
+
+    @Transactional
+    @PostMapping("/{id}/update")
+    // @Valid QuestionForm questionForm
+    // questionForm 값을 바인딩 할 때 유효성 체크를 해라!
+    // questionForm 변수와 bindingResult 변수는 model.addAttribute 없이 바로 뷰에서 접근할 수 있다.
+    public String update(@PathVariable Long id, @Valid CreateForm createForm, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "recruitmentArticle/updateRecruitment_form";
+        }
+
+        Optional<RecruitmentArticle> recruitmentArticle = recruitmentService.findById(id);
+
+        RsData canUpdateRsData = recruitmentService.canUpdate(recruitmentArticle, rq.getMember());
+        if (canUpdateRsData.isFail())
+            return rq.historyBack(canUpdateRsData);
+
+        recruitmentArticle.get().update(createForm);
+        recruitmentArticle.get().getRecruitmentArticleForm().update(createForm);
+
+        return "redirect:/recruitment/" + id;
     }
 
     @GetMapping("/attendList")
@@ -197,12 +228,14 @@ public class RecruitmentController {
                 commentList.add(comment);
             }
         }
-
+        model.addAttribute("commentForm", new CommentDto());
         model.addAttribute("recruitmentArticle", recruitmentArticle.get());
+
         model.addAttribute("comments", commentList);
         model.addAttribute("nowDate", LocalDateTime.now());
         model.addAttribute("writer", recruitmentArticle.get().getMember());
         model.addAttribute("me", rq.getMember());
+
         return "usr/recruitment/detail";
     }
 
@@ -221,10 +254,15 @@ public class RecruitmentController {
     }
 
     @PostMapping("/{id}/comment")
-    public String createComment(@PathVariable("id") Long id, @ModelAttribute Comment comment,
+    public String createComment(@PathVariable("id") Long id,
+                                @Valid CommentDto commentDto, BindingResult bindingResult,
                                 String writer) {
-        comment.setCreateDate(LocalDateTime.now());
-        commentService.commentSave(comment, writer, id);
+        if (bindingResult.hasErrors()) {
+            return "redirect:/recruitment/" + id;
+        }
+
+        commentDto.setCreateDate(LocalDateTime.now());
+        commentService.commentSave(commentDto, writer, id);
 
         return "redirect:/recruitment/" + id;
     }
@@ -264,14 +302,6 @@ public class RecruitmentController {
         return "redirect:/recruitment/" + articleId;
     }
 
-//    @GetMapping("/list")
-//    public String list(Model model, @RequestParam(defaultValue = "0L") Long ageRange, @RequestParam(defaultValue = "0") int dayNight, @RequestParam(defaultValue = "0") int typeValue, @RequestParam(defaultValue = "1") int sortCode, @RequestParam(defaultValue = "0") int page, String kw) { // int page 가 곧 name = page와 같다.
-//        Page<RecruitmentArticle> paging = recruitmentService.getlist(page, kw);
-//        model.addAttribute("paging", paging);
-//        //model.addAttribute("kw",kw);
-//        return "usr/recruitment/allList";
-//    }
-
     @GetMapping("/list")
     public String list(Model model,
                        @RequestParam(defaultValue = "0") Long ageRange,
@@ -298,5 +328,4 @@ public class RecruitmentController {
         model.addAttribute("paging", paging);
         return "usr/recruitment/allList";
     }
-
 }
