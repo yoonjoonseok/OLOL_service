@@ -63,12 +63,17 @@
 
                     <hr>
                     <div>신청하려고 하는 공고글이 이것이 맞나요?</div>
-                    <form method="post">
-                        <button type="submit">예</button>
-                    </form>
-                    <button type="submit"
-                            th:onclick="|location.href='@{/recruitment/{id} (id=${recruitmentArticle.id})}'|">아니요
-                    </button>
+                    <div class="containerIn">
+                        <form method="post">
+                            <button type="submit" class="btn btn-primary">예</button>
+                        </form>
+                        <form>
+                            <button type="button" class="btn btn-primary"
+                                    th:onclick="|location.href='@{/recruitment/{id} (id=${recruitmentArticle.id})}'|">
+                                아니요
+                            </button>
+                        </form>
+                    </div>
                 </section>
             </div>
         </div>

@@ -3,19 +3,19 @@ package com.ll.olol.boundedContext.comment.service;
 import com.ll.olol.base.rq.Rq;
 import com.ll.olol.base.rsData.RsData;
 import com.ll.olol.boundedContext.comment.entity.Comment;
+import com.ll.olol.boundedContext.comment.entity.CommentDto;
 import com.ll.olol.boundedContext.comment.repository.CommentRepository;
 import com.ll.olol.boundedContext.member.entity.Member;
 import com.ll.olol.boundedContext.member.repository.MemberRepository;
 import com.ll.olol.boundedContext.notification.event.EventAfterComment;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
 import com.ll.olol.boundedContext.recruitment.repository.RecruitmentRepository;
+import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -41,17 +41,16 @@ public class CommentService {
 
 
     @Transactional
-    public RsData commentSave(Comment comment, String writer, Long articleId) {
+    public RsData commentSave(CommentDto commentDto, String writer, Long articleId) {
         Member member = rq.getMember();
         member.setNickname(writer);
-        memberRepository.save(member);
 
         Optional<RecruitmentArticle> article = recruitmentRepository.findById(articleId);
         if (article.isEmpty()) {
             return RsData.of("F-1", "게시물이 없습니다.");
         }
         Comment savedComment = new Comment();
-        savedComment.setContent(comment.getContent());
+        savedComment.setContent(commentDto.getContent());
         savedComment.setRecruitmentArticle(article.get());
         savedComment.setMember(member);
 
