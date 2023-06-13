@@ -132,12 +132,15 @@
                     <form th:object="${comments}">
                         <li class="list-group-item" th:each="comment : ${comments}">
 
-                        <span th:if="${comment.member==writer}" style="font-size: x-large"
-                              th:text="작성자"></span>
-                            <span th:unless="${comment.member==me}" style="font-size: x-large"
-                                  th:text="나"></span>
-                            <span style="font-size: large" th:text="${comment.member.nickname}"></span>
-                            <span style="font-size: small" th:text="${#temporals.format(comment.createDate, 'yyyy년MM월dd일 HH시mm분')}"></span>
+                            <td>
+                                <th:block th:switch="${comment.getMember().id}">
+                                    <span th:case="${writer}" style="font-size: x-large" th:text="작성자"></span>
+                                    <span th:case="${me}" style="font-size: x-large" th:text="'나'"></span>
+                                    <span th:case="*" style="font-size: x-large" th:text="${comment.member.nickname}"></span>
+                                </th:block>
+                            </td>
+                            <span style="font-size: small"
+                                  th:text="${#temporals.format(comment.createDate, 'yyyy년MM월dd일 HH시mm분')}"></span>
 
                             <div class="container1">
                                 <button type="button" class="btn btn-warning"
@@ -159,10 +162,12 @@
                           th:action="@{|/recruitment/${recruitmentArticle.id}/comment|}">
 
 
-                            <p>
-                                <textarea th:field="*{content}" rows="5" cols="50" name="content" style="background-color: white"></textarea>
-                            </p>
-                        <p th:if="${#fields.hasErrors('content')}" th:errors="*{content}" class="fieldError" th:field="as">Incorrect content</p>
+                        <p>
+                            <textarea th:field="*{content}" rows="5" cols="50" name="content"
+                                      style="background-color: white"></textarea>
+                        </p>
+                        <p th:if="${#fields.hasErrors('content')}" th:errors="*{content}" class="fieldError"
+                           th:field="as">Incorrect content</p>
 
                         <p>
                             <button class="btn btn-primary" type="submit">댓글 작성</button>
