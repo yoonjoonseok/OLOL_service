@@ -39,6 +39,8 @@ public class RecruitmentArticle {
     private String articleName;
     @CreatedDate
     private LocalDateTime createDate;
+
+    @Column(columnDefinition = "TEXT")
     private String content;
     private LocalDateTime deadLineDate;
     private Long views;
