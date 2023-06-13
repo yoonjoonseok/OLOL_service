@@ -17,6 +17,7 @@ html > body .label-text {
 
 .containerIn {
     display: flex;
+    justify-content: start;
 }
 
 .container1 {

@@ -2,6 +2,7 @@ package com.ll.olol.boundedContext.comment.entity;
 
 import com.ll.olol.boundedContext.member.entity.Member;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
+import jakarta.validation.constraints.NotBlank;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,9 +20,11 @@ public class CommentDto {
     private Long id;
     private RecruitmentArticle recruitmentArticle;
     private Member member;
+    @NotBlank(message = "내용은 필수입니다.")
     private String content;
 
     private LocalDateTime createDate = LocalDateTime.now();
+
     private LocalDateTime modifyDate = LocalDateTime.now();
 
     public Comment toEntity() {

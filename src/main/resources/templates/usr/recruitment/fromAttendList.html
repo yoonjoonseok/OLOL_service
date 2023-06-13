@@ -31,12 +31,17 @@
                             <div class="containerIn">
                                 <form th:action="@{|/recruitment/${attendLists.id}/attend/create|}"
                                       method="POST">
-                                    <button type="submit">수락</button>
+                                    <button onclick="if ( confirm('수락하시겠습니까?') ) $(this).next().submit();"
+                                            class="btn btn-primary" type="submit">수락
+                                    </button>
                                 </form>
 
                                 <form th:action="@{|/recruitment/${attendLists.id}/attend/delete|}"
                                       method="POST">
-                                    <button type="submit">거절</button>
+                                    <button href="javascript:"
+                                            onclick="if ( confirm('거절하시겠습니까?') ) $(this).next().submit();"
+                                            class="btn btn-primary" type="submit">거절
+                                    </button>
                                 </form>
                             </div>
                         </li>
