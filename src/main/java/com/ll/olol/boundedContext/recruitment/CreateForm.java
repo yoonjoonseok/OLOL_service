@@ -1,13 +1,19 @@
 package com.ll.olol.boundedContext.recruitment;
 
+import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
+import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticleForm;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @Getter
+@Setter
+@Builder
 public class CreateForm {
     //        @NotBlank
 //        @Size(min = 3, max = 65)
@@ -51,4 +57,20 @@ public class CreateForm {
     @NotBlank(message = "내용은 필수항목입니다.")
     private String connectType;
 
+    public void set(RecruitmentArticle recruitmentArticle) {
+        RecruitmentArticleForm recruitmentArticleForm = recruitmentArticle.getRecruitmentArticleForm();
+
+        this.articleName = recruitmentArticle.getArticleName();
+        this.content = recruitmentArticle.getContent();
+        this.typeValue = recruitmentArticle.getTypeValue();
+        this.dayNight = recruitmentArticleForm.getDayNight();
+        this.mountainName = recruitmentArticleForm.getMountainName();
+        this.mtAddress = recruitmentArticleForm.getMtAddress();
+        this.recruitsNumber = recruitmentArticleForm.getRecruitsNumbers();
+        this.startTime = recruitmentArticleForm.getStartTime();
+        this.courseTime = recruitmentArticleForm.getCourseTime();
+        this.deadLineDate = recruitmentArticle.getDeadLineDate();
+        this.ageRange = recruitmentArticleForm.getAgeRange();
+        this.connectType = recruitmentArticleForm.getConnectType();
+    }
 }

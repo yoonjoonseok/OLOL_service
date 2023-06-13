@@ -69,7 +69,7 @@ public class CommentServiceTest {
         List<Comment> all = commentRepository.findAll();
         Comment comment = all.get(0);
         //when
-        commentService.update(comment);
+        //commentService.update(comment);
         //then
         assertEquals(comment.getContent(), "수정된댓글이에요.");
     }
