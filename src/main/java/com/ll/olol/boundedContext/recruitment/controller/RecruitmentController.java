@@ -241,14 +241,15 @@ public class RecruitmentController {
                 commentList.add(comment);
             }
         }
-        System.out.println("게시글멤버 번호" + recruitmentArticle.get().getMember().getId());
-        System.out.println("member" + rq.getMember().getId());
+
         model.addAttribute("commentForm", new CommentDto());
         model.addAttribute("recruitmentArticle", recruitmentArticle.get());
         model.addAttribute("comments", commentList);
         model.addAttribute("nowDate", LocalDateTime.now());
         model.addAttribute("writer", Long.toString(recruitmentArticle.get().getMember().getId()));
-        model.addAttribute("me", Long.toString(rq.getMember().getId()));
+        if (rq.getMember() != null) {
+            model.addAttribute("me", Long.toString(rq.getMember().getId()));
+        }
 
         return "usr/recruitment/detail";
     }
