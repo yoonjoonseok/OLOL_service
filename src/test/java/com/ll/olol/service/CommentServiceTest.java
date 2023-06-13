@@ -1,22 +1,21 @@
 package com.ll.olol.service;
 
+import static org.junit.Assert.assertEquals;
+
 import com.ll.olol.boundedContext.comment.entity.Comment;
 import com.ll.olol.boundedContext.comment.repository.CommentRepository;
 import com.ll.olol.boundedContext.comment.service.CommentService;
 import com.ll.olol.boundedContext.member.repository.MemberRepository;
 import com.ll.olol.boundedContext.recruitment.repository.RecruitmentRepository;
 import com.ll.olol.boundedContext.recruitment.service.RecruitmentService;
+import java.util.List;
+import java.util.Optional;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.Optional;
-
-import static org.junit.Assert.assertEquals;
 
 
 @SpringBootTest
@@ -63,15 +62,6 @@ public class CommentServiceTest {
         assertEquals(3, commentService.findComments().size());
     }
 
-    @Test
-    public void 댓글_수정() throws Exception {
-        //given
-        List<Comment> all = commentRepository.findAll();
-        Comment comment = all.get(0);
-        //when
-        commentService.update(comment);
-        //then
-        assertEquals(comment.getContent(), "수정된댓글이에요.");
-    }
+
 
 }

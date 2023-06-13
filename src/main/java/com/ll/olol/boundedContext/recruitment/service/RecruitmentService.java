@@ -2,15 +2,23 @@ package com.ll.olol.boundedContext.recruitment.service;
 
 import com.ll.olol.base.rsData.RsData;
 import com.ll.olol.boundedContext.api.localCode.LocalCodeApiClient;
+import com.ll.olol.boundedContext.comment.entity.Comment;
 import com.ll.olol.boundedContext.member.entity.Member;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticleForm;
 import com.ll.olol.boundedContext.recruitment.repository.RecruitmentFormRepository;
 import com.ll.olol.boundedContext.recruitment.repository.RecruitmentRepository;
+import jakarta.persistence.criteria.*;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -96,8 +104,73 @@ public class RecruitmentService {
         return RsData.of("F-1", "동을 저장 못함");
     }
 
+    private Specification<RecruitmentArticle> search(String kw) {
+        return new Specification<>() {
+            private static final long serialVersionUID = 1L;
+
+            @Override
+            public Predicate toPredicate(Root<RecruitmentArticle> q, CriteriaQuery<?> query, CriteriaBuilder cb) {
+                query.distinct(true);  // 중복을 제거
+                Join<RecruitmentArticle, Member> u1 = q.join("member", JoinType.LEFT);
+                Join<RecruitmentArticle, Comment> a = q.join("comment", JoinType.LEFT);
+                Join<Comment, Member> u2 = a.join("member", JoinType.LEFT);
+                return cb.or(cb.like(q.get("articleName"), "%" + kw + "%"), // 제목
+                        cb.like(q.get("content"), "%" + kw + "%"),      // 내용
+                        cb.like(q.get("recruitmentArticleForm").get("mountainName"), "%" + kw + "%"),      // 산
+                        cb.like(u1.get("nickname"), "%" + kw + "%"),    // 질문 작성자
+                        cb.like(a.get("content"), "%" + kw + "%"),      // 답변 내용
+                        cb.like(u2.get("nickname"), "%" + kw + "%"));   // 답변 작성자
+            }
+        };
+    }
+
+    public Page<RecruitmentArticle> getlist(int page, String kw) {
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("createDate"));
+
+        Pageable pageable = PageRequest.of(page, 20, Sort.by(sorts));
+        if (kw == null || kw.trim().length() == 0) {
+            return recruitmentRepository.findAll(pageable);
+        }
+        Specification<RecruitmentArticle> spec = search(kw);
+        return recruitmentRepository.findAll(spec, pageable);
+    }
+
+    public Page<RecruitmentArticle> getListByConditions(Long ageRange, int dayNight, int typeValue, String kw, Pageable pageable) {
+        Specification<RecruitmentArticle> spec = Specification.where(null);
+
+        if (ageRange != 0L) {
+            spec = spec.and((root, query, cb) -> cb.equal(root.get("recruitmentArticleForm").get("ageRange"), ageRange));
+        }
+
+        if (dayNight != 0) {
+            spec = spec.and((root, query, cb) -> cb.equal(root.get("recruitmentArticleForm").get("dayNight"), dayNight));
+        }
+
+        if (typeValue != 0) {
+            spec = spec.and((root, query, cb) -> cb.equal(root.get("typeValue"), typeValue));
+        }
+
+        if (kw != null && !kw.trim().isEmpty()) {
+            spec = spec.and(search(kw));
+        }
+
+        return recruitmentRepository.findAll(spec, pageable);
+    }
+
     public void updateArticleForm(RecruitmentArticle recruitmentArticle) {
         recruitmentRepository.save(recruitmentArticle);
+    }
+
+    public RsData canUpdate(Optional<RecruitmentArticle> recruitmentArticle, Member member) {
+        if (recruitmentArticle.isEmpty())
+            return RsData.of("F-1", "존재하지 않는 모임 공고입니다");
+        if (recruitmentArticle.get().getMember().getId() != member.getId())
+            return RsData.of("F-2", "모집자만이 수정 가능합니다");
+        if (recruitmentArticle.get().getDeadLineDate().isBefore(LocalDateTime.now()))
+            return RsData.of("F-3", " 마감 후에는 수정이 불가능합니다");
+
+        return RsData.of("S-1", "모임 공고 수정 가능");
     }
 
     public void deleteArticle(RecruitmentArticle recruitmentArticle) {
@@ -109,6 +182,10 @@ public class RecruitmentService {
             return RsData.of("F-1", "존재하지 않는 모임 공고입니다");
         if (recruitmentArticle.get().getMember().getId() != member.getId())
             return RsData.of("F-2", "모집자만이 삭제 가능합니다");
+        if (recruitmentArticle.get().getMember().getId() != member.getId() && !member.isAdmin())
+            return RsData.of("F-2", "모집자만이 삭제 가능합니다");
+//        if (member.isAdmin())
+//            return RsData.of("S-2", "관리자는 모임 공고 삭제 가능");
         return RsData.of("S-1", "모임 공고 삭제 가능");
     }
 
