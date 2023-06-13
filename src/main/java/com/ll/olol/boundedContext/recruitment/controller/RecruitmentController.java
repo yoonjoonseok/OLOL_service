@@ -74,9 +74,13 @@ public class RecruitmentController {
     @GetMapping("/{id}/update")
     // @Valid를 붙여야 QuestionForm.java내의 NotBlank나 Size가 동작한다.
     public String update(@PathVariable Long id, CreateForm createForm) {
-        RecruitmentArticle recruitmentArticle = recruitmentService.findById(id).get();
+        Optional<RecruitmentArticle> recruitmentArticle = recruitmentService.findById(id);
 
-        createForm.set(recruitmentArticle);
+        RsData canUpdateRsData = recruitmentService.canUpdate(recruitmentArticle, rq.getMember());
+        if (canUpdateRsData.isFail())
+            return rq.historyBack(canUpdateRsData);
+
+        createForm.set(recruitmentArticle.get());
 
         return "recruitmentArticle/updateRecruitment_form";
     }
@@ -91,12 +95,16 @@ public class RecruitmentController {
             return "recruitmentArticle/updateRecruitment_form";
         }
 
-        RecruitmentArticle recruitmentArticle = recruitmentService.findById(id).get();
+        Optional<RecruitmentArticle> recruitmentArticle = recruitmentService.findById(id);
 
-        recruitmentArticle.update(createForm);
-        recruitmentArticle.getRecruitmentArticleForm().update(createForm);
+        RsData canUpdateRsData = recruitmentService.canUpdate(recruitmentArticle, rq.getMember());
+        if (canUpdateRsData.isFail())
+            return rq.historyBack(canUpdateRsData);
 
-        return "redirect:/";
+        recruitmentArticle.get().update(createForm);
+        recruitmentArticle.get().getRecruitmentArticleForm().update(createForm);
+
+        return "redirect:/recruitment/" + id;
     }
 
     @GetMapping("/attendList")
