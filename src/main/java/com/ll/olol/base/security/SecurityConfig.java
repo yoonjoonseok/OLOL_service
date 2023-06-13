@@ -1,5 +1,9 @@
 package com.ll.olol.base.security;
 
+import com.ll.olol.base.rq.Rq;
+import com.ll.olol.base.rsData.RsData;
+import com.ll.olol.boundedContext.member.entity.Member;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -16,7 +20,10 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(prePostEnabled = true)
+@RequiredArgsConstructor
 public class SecurityConfig {
+    private final Rq rq;
+    private RsData rsData;
 
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -30,8 +37,20 @@ public class SecurityConfig {
                                 XFrameOptionsHeaderWriter.XFrameOptionsMode.SAMEORIGIN
                         )
                 ))
-//                .oauth2Login((loginUser) -> loginUser.loginPage("/**"))
-                .oauth2Login((loginUser) -> loginUser.loginPage("/adm/login"))
+                .oauth2Login((loginUser) -> loginUser
+                        .loginPage("/**")
+                        .successHandler(((request, response, authentication) -> {
+                            Member member = rq.getMember();
+                            if (member.getAge() == 0 || member.getGender() == null || member.getEmail() == null || member.getNickname() == null) {
+                                response.sendRedirect("/member/mypage");
+                            } else {
+                                String script = "<script>var previousUrl = localStorage.getItem('previousUrl'); localStorage.removeItem('previousUrl'); window.location.href = previousUrl || '/';</script>";
+                                response.setContentType("text/html;charset=UTF-8");
+                                response.getWriter().print(script);
+                                response.getWriter().flush();
+                            }
+                        })))
+
                 .logout((loginUser) -> loginUser
                         .logoutRequestMatcher(new AntPathRequestMatcher("/user/logout"))
                         .logoutSuccessUrl("/")
