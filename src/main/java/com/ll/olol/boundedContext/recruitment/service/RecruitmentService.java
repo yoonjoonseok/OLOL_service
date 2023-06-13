@@ -38,13 +38,23 @@ public class RecruitmentService {
 
     public RecruitmentArticle createArticle(String articleName, String content, Member member, Integer typeValue,
                                             LocalDateTime deadLineDate) {
-        RecruitmentArticle recruitmentArticle = new RecruitmentArticle();
-        recruitmentArticle.setMember(member);
-        recruitmentArticle.setArticleName(articleName);
-        recruitmentArticle.setContent(content);
-        recruitmentArticle.setViews(0L);
-        recruitmentArticle.setTypeValue(typeValue);
-        recruitmentArticle.setDeadLineDate(deadLineDate);
+        RecruitmentArticle recruitmentArticle = RecruitmentArticle
+                .builder()
+                .member(member)
+                .articleName(articleName)
+                .content(content)
+                .views(0L)
+                .typeValue(typeValue)
+                .deadLineDate(deadLineDate)
+                .build();
+
+//        RecruitmentArticle recruitmentArticle = new RecruitmentArticle();
+//        recruitmentArticle.setMember(member);
+//        recruitmentArticle.setArticleName(articleName);
+//        recruitmentArticle.setContent(content);
+//        recruitmentArticle.setViews(0L);
+//        recruitmentArticle.setTypeValue(typeValue);
+//        recruitmentArticle.setDeadLineDate(deadLineDate);
 
         recruitmentRepository.save(recruitmentArticle);
         return recruitmentArticle;
@@ -62,19 +72,34 @@ public class RecruitmentService {
             realMountainAddress = checkMt.getData();
         }
 
-        RecruitmentArticleForm recruitmentArticleForm = new RecruitmentArticleForm();
+        RecruitmentArticleForm recruitmentArticleForm = RecruitmentArticleForm
+                .builder()
+                .recruitmentArticle(recruitmentArticle)
+                .dayNight(dayNight)
+                .recruitsNumbers(recruitsNumber)
+                .mountainName(mountainName)
+                .mtAddress(mtAddress)
+                .ageRange(ageRange)
+                .connectType(connectType)
+                .startTime(startTime)
+                .courseTime(courseTime)
+                .localCode(localCodeApiClient.requestLocalCode(realMountainAddress))
+                .build();
 
-        recruitmentArticleForm.setRecruitmentArticle(recruitmentArticle);
-        recruitmentArticleForm.setDayNight(dayNight);
-        recruitmentArticleForm.setRecruitsNumbers(recruitsNumber);
-        recruitmentArticleForm.setMountainName(mountainName);
-        recruitmentArticleForm.setMtAddress(realMountainAddress);
-        recruitmentArticleForm.setAgeRange(ageRange);
-        recruitmentArticleForm.setConnectType(connectType);
-        recruitmentArticleForm.setStartTime(startTime);
-        recruitmentArticleForm.setCourseTime(courseTime);
 
-        recruitmentArticleForm.setLocalCode(localCodeApiClient.requestLocalCode(realMountainAddress));
+//        RecruitmentArticleForm recruitmentArticleForm = new RecruitmentArticleForm();
+//
+//        recruitmentArticleForm.setRecruitmentArticle(recruitmentArticle);
+//        recruitmentArticleForm.setDayNight(dayNight);
+//        recruitmentArticleForm.setRecruitsNumbers(recruitsNumber);
+//        recruitmentArticleForm.setMountainName(mountainName);
+//        recruitmentArticleForm.setMtAddress(realMountainAddress);
+//        recruitmentArticleForm.setAgeRange(ageRange);
+//        recruitmentArticleForm.setConnectType(connectType);
+//        recruitmentArticleForm.setStartTime(startTime);
+//        recruitmentArticleForm.setCourseTime(courseTime);
+//
+//        recruitmentArticleForm.setLocalCode(localCodeApiClient.requestLocalCode(realMountainAddress));
 
         recruitmentFormRepository.save(recruitmentArticleForm);
     }
