@@ -8,16 +8,19 @@ import com.ll.olol.boundedContext.member.service.LikeableRecruitmentArticleServi
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
 import com.ll.olol.boundedContext.recruitment.service.RecruitmentService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
 @Controller
 @RequestMapping("/member")
 @RequiredArgsConstructor
+@PreAuthorize("isAuthenticated()")
 public class LikeableRecruitmentArticleController {
     private final Rq rq;
     private final LikeableRecruitmentArticleService likeableRecruitmentArticleService;
@@ -27,6 +30,8 @@ public class LikeableRecruitmentArticleController {
     public String bookmark(Model model) {
         Member actor = rq.getMember();
         List<LikeableRecruitmentArticle> likeableRecruitmentArticles = likeableRecruitmentArticleService.findByFromMember(actor);
+
+        Collections.reverse(likeableRecruitmentArticles);
 
         model.addAttribute("likeableRecruitmentArticles", likeableRecruitmentArticles);
         return "usr/member/bookmark";
