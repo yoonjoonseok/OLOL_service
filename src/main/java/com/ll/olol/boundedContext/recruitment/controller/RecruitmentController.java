@@ -7,14 +7,17 @@ import com.ll.olol.boundedContext.comment.entity.CommentDto;
 import com.ll.olol.boundedContext.comment.service.CommentService;
 import com.ll.olol.boundedContext.member.entity.Member;
 import com.ll.olol.boundedContext.member.repository.MemberRepository;
-import com.ll.olol.boundedContext.member.service.MemberService;
 import com.ll.olol.boundedContext.recruitment.CreateForm;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentPeople;
 import com.ll.olol.boundedContext.recruitment.service.RecruitmentPeopleService;
 import com.ll.olol.boundedContext.recruitment.service.RecruitmentService;
-import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
+import java.security.Principal;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -24,13 +27,13 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
-
-import java.security.Principal;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/recruitment")
@@ -38,7 +41,6 @@ import java.util.Optional;
 public class RecruitmentController {
     private final Rq rq;
     private final RecruitmentService recruitmentService;
-    private final MemberService memberService;
     private final MemberRepository memberRepository;
     private final CommentService commentService;
     private final RecruitmentPeopleService recruitmentPeopleService;
@@ -51,7 +53,7 @@ public class RecruitmentController {
         return "recruitmentArticle/createRecruitment_form";
     }
 
-
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/create")
     // @Valid QuestionForm questionForm
     // questionForm 값을 바인딩 할 때 유효성 체크를 해라!
@@ -71,22 +73,23 @@ public class RecruitmentController {
         return "redirect:/";
     }
 
-    //@PreAuthorize("isAuthenticated()")
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/{id}/update")
     // @Valid를 붙여야 QuestionForm.java내의 NotBlank나 Size가 동작한다.
     public String update(@PathVariable Long id, CreateForm createForm) {
         Optional<RecruitmentArticle> recruitmentArticle = recruitmentService.findById(id);
 
         RsData canUpdateRsData = recruitmentService.canUpdate(recruitmentArticle, rq.getMember());
-        if (canUpdateRsData.isFail())
+        if (canUpdateRsData.isFail()) {
             return rq.historyBack(canUpdateRsData);
+        }
 
         createForm.set(recruitmentArticle.get());
 
         return "recruitmentArticle/updateRecruitment_form";
     }
 
-    @Transactional
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/{id}/update")
     // @Valid QuestionForm questionForm
     // questionForm 값을 바인딩 할 때 유효성 체크를 해라!
@@ -99,8 +102,11 @@ public class RecruitmentController {
         Optional<RecruitmentArticle> recruitmentArticle = recruitmentService.findById(id);
 
         RsData canUpdateRsData = recruitmentService.canUpdate(recruitmentArticle, rq.getMember());
-        if (canUpdateRsData.isFail())
+        if (canUpdateRsData.isFail()) {
             return rq.historyBack(canUpdateRsData);
+        }
+
+        recruitmentService.update(recruitmentArticle.get(), createForm);
 
         recruitmentArticle.get().update(createForm);
         recruitmentArticle.get().getRecruitmentArticleForm().update(createForm);
@@ -108,6 +114,7 @@ public class RecruitmentController {
         return "redirect:/recruitment/" + id;
     }
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/attendList")
     public String showAttendList(Model model) {
         Long memberId = rq.getMember().getId();
@@ -118,6 +125,7 @@ public class RecruitmentController {
         return "usr/recruitment/attendList";
     }
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/fromList")
     public String showFromAttendList(Model model) {
         Long memberId = rq.getMember().getId();
@@ -143,6 +151,7 @@ public class RecruitmentController {
         return "usr/recruitment/fromAttendList";
     }
 
+    @PreAuthorize("isAuthenticated()")
 
     @PostMapping("/{id}/attend/delete")
     public String deleteAttend(@PathVariable Long id) {
@@ -151,6 +160,7 @@ public class RecruitmentController {
         return "redirect:/recruitment/fromList";
     }
 
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/{id}/attend/create")
     public String createAttend(@PathVariable Long id) {
         RecruitmentPeople person = recruitmentPeopleService.findOne(id);
@@ -167,6 +177,7 @@ public class RecruitmentController {
         return "redirect:/recruitment/fromList";
     }
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/{id}/attend")
     public String attendForm(@PathVariable Long id, Model model) {
         Optional<RecruitmentArticle> recruitmentArticle = recruitmentService.findById(id);
@@ -190,6 +201,7 @@ public class RecruitmentController {
         return "usr/recruitment/attendForm";
     }
 
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/{id}/attend")
     public String attend(@PathVariable Long id, @ModelAttribute RecruitmentArticle recruitmentArticle) {
         recruitmentPeopleService.saveRecruitmentPeople(rq.getMember().getId(), id);
@@ -197,6 +209,7 @@ public class RecruitmentController {
         return "redirect:/recruitment/" + id;
     }
 
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/{id}/deadLine")
     public String deadLineForm(@PathVariable Long id, @ModelAttribute RecruitmentArticle recruitmentArticle) {
         Optional<RecruitmentArticle> article = recruitmentService.findById(id);
@@ -228,18 +241,19 @@ public class RecruitmentController {
                 commentList.add(comment);
             }
         }
+        System.out.println("게시글멤버 번호" + recruitmentArticle.get().getMember().getId());
+        System.out.println("member" + rq.getMember().getId());
         model.addAttribute("commentForm", new CommentDto());
         model.addAttribute("recruitmentArticle", recruitmentArticle.get());
-
         model.addAttribute("comments", commentList);
         model.addAttribute("nowDate", LocalDateTime.now());
-        model.addAttribute("writer", recruitmentArticle.get().getMember());
-        model.addAttribute("me", rq.getMember());
+        model.addAttribute("writer", Long.toString(recruitmentArticle.get().getMember().getId()));
+        model.addAttribute("me", Long.toString(rq.getMember().getId()));
 
         return "usr/recruitment/detail";
     }
 
-    @Transactional
+    @PreAuthorize("isAuthenticated()")
     @DeleteMapping("/{id}/delete")
     public String delete(@PathVariable Long id) {
         Optional<RecruitmentArticle> recruitmentArticle = recruitmentService.findById(id);
@@ -253,20 +267,21 @@ public class RecruitmentController {
         return "redirect:/";
     }
 
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/{id}/comment")
     public String createComment(@PathVariable("id") Long id,
-                                @Valid CommentDto commentDto, BindingResult bindingResult,
-                                String writer) {
+                                @Valid CommentDto commentDto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "redirect:/recruitment/" + id;
         }
 
         commentDto.setCreateDate(LocalDateTime.now());
-        commentService.commentSave(commentDto, writer, id);
+        commentService.commentSave(commentDto, id);
 
         return "redirect:/recruitment/" + id;
     }
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/comment/{id}/delete")
     public String deleteComment(@PathVariable("id") Long id) {
         RsData rsData = commentService.isEqualMemberById(id);
@@ -279,7 +294,7 @@ public class RecruitmentController {
         return "redirect:/recruitment/" + articleId;
     }
 
-
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/comment/{id}/edit")
     public String editCommentForm(@PathVariable("id") Long id, Model model) {
         Comment comment = commentService.findOne(id);
@@ -293,6 +308,7 @@ public class RecruitmentController {
         return "usr/home/editComment";
     }
 
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/comment/{id}/edit")
     public String editComment(@PathVariable("id") Long id, @ModelAttribute Comment comment) {
         commentService.update(id, comment.getContent());

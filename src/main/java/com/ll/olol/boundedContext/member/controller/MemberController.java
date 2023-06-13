@@ -52,7 +52,7 @@ public class MemberController {
         RsData result = memberService.modifyMemberInfo(rq.getMember(), editForm.getNickname(), editForm.getAgeRange(), editForm.getGender(), editForm.getEmail());
 
         if (result.isFail()) {
-            rq.historyBack("다시시도해주세요");
+            rq.historyBack("다시 시도해주세요");
         }
 
         return "redirect:/";
