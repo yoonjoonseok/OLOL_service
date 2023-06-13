@@ -9,7 +9,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.format.annotation.DateTimeFormat;
 
 @Getter
 @Builder
@@ -23,9 +22,9 @@ public class CommentDto {
     private Member member;
     @NotBlank(message = "내용은 필수입니다.")
     private String content;
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+
     private LocalDateTime createDate = LocalDateTime.now();
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm")
+
     private LocalDateTime modifyDate = LocalDateTime.now();
 
     public Comment toEntity() {
