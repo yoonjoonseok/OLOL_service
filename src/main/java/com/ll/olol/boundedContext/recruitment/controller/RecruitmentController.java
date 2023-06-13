@@ -15,6 +15,11 @@ import com.ll.olol.boundedContext.recruitment.service.RecruitmentPeopleService;
 import com.ll.olol.boundedContext.recruitment.service.RecruitmentService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
+import java.security.Principal;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -24,13 +29,13 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
-
-import java.security.Principal;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/recruitment")
@@ -78,8 +83,9 @@ public class RecruitmentController {
         Optional<RecruitmentArticle> recruitmentArticle = recruitmentService.findById(id);
 
         RsData canUpdateRsData = recruitmentService.canUpdate(recruitmentArticle, rq.getMember());
-        if (canUpdateRsData.isFail())
+        if (canUpdateRsData.isFail()) {
             return rq.historyBack(canUpdateRsData);
+        }
 
         createForm.set(recruitmentArticle.get());
 
@@ -99,8 +105,9 @@ public class RecruitmentController {
         Optional<RecruitmentArticle> recruitmentArticle = recruitmentService.findById(id);
 
         RsData canUpdateRsData = recruitmentService.canUpdate(recruitmentArticle, rq.getMember());
-        if (canUpdateRsData.isFail())
+        if (canUpdateRsData.isFail()) {
             return rq.historyBack(canUpdateRsData);
+        }
 
         recruitmentArticle.get().update(createForm);
         recruitmentArticle.get().getRecruitmentArticleForm().update(createForm);
@@ -228,13 +235,14 @@ public class RecruitmentController {
                 commentList.add(comment);
             }
         }
+        System.out.println("게시글멤버 번호" + recruitmentArticle.get().getMember().getId());
+        System.out.println("member" + rq.getMember().getId());
         model.addAttribute("commentForm", new CommentDto());
         model.addAttribute("recruitmentArticle", recruitmentArticle.get());
-
         model.addAttribute("comments", commentList);
         model.addAttribute("nowDate", LocalDateTime.now());
-        model.addAttribute("writer", recruitmentArticle.get().getMember());
-        model.addAttribute("me", rq.getMember());
+        model.addAttribute("writer", Long.toString(recruitmentArticle.get().getMember().getId()));
+        model.addAttribute("me", Long.toString(rq.getMember().getId()));
 
         return "usr/recruitment/detail";
     }
@@ -255,14 +263,13 @@ public class RecruitmentController {
 
     @PostMapping("/{id}/comment")
     public String createComment(@PathVariable("id") Long id,
-                                @Valid CommentDto commentDto, BindingResult bindingResult,
-                                String writer) {
+                                @Valid CommentDto commentDto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
             return "redirect:/recruitment/" + id;
         }
 
         commentDto.setCreateDate(LocalDateTime.now());
-        commentService.commentSave(commentDto, writer, id);
+        commentService.commentSave(commentDto, id);
 
         return "redirect:/recruitment/" + id;
     }
