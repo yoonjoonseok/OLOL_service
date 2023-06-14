@@ -53,7 +53,6 @@ spring:
         format_sql: false
         use_sql_comments: false
 
-
 naver:
   url:
     search:
