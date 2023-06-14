@@ -202,24 +202,34 @@
                     <div class="card-header bg-white">
                         <div class="card-title mt-3">
                             <div class="smaller-text mb-2">
-                                <div th:if="${recruitmentArticle.isImpromotu()}">
+                                <div class="div">
+                                    <div th:if="${recruitmentArticle.isImpromotu()}">
                                     <span class="border bg-light rounded-4 p-1">
                                         <i class="fa-solid fa-cloud-bolt"></i>
                                         <span class="fw-bold"
                                               th:text="${recruitmentArticle.getTypeValueToString()}"></span>
                                     </span>
-                                </div>
-                                <div th:if="${recruitmentArticle.isRegular()}">
-                                    <span class="border bg-light rounded-4 p-1">
+                                    </div>
+
+
+                                    <div th:if="${recruitmentArticle.isRegular()}">
+                                        <span class="border bg-light rounded-4 p-1">
                                         <i class="fa-solid fa-user-group"></i>
-                                        <span class="fw-bold"
-                                              th:text="${recruitmentArticle.getTypeValueToString()}"></span>
-                                    </span>
+                                            <span class="fw-bold"
+                                                  th:text="${recruitmentArticle.getTypeValueToString()}"></span>
+                                        </span>
+                                    </div>
+                                    <div th:if="${recruitmentArticle.getCreateDate().plusHours(3).isAfter(now)}">
+                                        <span class="border bg-light rounded-4 p-1">
+                                        <i class="fa-solid fa-fire" style="color: #e63819;"></i>
+                                            <span class="fw-bold">따끈따끈 새 글</span></span>
+                                    </div>
                                 </div>
+                            </div>
 
                                 <div class="smaller-text text-secondary mt-1 fw-bold"
                                      th:text="|마감일 ${#temporals.format(recruitmentArticle.deadLineDate, 'yyyy.MM.dd')}|"></div>
-                            </div>
+
                         </div>
                     </div>
                     <div class="card-body ml-2" style="text-decoration: none;">

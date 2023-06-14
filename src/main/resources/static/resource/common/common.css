@@ -1,9 +1,3 @@
-@font-face {
-    font-family: 'Pretendard-Regular';
-    src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
-    font-weight: 400;
-    font-style: normal;
-}
 
 html > body {
     font-family: "Pretendard-Regular";
@@ -11,8 +5,125 @@ html > body {
     word-break: keep-all;
 }
 
-html > body .label-text {
-    font-size: 1rem;
+
+body {
+    background-color: #F5F5F5;
+}
+
+.jumbotron {
+    background-color: #E8F5E9;
+    color: #2E7D32;
+}
+
+.display-4 {
+    color: #2E7D32;
+}
+
+.lead {
+    color: #388E3C;
+}
+
+.form-container {
+    background-color: #FFFFFF;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.label-text {
+    color: black;
+}
+
+.select-bordered {
+    border-color: black;
+    color: black;
+}
+
+.btn-outline-secondary {
+    border-color: darkgreen;
+    color: darkgreen;
+}
+
+.btn-outline-secondary:hover {
+    background-color: darkgreen;
+    color: #FFFFFF;
+}
+
+.card {
+    background-color: #FFFFFF;
+    border: none;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.card:hover {
+    transform: scale(1.03);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.smaller-text {
+    color: #616161;
+}
+
+.text-secondary {
+    color: #757575;
+}
+
+.card-footer {
+    background-color: #F5F5F5;
+}
+
+.pagination .page-link {
+    color: #2E7D32;
+    border-color: #2E7D32;
+}
+
+.pagination .page-link:hover {
+    background-color: #2E7D32;
+    color: #FFFFFF;
+}
+
+#btnScrollToTop {
+    background: darkgreen;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
+}
+
+#btnScrollToTop:active {
+    background: #1B5E20;
+}
+
+/* 아이콘 스타일 */
+.fa-solid {
+    color: #2E7D32;
+}
+
+.fa-cloud-bolt {
+    color: #388E3C;
+}
+
+.fa-user-group {
+    color: #388E3C;
+}
+
+.fa-arrow-up-z-a {
+    color: #2E7D32;
+}
+
+.material-icons {
+    color: #FFFFFF;
+}
+
+.container.smaller-text {
+    display: flex;
+    flex-direction: row-reverse;
+
+}
+
+.div {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+
 }
 
 .containerIn {
@@ -24,8 +135,3 @@ html > body .label-text {
     display: flex;
     flex-direction: row-reverse;
 }
-
-
-
-
-
