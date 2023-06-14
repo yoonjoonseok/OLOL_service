@@ -92,9 +92,13 @@ body {
 }
 
 /* 아이콘 스타일 */
-.fa-solid {
-    color: #2E7D32;
-}
+/*.fa-solid {*/
+/*    color: #2E7D32;*/
+/*}*/
+
+/*.fa-brands {*/
+/*    color: #2E7D32;*/
+/*}*/
 
 .fa-cloud-bolt {
     color: #388E3C;
