@@ -23,7 +23,7 @@ public class CreateForm {
     private String articleName;
 
     @NotBlank(message = "내용은 필수항목입니다.")
-    @Size(max = 20000, message = "제목을 20000자 이하로 설정해주세요.")
+    @Size(max = 100000, message = "제목을 20000자 이하로 설정해주세요.")
     private String content;
 
 
