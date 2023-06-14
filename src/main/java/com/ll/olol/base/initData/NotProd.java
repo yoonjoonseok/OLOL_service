@@ -7,6 +7,7 @@ import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticleForm;
 import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,7 +17,7 @@ import java.time.LocalDateTime;
 
 @Component
 @RequiredArgsConstructor
-//@Profile({"dev", "test"})
+@Profile({"dev", "test"})
 public class NotProd {
 
     private final InitService initService;
