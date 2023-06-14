@@ -3,7 +3,28 @@
 
 <head>
     <title>오름 오름(메인)</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+          rel="stylesheet">
     <style>
+        #btnScrollToTop {
+            position: fixed;
+            right: 10px;
+            bottom: 10px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgb(156, 185, 97);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.25);
+            color: white;
+            border: none;
+            outline: none;
+            cursor: pointer;
+        }
+
+        #btnScrollToTop:active {
+            background: darkgreen;
+        }
+
         .smaller-text {
             font-size: 13px;
         }
@@ -38,16 +59,6 @@
         /*    flex-shrink: 0;*/
         /*    width: 200px;*/
         /*    margin-left: auto;*/
-        /*}*/
-
-        /*#carouselContainer {*/
-        /*    max-width: 500px; !* 원하는 최대 가로 크기로 조정 *!*/
-        /*    max-height: 300px; !* 원하는 최대 세로 크기로 조정 *!*/
-        /*}*/
-
-        /*#carouselExampleControls {*/
-        /*    width: 100%;*/
-        /*    height: 100%;*/
         /*}*/
 
         @media (max-width: 995px) {
@@ -327,6 +338,26 @@
         </nav>
         <!-- 페이징처리 끝 -->
     </div>
+    <button id="btnScrollToTop">
+        <i class="materials-icons"><span class="material-icons">arrow_upward</span></i>
+    </button>
+    </span><!-- /top-link-block -->
+    <script>
+        const btnScrollToTop = document.querySelector("#btnScrollToTop");
+
+        btnScrollToTop.addEventListener("click", function () {
+
+            // window.scrollTo(0, 0); left and top
+
+            window.scrollTo({
+                left: 0,
+                top: 0,
+                behavior: "smooth"
+            })
+        })
+
+
+    </script>
 </main>
 
 </body>
