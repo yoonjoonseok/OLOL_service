@@ -55,6 +55,7 @@ body {
     color: #FFFFFF;
 }
 
+
 .card {
     background-color: #FFFFFF;
     border: none;
@@ -86,6 +87,28 @@ body {
 .pagination .page-link:hover {
     background-color: #2E7D32;
     color: #FFFFFF;
+}
+
+.pagination .page-item.active .page-link,
+.pagination .page-link {
+    color: green;
+    background-color: transparent;
+    border-color: green;
+}
+
+.pagination .page-item.active .page-link {
+    color: white;
+
+    background-color: green;
+    border-color: green;
+
+}
+
+.pagination .page-item.disabled .page-link {
+    color: green;
+
+    background-color: white;
+    border-color: green;
 }
 
 #btnScrollToTop {
@@ -160,5 +183,5 @@ body {
 
 .viewr2 {
     display: flex;
-    
+
 }

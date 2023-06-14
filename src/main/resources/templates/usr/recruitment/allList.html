@@ -314,13 +314,19 @@
                         <div class="viewr1" style="display: flex; justify-content: space-between;">
                             <div class="viewr2">
                                 <div class="mr-1">
-                                <i class="fa-solid fa-person-hiking" style="color: #1a5903;"></i>
+                                    <i class="fa-solid fa-person-hiking" style="color: #1a5903;"></i>
                                 </div>
                                 <div th:text="${recruitmentArticle.member.nickname}"></div>
                             </div>
                             <div>
-                                <i class="fa-solid fa-eye" style="color: #133b02;" th:text="${recruitmentArticle.views}"></i>
-                                <i class="fa-solid fa-comments" style="color: #154304;" th:text="${recruitmentArticle.comment.size()}"></i>
+
+                                <i class="fa-solid fa-eye" style="color: #133b02;"
+                                   th:text="${recruitmentArticle.views}">" "</i>
+
+
+                                <i class="fa-solid fa-comments" style="color: #154304;"
+                                   th:text="${recruitmentArticle.comment.size()}"> " "</i>
+
                             </div>
                         </div>
                     </div>
