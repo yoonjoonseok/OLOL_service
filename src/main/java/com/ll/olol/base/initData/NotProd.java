@@ -16,6 +16,7 @@ import java.time.LocalDateTime;
 
 @Component
 @RequiredArgsConstructor
+//@Profile({"dev", "test"})
 public class NotProd {
 
     private final InitService initService;

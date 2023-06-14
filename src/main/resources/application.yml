@@ -5,6 +5,7 @@ spring:
         enabled: true
   profiles:
     include: secret
+    active: dev
   datasource:
     url: jdbc:h2:mem:test
     username: sa
