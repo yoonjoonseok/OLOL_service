@@ -3,8 +3,6 @@ spring:
     hiddenmethod:
       filter:
         enabled: true
-  profiles:
-    include: secret
   datasource:
     driver-class-name: org.mariadb.jdbc.Driver
     url: jdbc:mariadb://172.17.0.1:3306/olol__prod?useUnicode=true&characterEncoding=utf8&autoReconnect=true&serverTimezone=Asia/Seoul
@@ -70,4 +68,4 @@ logging:
     org.hibernate.orm.jdbc.extract: TRACE
 custom:
   site:
-    baseUrl: http://localhost:8080/
+    baseUrl: https://olol.vzx.life/
