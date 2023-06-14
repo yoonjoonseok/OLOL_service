@@ -97,8 +97,16 @@
             <button type="button" class="btn btn-secondary" onclick="window.history.back()">취소</button>
         </div>
     </form>
-    <th:block th:replace="~{/usr/recruitment/attendList}"></th:block>
-    <th:block th:replace="~{/usr/member/bookmark}"></th:block>
+    <div class="row">
+        <div class="col-md-6">
+            <th:block th:replace="~{/usr/recruitment/attendList}"></th:block>
+        </div>
+        <div class="col-md-6">
+            <th:block th:replace="~{/usr/member/bookmark}"></th:block>
+        </div>
+    </div>
+
+
 </main>
 
 </body>
