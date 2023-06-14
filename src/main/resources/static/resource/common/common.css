@@ -130,11 +130,11 @@ body {
 /*}*/
 
 .fa-cloud-bolt {
-    color: #388E3C;
+    color: gray;
 }
 
 .fa-user-group {
-    color: #388E3C;
+    color: grey;
 }
 
 .fa-arrow-up-z-a {
@@ -153,9 +153,9 @@ body {
 
 .div {
     display: flex;
-    flex-direction: row;
     flex-wrap: wrap;
-    justify-content: flex-start;
+    margin-right: 10px;
+
 
 }
 
