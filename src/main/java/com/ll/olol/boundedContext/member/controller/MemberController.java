@@ -39,6 +39,8 @@ public class MemberController {
     @GetMapping("/mypage")
     public String showMypage(Model model) {
         Member actor = rq.getMember();
+        model.addAttribute("member", actor);
+        
         Optional<Member> member = memberRepository.findById(actor.getId());
         List<RecruitmentPeople> recruitmentPeople = member.get().getRecruitmentPeople();
         model.addAttribute("peopleList", recruitmentPeople);
