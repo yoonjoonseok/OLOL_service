@@ -1,40 +1,49 @@
-<html layout:decorate="~{usr/layout/layout.html}">
 <head>
 </head>
 <body>
-<main layout:fragment="main">
-    <div class="container">
+<main layout:fragment="attendList">
+    <div class="container mt-5">
+        <h2 class="my-4">신청한 공고 목록</h2>
         <div class="row">
             <div class="col-md-8">
                 <section>
-                    <h2>신청한 공고 목록</h2>
                     <ul th:if="${!#lists.isEmpty(peopleList)}" class="list-group">
-                        <li th:each="likeableRecruitmentArticle: ${peopleList}"
-                            class="list-group-item">
-                            <a th:href="@{|/recruitment/${likeableRecruitmentArticle.recruitmentArticle.id}|}"
-                               th:text="${likeableRecruitmentArticle.recruitmentArticle.articleName}">
-                                공고 제목</a>
-                            <div class="vr"></div>
-                            <span th:text="${likeableRecruitmentArticle.recruitmentArticle.recruitmentArticleForm.mountainName}">
-                            </span>
-                            <div class="vr"></div>
-                            <span th:text="${likeableRecruitmentArticle.recruitmentArticle.getDeadLineDateToString()}">
-                            </span>
-                            <!--                            <button href="javascript:"-->
-                            <!--                                    onclick="if ( confirm('찜을 해제하시겠습니까?') ) $(this).next().submit();">-->
-                            <!--                                찜 해제-->
-                            <!--                            </button>-->
-                            <form hidden
-                                  th:action="@{|/recruitment/${likeableRecruitmentArticle.recruitmentArticle.id}/attend/delete|}"
-                                  method="POST">
-                                <input type="hidden" name="_method" value="delete">
-                            </form>
+                        <li th:each="likeableRecruitmentArticle: ${peopleList}" class="list-group-item">
+                            <div class="d-flex align-items-center">
+                                <div class="mr-3">
+                                    <a th:href="@{|/recruitment/${likeableRecruitmentArticle.recruitmentArticle.id}|}"
+                                       th:text="${likeableRecruitmentArticle.recruitmentArticle.articleName}"
+                                       class="text-decoration-none">
+                                        공고 제목
+                                    </a>
+                                </div>
+                                <div class="mr-3">
+                                    <span th:text="${likeableRecruitmentArticle.recruitmentArticle.recruitmentArticleForm.mountainName}">
+                                    </span>
+                                </div>
+                                <div class="mr-3">
+                                    <span th:text="${likeableRecruitmentArticle.recruitmentArticle.getDeadLineDateToString()}">
+                                    </span>
+                                </div>
+                                <!-- 찜 해제 버튼은 필요하다면 주석 해제하여 사용하세요 -->
+                                <!--
+                                <button href="javascript:" onclick="if (confirm('찜을 해제하시겠습니까?')) $(this).next().submit();">
+                                    찜 해제
+                                </button>
+                                <form hidden th:action="@{|/recruitment/${likeableRecruitmentArticle.recruitmentArticle.id}/attend/delete|}" method="POST">
+                                    <input type="hidden" name="_method" value="delete">
+                                </form>
+                                -->
+                            </div>
                         </li>
                     </ul>
+                    <!-- 신청한 공고 없을 때의 메시지 -->
+                    <div th:if="${#lists.isEmpty(peopleList)}" class="text-muted mt-4">
+                        신청한 공고가 없습니다.
+                    </div>
                 </section>
             </div>
         </div>
     </div>
 </main>
 </body>
-</html>

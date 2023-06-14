@@ -50,7 +50,7 @@ public class LikeableRecruitmentArticleController {
         likeableRecruitmentArticleService.add(recruitmentArticle.get(), actor);
 
         //return "redirect:/recruitment/" + id;
-        return "redirect:/member/bookmark";
+        return "redirect:/member/mypage";
     }
 
     @DeleteMapping("/bookmark/{id}")
@@ -64,6 +64,6 @@ public class LikeableRecruitmentArticleController {
 
         likeableRecruitmentArticleService.cancel(likeableRecruitmentArticle.get());
 
-        return "redirect:/member/bookmark";
+        return "redirect:/member/mypage";
     }
 }
