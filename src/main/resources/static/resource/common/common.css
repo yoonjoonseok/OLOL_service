@@ -145,3 +145,20 @@ body {
     display: flex;
     flex-direction: row-reverse;
 }
+
+/*.viewr1 {*/
+/*    display: flex;*/
+/*    justify-content: space-between;*/
+
+
+/*}*/
+
+.item {
+    flex-basis: 100px;
+
+}
+
+.viewr2 {
+    display: flex;
+    
+}

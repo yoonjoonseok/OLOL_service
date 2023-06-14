@@ -285,16 +285,19 @@
                                                   th:text="${recruitmentArticle.getTypeValueToString()}"></span>
                                         </span>
                                     </div>
+                                    <div class="mr-1"></div>
                                     <div th:if="${recruitmentArticle.getCreateDate().plusHours(3).isAfter(now)}">
                                         <span class="border bg-light rounded-4 p-1">
-                                        <i class="fa-solid fa-fire" style="color: #e63819;"></i>
+
+                                            <i class="fa-solid fa-fire" style="color: #e63819;"></i>
+
                                             <span class="fw-bold">따끈따끈 새 글</span></span>
                                     </div>
                                 </div>
                             </div>
 
-                                <div class="smaller-text text-secondary mt-1 fw-bold"
-                                     th:text="|마감일 ${#temporals.format(recruitmentArticle.deadLineDate, 'yyyy.MM.dd')}|"></div>
+                            <div class="smaller-text text-secondary mt-1 fw-bold"
+                                 th:text="|마감일 ${#temporals.format(recruitmentArticle.deadLineDate, 'yyyy.MM.dd')}|"></div>
 
                         </div>
                     </div>
@@ -306,8 +309,20 @@
                                  th:text="${recruitmentArticle.articleName}"></div>
                         </div>
                     </div>
+
                     <div class="card-footer bg-white">
-                        <div th:text="${recruitmentArticle.member.nickname}"></div>
+                        <div class="viewr1" style="display: flex; justify-content: space-between;">
+                            <div class="viewr2">
+                                <div class="mr-1">
+                                <i class="fa-solid fa-person-hiking" style="color: #1a5903;"></i>
+                                </div>
+                                <div th:text="${recruitmentArticle.member.nickname}"></div>
+                            </div>
+                            <div>
+                                <i class="fa-solid fa-eye" style="color: #133b02;" th:text="${recruitmentArticle.views}"></i>
+                                <i class="fa-solid fa-comments" style="color: #154304;" th:text="${recruitmentArticle.comment.size()}"></i>
+                            </div>
+                        </div>
                     </div>
                 </a>
             </div>
