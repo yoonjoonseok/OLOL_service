@@ -20,6 +20,7 @@ public class NotificationService {
         return notificationRepository.findByMember(member);
     }
 
+    @Transactional
     public void make(Member member, int type, String content) {
         Notification notification = Notification.builder()
                 .member(member)

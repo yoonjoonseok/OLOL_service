@@ -39,6 +39,8 @@ public class RecruitmentArticle {
     private String articleName;
     @CreatedDate
     private LocalDateTime createDate;
+
+    @Column(columnDefinition = "TEXT")
     private String content;
     private LocalDateTime deadLineDate;
     private Long views;
@@ -47,7 +49,7 @@ public class RecruitmentArticle {
     @OrderBy("id desc")
     private List<Comment> comment;
 
-    @OneToMany(mappedBy = "recruitmentArticle", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "recruitmentArticle", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<ArticleReport> articleReports;
 
     @OneToOne(cascade = CascadeType.REMOVE, mappedBy = "recruitmentArticle")
