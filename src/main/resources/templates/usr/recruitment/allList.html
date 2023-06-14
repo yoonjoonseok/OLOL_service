@@ -166,7 +166,7 @@
                 <div class="form-control">
                     <label class="label">
                                 <span class="label-text">
-                                    <i class="fa-solid fa-person-half-dress"></i>
+                                    <i class="fa-solid fa-person-half-dress" style="color: #2E7D32"></i>
                                     나이대
                                 </span>
                     </label>
@@ -189,7 +189,7 @@
                 <div class="form-control">
                     <label class="label">
                                 <span class="label-text">
-                                    <i class="fa-solid fa-check"></i>
+                                    <i class="fa-solid fa-check" style="color: #2E7D32"></i>
                                     주간/야간
                                 </span>
                     </label>
@@ -209,7 +209,7 @@
                 <div class="form-control">
                     <label class="label">
                                 <span class="label-text">
-                                    <i class="fa-solid fa-check"></i>
+                                    <i class="fa-solid fa-check" style="color: #2E7D32"></i>
                                     번개/정기
                                 </span>
                     </label>
@@ -268,24 +268,34 @@
                     <div class="card-header bg-white">
                         <div class="card-title mt-3">
                             <div class="smaller-text mb-2">
-                                <div th:if="${recruitmentArticle.isImpromotu()}">
+                                <div class="div">
+                                    <div th:if="${recruitmentArticle.isImpromotu()}">
                                     <span class="border bg-light rounded-4 p-1">
                                         <i class="fa-solid fa-cloud-bolt"></i>
                                         <span class="fw-bold"
                                               th:text="${recruitmentArticle.getTypeValueToString()}"></span>
                                     </span>
-                                </div>
-                                <div th:if="${recruitmentArticle.isRegular()}">
-                                    <span class="border bg-light rounded-4 p-1">
+                                    </div>
+
+
+                                    <div th:if="${recruitmentArticle.isRegular()}">
+                                        <span class="border bg-light rounded-4 p-1">
                                         <i class="fa-solid fa-user-group"></i>
-                                        <span class="fw-bold"
-                                              th:text="${recruitmentArticle.getTypeValueToString()}"></span>
-                                    </span>
+                                            <span class="fw-bold"
+                                                  th:text="${recruitmentArticle.getTypeValueToString()}"></span>
+                                        </span>
+                                    </div>
+                                    <div th:if="${recruitmentArticle.getCreateDate().plusHours(3).isAfter(now)}">
+                                        <span class="border bg-light rounded-4 p-1">
+                                        <i class="fa-solid fa-fire" style="color: #e63819;"></i>
+                                            <span class="fw-bold">따끈따끈 새 글</span></span>
+                                    </div>
                                 </div>
+                            </div>
 
                                 <div class="smaller-text text-secondary mt-1 fw-bold"
                                      th:text="|마감일 ${#temporals.format(recruitmentArticle.deadLineDate, 'yyyy.MM.dd')}|"></div>
-                            </div>
+
                         </div>
                     </div>
                     <div class="card-body ml-2" style="text-decoration: none;">
