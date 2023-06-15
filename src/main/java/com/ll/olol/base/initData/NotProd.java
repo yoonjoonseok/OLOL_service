@@ -6,12 +6,13 @@ import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticleForm;
 import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityManager;
-import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
 
 
 @Component
@@ -146,7 +147,7 @@ public class NotProd {
             RecruitmentArticleForm recruitmentArticleForm3 = createRecruitmentArticleForm(recruitmentArticle3, 1, 2L,
                     "한라산", "석수동", "48220370", 40L, LocalDateTime.now(), LocalDateTime.now().plusDays(2), "카카오톡3");
             RecruitmentArticleForm recruitmentArticleForm4 = createRecruitmentArticleForm(recruitmentArticle4, 2, 4L,
-                    "백두산", "석수동ㅎ", "48220370", 20L, LocalDateTime.now(), LocalDateTime.now().plusDays(4), "카카오톡4");
+                    "백두산", "석수동", "48220370", 20L, LocalDateTime.now(), LocalDateTime.now().plusDays(4), "카카오톡4");
             em.persist(recruitmentArticleForm1);
             em.persist(recruitmentArticleForm2);
             em.persist(recruitmentArticleForm3);
