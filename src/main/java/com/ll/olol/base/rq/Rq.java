@@ -96,6 +96,7 @@ public class Rq {
         return member;
     }
 
+
     // 뒤로가기 + 메세지
     public String historyBack(String msg) {
         String referer = req.getHeader("referer");
@@ -110,6 +111,7 @@ public class Rq {
     public String historyBack(RsData rsData) {
         return historyBack(rsData.getMsg());
     }
+
 
     public void setSessionAttr(String name, String value) {
         session.setAttribute(name, value);
