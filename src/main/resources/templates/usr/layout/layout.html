@@ -3,6 +3,7 @@
 <body>
 
 <header layout:fragment="header">
+    
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <a class="navbar-brand" href="/" style="margin-left: 75px;">오름 오름</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
@@ -38,15 +39,20 @@
 
                 </li>
                 <li class="nav-item">
-                    <button type="button" sec:authorize="isAnonymous()" class="btn btn-link" data-toggle="modal"
-                            data-target="#exampleModalCenter">
-                        로그인
-                    </button>
+
+                    <a sec:authorize="isAnonymous()" data-toggle="modal"
+                       data-target="#exampleModalCenter" class="btn btn-ghost normal-case text-xl"
+                       style="margin-top: 5px;">
+
+                        <i class="fa-solid fa-right-to-bracket fa-2xl"></i>
+                    </a>
+
                     <div class="dropdown" sec:authorize="isAuthenticated()">
-                        <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton"
-                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            My Menu
-                        </button>
+                        <a type="button" id="dropdownMenuButton"
+                           data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="margin-top: 15px">
+                            <i class="fa-regular fa-square-caret-down fa-2xl"></i>
+                        </a>
+
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                             <a class="dropdown-item" th:href="@{/member/mypage}">마이페이지</a>
                             <a class="dropdown-item" th:href="@{/user/logout}">로그아웃</a>
