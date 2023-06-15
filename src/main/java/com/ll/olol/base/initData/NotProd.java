@@ -6,13 +6,12 @@ import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticleForm;
 import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityManager;
+import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Profile;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
 
 
 @Component
@@ -47,7 +46,8 @@ public class NotProd {
                     LocalDateTime.now());
             Member member4 = createMember(55, "남자", "공유", "2368", "1111@4444", "도깨비", LocalDateTime.now(),
                     LocalDateTime.now());
-            Member member5 = createMember(10, "남자", "admin", passwordEncoder.encode("1234"), "1111@5555", "관리자", LocalDateTime.now(),
+            Member member5 = createMember(10, "남자", "admin", passwordEncoder.encode("1234"), "1111@5555", "관리자",
+                    LocalDateTime.now(),
                     LocalDateTime.now());
             em.persist(member1);
             em.persist(member2);
@@ -67,16 +67,26 @@ public class NotProd {
                     "테스트용 게시글 내용입니다3.");
             RecruitmentArticle recruitmentArticle4 = createRecruitmentArticle(LocalDateTime.now(),
                     LocalDateTime.now().plusDays(1), 10L, member4, 2, "테스트용4",
-                    "테스트용 게시글 내용입니다4. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ac nunc ac ligula ultricies bibendum. Morbi facilisis, justo ac finibus placerat, mauris nisl interdum arcu, non rhoncus lacus leo nec mi. Etiam scelerisque tellus non erat cursus dapibus. Duis tincidunt ullamcorper magna, sit amet auctor ipsum. Curabitur id lacinia nibh. Vestibulum gravida, nulla id faucibus malesuada, lectus metus pharetra velit, id posuere purus felis vitae tellus." +
-                            " Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ac nunc ac ligula ultricies bibendum. Morbi facilisis, justo ac finibus placerat, mauris nisl interdum arcu, non rhoncus lacus leo nec mi. Etiam scelerisque tellus non erat cursus dapibus. Duis tincidunt ullamcorper magna, sit amet auctor ipsum. Curabitur id lacinia nibh. Vestibulum gravida, nulla id faucibus malesuada, lectus metus pharetra velit, id posuere purus felis vitae tellus." +
-                            " Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ac nunc ac ligula ultricies bibendum. Morbi facilisis, justo ac finibus placerat, mauris nisl interdum arcu, non rhoncus lacus leo nec mi. Etiam scelerisque tellus non erat cursus dapibus. Duis tincidunt ullamcorper magna, sit amet auctor ipsum. Curabitur id lacinia nibh. Vestibulum gravida, nulla id faucibus malesuada, lectus metus pharetra velit, id posuere purus felis vitae tellus." +
-                            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ac nunc ac ligula ultricies bibendum. Morbi facilisis, justo ac finibus placerat, mauris nisl interdum arcu, non rhoncus lacus leo nec mi. Etiam scelerisque tellus non erat cursus dapibus. Duis tincidunt ullamcorper magna, sit amet auctor ipsum. Curabitur id lacinia nibh. Vestibulum gravida, nulla id faucibus malesuada, lectus metus pharetra velit, id posuere purus felis vitae tellus." +
-                            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ac nunc ac ligula ultricies bibendum. Morbi facilisis, justo ac finibus placerat, mauris nisl interdum arcu, non rhoncus lacus leo nec mi. Etiam scelerisque tellus non erat cursus dapibus. Duis tincidunt ullamcorper magna, sit amet auctor ipsum. Curabitur id lacinia nibh. Vestibulum gravida, nulla id faucibus malesuada, lectus metus pharetra velit, id posuere purus felis vitae tellus." +
-                            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ac nunc ac ligula ultricies bibendum. Morbi facilisis, justo ac finibus placerat, mauris nisl interdum arcu, non rhoncus lacus leo nec mi. Etiam scelerisque tellus non erat cursus dapibus. Duis tincidunt ullamcorper magna, sit amet auctor ipsum. Curabitur id lacinia nibh. Vestibulum gravida, nulla id faucibus malesuada, lectus metus pharetra velit, id posuere purus felis vitae tellus." +
-                            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ac nunc ac ligula ultricies bibendum. Morbi facilisis, justo ac finibus placerat, mauris nisl interdum arcu, non rhoncus lacus leo nec mi. Etiam scelerisque tellus non erat cursus dapibus. Duis tincidunt ullamcorper magna, sit amet auctor ipsum. Curabitur id lacinia nibh. Vestibulum gravida, nulla id faucibus malesuada, lectus metus pharetra velit, id posuere purus felis vitae tellus." +
-                            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ac nunc ac ligula ultricies bibendum. Morbi facilisis, justo ac finibus placerat, mauris nisl interdum arcu, non rhoncus lacus leo nec mi. Etiam scelerisque tellus non erat cursus dapibus. Duis tincidunt ullamcorper magna, sit amet auctor ipsum. Curabitur id lacinia nibh. Vestibulum gravida, nulla id faucibus malesuada, lectus metus pharetra velit, id posuere purus felis vitae tellus." +
-                            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ac nunc ac ligula ultricies bibendum. Morbi facilisis, justo ac finibus placerat, mauris nisl interdum arcu, non rhoncus lacus leo nec mi. Etiam scelerisque tellus non erat cursus dapibus. Duis tincidunt ullamcorper magna, sit amet auctor ipsum. Curabitur id lacinia nibh. Vestibulum gravida, nulla id faucibus malesuada, lectus metus pharetra velit, id posuere purus felis vitae tellus." +
-                            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ac nunc ac ligula ultricies bibendum. Morbi facilisis, justo ac finibus placerat, mauris nisl interdum arcu, non rhoncus lacus leo nec mi. Etiam scelerisque tellus non erat cursus dapibus. Duis tincidunt ullamcorper magna, sit amet auctor ipsum. Curabitur id lacinia nibh. Vestibulum gravida, nulla id faucibus malesuada, lectus metus pharetra velit, id posuere purus felis vitae tellus." +
+                    "테스트용 게시글 내용입니다4. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ac nunc ac ligula ultricies bibendum. Morbi facilisis, justo ac finibus placerat, mauris nisl interdum arcu, non rhoncus lacus leo nec mi. Etiam scelerisque tellus non erat cursus dapibus. Duis tincidunt ullamcorper magna, sit amet auctor ipsum. Curabitur id lacinia nibh. Vestibulum gravida, nulla id faucibus malesuada, lectus metus pharetra velit, id posuere purus felis vitae tellus."
+                            +
+                            " Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ac nunc ac ligula ultricies bibendum. Morbi facilisis, justo ac finibus placerat, mauris nisl interdum arcu, non rhoncus lacus leo nec mi. Etiam scelerisque tellus non erat cursus dapibus. Duis tincidunt ullamcorper magna, sit amet auctor ipsum. Curabitur id lacinia nibh. Vestibulum gravida, nulla id faucibus malesuada, lectus metus pharetra velit, id posuere purus felis vitae tellus."
+                            +
+                            " Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ac nunc ac ligula ultricies bibendum. Morbi facilisis, justo ac finibus placerat, mauris nisl interdum arcu, non rhoncus lacus leo nec mi. Etiam scelerisque tellus non erat cursus dapibus. Duis tincidunt ullamcorper magna, sit amet auctor ipsum. Curabitur id lacinia nibh. Vestibulum gravida, nulla id faucibus malesuada, lectus metus pharetra velit, id posuere purus felis vitae tellus."
+                            +
+                            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ac nunc ac ligula ultricies bibendum. Morbi facilisis, justo ac finibus placerat, mauris nisl interdum arcu, non rhoncus lacus leo nec mi. Etiam scelerisque tellus non erat cursus dapibus. Duis tincidunt ullamcorper magna, sit amet auctor ipsum. Curabitur id lacinia nibh. Vestibulum gravida, nulla id faucibus malesuada, lectus metus pharetra velit, id posuere purus felis vitae tellus."
+                            +
+                            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ac nunc ac ligula ultricies bibendum. Morbi facilisis, justo ac finibus placerat, mauris nisl interdum arcu, non rhoncus lacus leo nec mi. Etiam scelerisque tellus non erat cursus dapibus. Duis tincidunt ullamcorper magna, sit amet auctor ipsum. Curabitur id lacinia nibh. Vestibulum gravida, nulla id faucibus malesuada, lectus metus pharetra velit, id posuere purus felis vitae tellus."
+                            +
+                            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ac nunc ac ligula ultricies bibendum. Morbi facilisis, justo ac finibus placerat, mauris nisl interdum arcu, non rhoncus lacus leo nec mi. Etiam scelerisque tellus non erat cursus dapibus. Duis tincidunt ullamcorper magna, sit amet auctor ipsum. Curabitur id lacinia nibh. Vestibulum gravida, nulla id faucibus malesuada, lectus metus pharetra velit, id posuere purus felis vitae tellus."
+                            +
+                            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ac nunc ac ligula ultricies bibendum. Morbi facilisis, justo ac finibus placerat, mauris nisl interdum arcu, non rhoncus lacus leo nec mi. Etiam scelerisque tellus non erat cursus dapibus. Duis tincidunt ullamcorper magna, sit amet auctor ipsum. Curabitur id lacinia nibh. Vestibulum gravida, nulla id faucibus malesuada, lectus metus pharetra velit, id posuere purus felis vitae tellus."
+                            +
+                            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ac nunc ac ligula ultricies bibendum. Morbi facilisis, justo ac finibus placerat, mauris nisl interdum arcu, non rhoncus lacus leo nec mi. Etiam scelerisque tellus non erat cursus dapibus. Duis tincidunt ullamcorper magna, sit amet auctor ipsum. Curabitur id lacinia nibh. Vestibulum gravida, nulla id faucibus malesuada, lectus metus pharetra velit, id posuere purus felis vitae tellus."
+                            +
+                            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ac nunc ac ligula ultricies bibendum. Morbi facilisis, justo ac finibus placerat, mauris nisl interdum arcu, non rhoncus lacus leo nec mi. Etiam scelerisque tellus non erat cursus dapibus. Duis tincidunt ullamcorper magna, sit amet auctor ipsum. Curabitur id lacinia nibh. Vestibulum gravida, nulla id faucibus malesuada, lectus metus pharetra velit, id posuere purus felis vitae tellus."
+                            +
+                            "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ac nunc ac ligula ultricies bibendum. Morbi facilisis, justo ac finibus placerat, mauris nisl interdum arcu, non rhoncus lacus leo nec mi. Etiam scelerisque tellus non erat cursus dapibus. Duis tincidunt ullamcorper magna, sit amet auctor ipsum. Curabitur id lacinia nibh. Vestibulum gravida, nulla id faucibus malesuada, lectus metus pharetra velit, id posuere purus felis vitae tellus."
+                            +
                             "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed ac nunc ac ligula ultricies bibendum. Morbi facilisis, justo ac finibus placerat, mauris nisl interdum arcu, non rhoncus lacus leo nec mi. Etiam scelerisque tellus non erat cursus dapibus. Duis tincidunt ullamcorper magna, sit amet auctor ipsum. Curabitur id lacinia nibh. Vestibulum gravida, nulla id faucibus malesuada, lectus metus pharetra velit, id posuere purus felis vitae tellus.");
 
             em.persist(recruitmentArticle1);
@@ -87,7 +97,7 @@ public class NotProd {
             for (int i = 5; i < 20; i++) {
                 em.persist(createRecruitmentArticleForm(
                         createRecruitmentArticle(LocalDateTime.now(),
-                                LocalDateTime.now().plusDays(1), 10L, member4, 2, String.format("테스트 데이터[%03d]", i),
+                                LocalDateTime.now().plusDays(1), 100L, member4, 2, String.format("테스트 데이터[%03d]", i),
                                 "테스트용 게시글 내용입니다."),
                         1, 1L,
                         "삼성산", "석수동", "41171102", 30L, LocalDateTime.now(), LocalDateTime.now().plusDays(1), "카카오톡1")
@@ -113,7 +123,6 @@ public class NotProd {
                         "삼성산", "석수동", "41171102", 40L, LocalDateTime.now(), LocalDateTime.now().plusDays(1), "카카오톡1")
                 );
             }
-
 
             Comment comment1 = createComment(recruitmentArticle1, member1, "안녕하세요11", LocalDateTime.now(),
                     LocalDateTime.now());
@@ -185,7 +194,8 @@ public class NotProd {
 
         private static RecruitmentArticleForm createRecruitmentArticleForm(RecruitmentArticle recruitmentArticle,
                                                                            int dayNight, Long recruitsNumbers,
-                                                                           String mountainName, String mtAddress, String localCode, Long ageRange,
+                                                                           String mountainName, String mtAddress,
+                                                                           String localCode, Long ageRange,
                                                                            LocalDateTime startTime,
                                                                            LocalDateTime courseTime,
                                                                            String connectType) {
