@@ -67,4 +67,8 @@ public class MemberService {
         memberRepository.save(resultMember);
         return RsData.of("S-1", "닉네임 수정 성공");
     }
+
+    public boolean hasAdditionalInfo(Member loginedMember) {
+        return loginedMember.getEmail() != null || loginedMember.getNickname() != null;
+    }
 }
