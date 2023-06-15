@@ -6,25 +6,23 @@
 /*}*/
 
 
-/*!*html > body {*/
-/*    font-family: "Pretendard-Regular";*/
-/*    text-underline-position: under;*/
-/*    word-break: keep-all;*/
-/*}*!*/
+
+/*html > body {
+    font-family: "Pretendard-Regular";
+    text-underline-position: under;
+    word-break: keep-all;
+}*/
 
 
 /*body {*/
 /*    background-color: #F5F5F5;*/
 /*}*/
 
-/*.jumbotron {*/
-/*    background-color: #E8F5E9;*/
-/*    color: #2E7D32;*/
-/*}*/
 
-/*.display-4 {*/
-/*    color: #2E7D32;*/
-/*}*/
+body {
+    background-color: #F5F5F5;
+}
+
 
 /*.lead {*/
 /*    color: #388E3C;*/
