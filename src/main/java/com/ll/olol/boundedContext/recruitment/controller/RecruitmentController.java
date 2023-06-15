@@ -341,6 +341,7 @@ public class RecruitmentController {
         Pageable pageable = PageRequest.of(page, 20, Sort.by(sorts));
         Page<RecruitmentArticle> paging = recruitmentService.getListByConditions(ageRange, dayNight, typeValue, kw,
                 pageable);
+
         model.addAttribute("now", LocalDateTime.now());
         model.addAttribute("paging", paging);
         return "usr/recruitment/allList";
