@@ -7,6 +7,7 @@ import com.ll.olol.boundedContext.comment.entity.CommentDto;
 import com.ll.olol.boundedContext.comment.service.CommentService;
 import com.ll.olol.boundedContext.member.entity.Member;
 import com.ll.olol.boundedContext.member.repository.MemberRepository;
+import com.ll.olol.boundedContext.member.service.MemberService;
 import com.ll.olol.boundedContext.recruitment.CreateForm;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentPeople;
@@ -37,6 +38,7 @@ public class RecruitmentController {
     private final Rq rq;
     private final RecruitmentService recruitmentService;
     private final MemberRepository memberRepository;
+    private final MemberService memberService;
     private final CommentService commentService;
     private final RecruitmentPeopleService recruitmentPeopleService;
     private int limitPeople = 0;
@@ -45,6 +47,12 @@ public class RecruitmentController {
     @GetMapping("/create")
     // @Valid를 붙여야 QuestionForm.java내의 NotBlank나 Size가 동작한다.
     public String questionCreate2(CreateForm createForm) {
+
+        Member loginedMember = rq.getMember();
+        if (!memberService.hasAdditionalInfo(loginedMember)) {
+            return rq.historyBack("마이페이지에서 추가정보를 입력해주세요.");
+        }
+
         return "recruitmentArticle/createRecruitment_form";
     }
 
@@ -123,6 +131,12 @@ public class RecruitmentController {
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/fromList")
     public String showFromAttendList(Model model) {
+
+        Member loginedMember = rq.getMember();
+        if (!memberService.hasAdditionalInfo(loginedMember)) {
+            return rq.historyBack("마이페이지에서 추가정보를 입력해주세요.");
+        }
+
         Long memberId = rq.getMember().getId();
         List<RecruitmentArticle> all = recruitmentService.findAll();
         List<RecruitmentPeople> list = new ArrayList<>();
