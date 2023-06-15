@@ -3,7 +3,7 @@
 <body>
 
 <header layout:fragment="header">
-    
+
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <a class="navbar-brand" href="/" style="margin-left: 75px;">오름 오름</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
@@ -32,7 +32,9 @@
 
                     <a th:href="@{/notification/list}" class="btn btn-ghost normal-case text-xl"
                        style="margin-top: 5px">
-                        <i class="fa-regular fa-bell fa-2xl"></i>
+                        <i class="fa-regular fa-bell fa-2xl" th:text="...">
+
+                        </i>
 
 
                     </a>
