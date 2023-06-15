@@ -280,7 +280,6 @@
                                     </span>
 
 
-
                                     </div>
 
                                     <div th:if="${recruitmentArticle.isRegular()}" style="margin-right: 3px;">
@@ -321,38 +320,6 @@
                                         <span th:unless="${!recruitmentArticle.getDeadLineDate().isAfter(now)}"></span>
                                     </div>
 
-
-
-
-                                    <div th:if="${recruitmentArticle.getCreateDate().plusHours(3).isAfter(now)}"
-                                         style="margin-right: 3px;">
-
-                                        <span class="border bg-light rounded-4 p-1">
-
-                                            <i class="fa-solid fa-mountain" style="color: #037401;"></i>
-
-                                            <span class="fw-bold" style="color: green">NEW</span></span>
-                                    </div>
-
-
-                                    <div th:if="${recruitmentArticle.views >= 100}" style="margin-right: 3px;">
-
-
-                                        <span class="border bg-light rounded-4 p-1">
-                                            <i class="bi bi-balloon-heart" style="color:blue;"></i>
-
-                                            <span class="fw-bold" style="color:blue;">인기</span></span>
-                                    </div>
-
-                                    <div style="margin-right: 3px;">
-                                        <span th:if="${recruitmentArticle.getDeadLineDate().minusHours(1).isAfter(now)}"
-
-                                              class="border bg-light rounded-4 p-1">
-                                            <i class="fa-solid fa-fire" style="color: #ff0000;"></i>
-                                            <span class="fw-bold" style="color: #ff0000">마감이 코앞!!</span>
-                                        </span>
-                                        <span th:unless="${!recruitmentArticle.getDeadLineDate().isAfter(now)}"></span>
-                                    </div>
 
                                 </div>
                             </div>
