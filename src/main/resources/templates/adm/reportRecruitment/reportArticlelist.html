@@ -237,19 +237,54 @@
                         </div>
                     </div>
                     <div class="card-body ml-2" style="text-decoration: none;">
+
                         <div class="card-text" style="height: 4rem; /* 예시로 높이를 조절 */">
                             <div class="fw-bold fs-5 mt-2"
                                  style="overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;"
                                  th:text="${articleReport.recruitmentArticle.articleName}"></div>
                         </div>
-                        <div class="card-text" style="height: 4rem; /* 예시로 높이를 조절 */">
+
+                        <div class="card-text" style="/*height: 4rem;  예시로 높이를 조절 */">
                             <div class="fw-bold fs-5 mt-2"
                                  style="overflow: hidden; text-overflow: ellipsis; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;"
                                  th:text="|신고사유 : ${articleReport.getReasonToString()}|"></div>
                         </div>
+
+                        <div>
+                            <i class="fa-solid fa-mountain" style="color: #2e6501;"></i>
+                            <i style="font-size: 13px; color: darkgreen; font-style: normal; font-weight: bold;"
+                               th:text="${articleReport.recruitmentArticle.recruitmentArticleForm.mountainName}">
+                            </i>
+                        </div>
                     </div>
+
                     <div class="card-footer bg-white">
-                        <div th:text="${articleReport.recruitmentArticle.member.nickname}"></div>
+                        <div class="viewr1" style="display: flex; justify-content: space-between;">
+                            <div class="viewr2">
+                                <div class="mr-1">
+                                    <i class="fa-solid fa-person-hiking" style="color: #1a5903; margin-top: 3.5px"></i>
+                                </div>
+
+                                <div th:text="${articleReport.recruitmentArticle.member.nickname}"
+                                     style="color: #1a5903; font-weight: bold"></div>
+
+                            </div>
+                            <div>
+
+                                <i class="fa-solid fa-eye" style="color: #133b02;"
+                                   th:text="${articleReport.recruitmentArticle.views}">" "</i>
+
+                                <i class="fa bi-heart-fill" style="color: #133b02;"
+
+                                   th:text="${articleReport.recruitmentArticle.likeableRecruitmentArticles.size()}">"
+                                    "</i>
+
+                                <i class="fa-solid fa-comments" style="color: #154304;"
+
+                                   th:text="${articleReport.recruitmentArticle.comment.size()}"> " "</i>
+
+                            </div>
+                        </div>
                     </div>
                 </a>
             </div>
