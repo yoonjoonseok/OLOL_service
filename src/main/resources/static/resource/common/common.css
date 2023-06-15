@@ -1,3 +1,4 @@
+
 @font-face {
     font-family: 'Pretendard-Regular';
     src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
@@ -6,16 +7,15 @@
 }
 
 
-/*html > body {
-    font-family: "Pretendard-Regular";
-    text-underline-position: under;
-    word-break: keep-all;
-}*/
-
 
 body {
     background-color: #F5F5F5;
 }
+
+
+
+
+
 
 .jumbotron {
     background-color: #E8F5E9;
