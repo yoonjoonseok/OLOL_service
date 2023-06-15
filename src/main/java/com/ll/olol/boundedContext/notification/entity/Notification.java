@@ -34,6 +34,8 @@ public class Notification {
 
     private String content;
 
+    private Long articleId;
+
     public boolean isRead() {
         return readDate != null;
     }

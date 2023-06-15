@@ -29,7 +29,7 @@ public class NotificationEventListener {
     public void listen(EventAfterComment event) {
         RecruitmentArticle recruitmentArticle = event.getRecruitmentArticle();
         String content = recruitmentArticle.getArticleName() + " 공고에 댓글이 달렸습니다";
-        notificationService.make(recruitmentArticle.getMember(), 1, content);
+        notificationService.make(recruitmentArticle.getMember(), 1, content, recruitmentArticle.getId());
     }
 
     @EventListener
@@ -37,7 +37,7 @@ public class NotificationEventListener {
         RecruitmentPeople recruitmentPeople = event.getRecruitmentPeople();
         Member member = recruitmentPeople.getRecruitmentArticle().getMember();
         String content = recruitmentPeople.getRecruitmentArticle().getArticleName() + " 공고에 " + recruitmentPeople.getMember().getNickname() + "님이 참가 신청을 하였습니다.";
-        notificationService.make(member, 2, content);
+        notificationService.make(member, 2, content, recruitmentPeople.getRecruitmentArticle().getId());
     }
 
     @EventListener
@@ -52,7 +52,7 @@ public class NotificationEventListener {
             content += "님이 참가 거절을 했습니다.";
         }
 
-        notificationService.make(member, 3, content);
+        notificationService.make(member, 3, content, recruitmentPeople.getRecruitmentArticle().getId());
     }
 
     @EventListener
@@ -61,7 +61,7 @@ public class NotificationEventListener {
         List<RecruitmentPeople> list = recruitmentPeopleService.findByRecruitmentArticle(recruitmentArticle);
         for (RecruitmentPeople r : list) {
             String content = recruitmentArticle.getArticleName() + " 공고의 내용이 변경되었습니다";
-            notificationService.make(r.getMember(), 4, content);
+            notificationService.make(r.getMember(), 4, content, recruitmentArticle.getId());
         }
     }
 }

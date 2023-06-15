@@ -21,11 +21,12 @@ public class NotificationService {
     }
 
     @Transactional
-    public void make(Member member, int type, String content) {
+    public void make(Member member, int type, String content, Long articleId) {
         Notification notification = Notification.builder()
                 .member(member)
                 .type(type)
                 .content(content)
+                .articleId(articleId)
                 .build();
 
         notificationRepository.save(notification);
