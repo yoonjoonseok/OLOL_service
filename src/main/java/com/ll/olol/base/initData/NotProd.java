@@ -2,6 +2,7 @@ package com.ll.olol.base.initData;
 
 import com.ll.olol.boundedContext.comment.entity.Comment;
 import com.ll.olol.boundedContext.member.entity.Member;
+import com.ll.olol.boundedContext.notification.entity.Notification;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticleForm;
 import jakarta.annotation.PostConstruct;
@@ -50,11 +51,19 @@ public class NotProd {
             Member member5 = createMember(10, "남자", "admin", passwordEncoder.encode("1234"), "1111@5555", "관리자",
                     LocalDateTime.now(),
                     LocalDateTime.now());
+
             em.persist(member1);
             em.persist(member2);
             em.persist(member3);
             em.persist(member4);
             em.persist(member5);
+
+            Member member = createMember(10, "남자", "KAKAO__2815239024", "1234", "1111@1211", "KAKAO", LocalDateTime.now(), LocalDateTime.now());
+            Notification notification = Notification.builder().content("하이").type(1).member(member).build();
+            Notification notification1 = Notification.builder().content("하이").type(1).member(member).build();
+            em.persist(member);
+            em.persist(notification);
+            em.persist(notification1);
 
             RecruitmentArticle recruitmentArticle1 = createRecruitmentArticle(LocalDateTime.now(),
                     LocalDateTime.now().plusHours(100L),

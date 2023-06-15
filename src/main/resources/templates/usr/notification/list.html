@@ -11,7 +11,11 @@
                     <ul th:if="${!#lists.isEmpty(notifications)}" class="list-group">
                         <li th:each="notification: ${notifications}"
                             class="list-group-item">
-                            <span th:text="${notification.getContent()}">
+                            <a th:href="@{|/recruitment/${notification.getArticleId()}|}"
+                               th:text="${notification.getContent()}" style="color: green;">
+                            </a>
+                            <span th:text="${#temporals.format(notification.getCreateDate(), 'yyyy.MM.dd HH:mm')}"
+                                  style="float: right;">
                             </span>
                         </li>
                     </ul>

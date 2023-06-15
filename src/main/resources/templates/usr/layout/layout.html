@@ -36,12 +36,9 @@
 
                     <a th:href="@{/notification/list}" class="btn btn-ghost normal-case text-xl"
                        style="margin-top: 5px">
-
-                        <i class="fa-regular fa-bell fa-2xl">
-
-                        </i>
-
-
+                        <i th:unless="${@rq.hasUnreadNotifications}" class="fa-regular fa-bell fa-2xl"></i>
+                        <i th:if="${@rq.hasUnreadNotifications}" class="fa-regular fa-bell fa-2xl"
+                           style="color: red;"></i>
                     </a>
 
                 </li>
