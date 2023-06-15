@@ -341,8 +341,10 @@ public class RecruitmentController {
         Pageable pageable = PageRequest.of(page, 20, Sort.by(sorts));
         Page<RecruitmentArticle> paging = recruitmentService.getListByConditions(ageRange, dayNight, typeValue, kw,
                 pageable);
+        LocalDateTime now = LocalDateTime.now();
+        System.out.println("now = " + now);
 
-        model.addAttribute("now", LocalDateTime.now());
+        model.addAttribute("now", now);
         model.addAttribute("paging", paging);
         return "usr/recruitment/allList";
     }
