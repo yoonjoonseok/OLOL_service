@@ -197,23 +197,26 @@
 
             <div class="col-md-6 mb-2">
                 <label for="startTime" class="form-label">출발 시간 (선택)</label>
-                <input type="datetime-local" class="form-control" th:field="*{startTime}">
+                <input type="datetime-local" class="form-control" th:field="*{startTime}"
+                       th:min="${#dates.format(#dates.createNow(), 'yyyy-MM-dd HH:mm')}">
             </div>
 
             <div class="col-md-6 mb-2">
                 <label for="courseTime" class="form-label">종료 예정 시간 (선택)</label>
-                <input type="datetime-local" class="form-control" th:field="*{courseTime}">
+                <input type="datetime-local" class="form-control" th:field="*{courseTime}"
+                       th:min="${#dates.format(#dates.createNow(), 'yyyy-MM-dd HH:mm')}">
             </div>
 
             <div class="col-md-6 mb-2">
                 <label for="connectType" class="form-label">연락 방법</label>
-                <input required maxlength="20" autocomplete="off" type="text" placeholder="연락 방법" class="form-control"
+                <input required autocomplete="off" type="text" placeholder="연락 방법" class="form-control"
                        th:field="*{connectType}">
             </div>
 
             <div class="col-md-6 mb-2">
                 <label for="deadLineDate" class="form-label">모집 마감 시간</label>
-                <input type="datetime-local" class="form-control" th:field="*{deadLineDate}">
+                <input type="datetime-local" class="form-control" th:field="*{deadLineDate}"
+                       th:min="${#dates.format(#dates.createNow(), 'yyyy-MM-dd HH:mm')}">
             </div>
         </div>
 
@@ -235,7 +238,7 @@
         </div>
         <div class="mb-3">
             <label for="content" class="form-label">내용</label>
-            <textarea required maxlength="20000" placeholder="내용(20,000자 이하)" class="form-control" rows="10"
+            <textarea required placeholder="내용" class="form-control" rows="10"
                       th:field="*{content}"></textarea>
             <!--
             th:field="*{content} ==> id="content" name="content" th:text="*{content}"
