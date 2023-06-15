@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ll.olol.base.rsData.RsData;
 import com.ll.olol.boundedContext.member.entity.Member;
 import com.ll.olol.boundedContext.member.service.MemberService;
+import com.ll.olol.boundedContext.notification.service.NotificationService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
@@ -26,6 +27,7 @@ import java.util.Map;
 public class Rq {
     private final MemberService memberService;
     private final MessageSource messageSource;
+    private final NotificationService notificationService;
     private final LocaleResolver localeResolver;
     private Locale locale;
     private final HttpServletRequest req;
@@ -34,10 +36,11 @@ public class Rq {
     private final User user;
     private Member member = null; // 레이지 로딩, 처음부터 넣지 않고, 요청이 들어올 때 넣는다.
 
-    public Rq(MemberService memberService, MessageSource messageSource, LocaleResolver localeResolver,
+    public Rq(MemberService memberService, MessageSource messageSource, NotificationService notificationService, LocaleResolver localeResolver,
               HttpServletRequest req, HttpServletResponse resp, HttpSession session) {
         this.memberService = memberService;
         this.messageSource = messageSource;
+        this.notificationService = notificationService;
         this.localeResolver = localeResolver;
         this.req = req;
         this.resp = resp;
@@ -149,5 +152,11 @@ public class Rq {
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public boolean hasUnreadNotifications() {
+        if (isLogout()) return false;
+        Member actor = getMember();
+        return notificationService.countUnreadNotificationsByMember(getMember());
     }
 }

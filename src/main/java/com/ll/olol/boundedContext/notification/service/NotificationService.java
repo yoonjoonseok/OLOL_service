@@ -40,4 +40,8 @@ public class NotificationService {
 
         return RsData.of("S-1", "읽음 처리 되었습니다.");
     }
+
+    public boolean countUnreadNotificationsByMember(Member member) {
+        return notificationRepository.countByMemberAndReadDateIsNull(member) > 0;
+    }
 }
