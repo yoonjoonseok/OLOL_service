@@ -17,6 +17,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -62,15 +63,6 @@ public class ReportController {
         //return "redirect:/recruit/bookmark";
     }
 
-//    @PreAuthorize("hasAuthority('admin')")
-//    @GetMapping("/report/list")
-//    public String allReport(Model model) {
-//        List<ArticleReport> articleReportList = reportService.findAll();
-//        model.addAttribute(articleReportList);
-//
-//        return "adm/reportRecruitment/reportArticlelist";
-//    }
-
 
     @PreAuthorize("hasAuthority('admin')")
     @GetMapping("/report/list")
@@ -85,6 +77,10 @@ public class ReportController {
         Pageable pageable = PageRequest.of(page, 20, Sort.by(sorts));
         Page<ArticleReport> paging = reportService.getListByConditions(reason, kw, pageable);
 
+        LocalDateTime now = LocalDateTime.now();
+        System.out.println("now = " + now);
+
+        model.addAttribute("now", now);
         model.addAttribute("paging", paging);
         return "adm/reportRecruitment/reportArticlelist";
     }

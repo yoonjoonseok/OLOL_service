@@ -7,17 +7,13 @@ import com.ll.olol.boundedContext.comment.entity.CommentDto;
 import com.ll.olol.boundedContext.comment.service.CommentService;
 import com.ll.olol.boundedContext.member.entity.Member;
 import com.ll.olol.boundedContext.member.repository.MemberRepository;
+import com.ll.olol.boundedContext.member.service.MemberService;
 import com.ll.olol.boundedContext.recruitment.CreateForm;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentPeople;
 import com.ll.olol.boundedContext.recruitment.service.RecruitmentPeopleService;
 import com.ll.olol.boundedContext.recruitment.service.RecruitmentService;
 import jakarta.validation.Valid;
-import java.security.Principal;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -27,13 +23,13 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/recruitment")
@@ -42,6 +38,7 @@ public class RecruitmentController {
     private final Rq rq;
     private final RecruitmentService recruitmentService;
     private final MemberRepository memberRepository;
+    private final MemberService memberService;
     private final CommentService commentService;
     private final RecruitmentPeopleService recruitmentPeopleService;
     private int limitPeople = 0;
@@ -50,6 +47,12 @@ public class RecruitmentController {
     @GetMapping("/create")
     // @Valid를 붙여야 QuestionForm.java내의 NotBlank나 Size가 동작한다.
     public String questionCreate2(CreateForm createForm) {
+
+        Member loginedMember = rq.getMember();
+        if (!memberService.hasAdditionalInfo(loginedMember)) {
+            return rq.historyBack("마이페이지에서 추가정보를 입력해주세요.");
+        }
+
         return "recruitmentArticle/createRecruitment_form";
     }
 
@@ -128,6 +131,12 @@ public class RecruitmentController {
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/fromList")
     public String showFromAttendList(Model model) {
+
+        Member loginedMember = rq.getMember();
+        if (!memberService.hasAdditionalInfo(loginedMember)) {
+            return rq.historyBack("마이페이지에서 추가정보를 입력해주세요.");
+        }
+
         Long memberId = rq.getMember().getId();
         List<RecruitmentArticle> all = recruitmentService.findAll();
         List<RecruitmentPeople> list = new ArrayList<>();
@@ -265,6 +274,11 @@ public class RecruitmentController {
         }
 
         recruitmentService.deleteArticle(recruitmentArticle.get());
+
+        // admin 이면 신고된 게시글 삭제시 뒤로가기
+        if (rq.getMember().isAdmin())
+            return rq.historyBack(canDeleteRsData.getMsg());
+
         return "redirect:/";
     }
 
@@ -341,8 +355,10 @@ public class RecruitmentController {
         Pageable pageable = PageRequest.of(page, 20, Sort.by(sorts));
         Page<RecruitmentArticle> paging = recruitmentService.getListByConditions(ageRange, dayNight, typeValue, kw,
                 pageable);
+        LocalDateTime now = LocalDateTime.now();
+        System.out.println("now = " + now);
 
-        model.addAttribute("now", LocalDateTime.now());
+        model.addAttribute("now", now);
         model.addAttribute("paging", paging);
         return "usr/recruitment/allList";
     }

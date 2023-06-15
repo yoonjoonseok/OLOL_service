@@ -16,6 +16,10 @@
                 <!--                    <a class="nav-link" href="/">홈</a>-->
                 <!--                </li>-->
                 <li class="nav-item active mr-4">
+                    <a th:href="@{/recruitment/report/list}" class="btn btn-outline-secondary"
+                       th:if="${@rq.admin}">신고된 공고 목록</a>
+                </li>
+                <li class="nav-item active mr-4">
                     <a th:href="@{/recruitment/create}" class="nav-link" style="margin-top:  -7px">
                         <i class="bi bi-file-earmark-plus fa-2xl"></i>
 
@@ -32,13 +36,9 @@
 
                     <a th:href="@{/notification/list}" class="btn btn-ghost normal-case text-xl"
                        style="margin-top: 5px">
-
-                        <i class="fa-regular fa-bell fa-2xl">
-
-                        </i>
-
-
-
+                        <i th:unless="${@rq.hasUnreadNotifications}" class="fa-regular fa-bell fa-2xl"></i>
+                        <i th:if="${@rq.hasUnreadNotifications}" class="fa-regular fa-bell fa-2xl"
+                           style="color: red;"></i>
                     </a>
 
                 </li>

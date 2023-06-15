@@ -23,6 +23,12 @@ public class LocalCodeApiClient {
     public String requestLocalCode(String keyword) {
         url_getLocalCode = url_getLocalCode.formatted(key, domain);
 
-        return restTemplate.exchange(url_getLocalCode, HttpMethod.GET, null, LocalCodeDTO.class, keyword).getBody().getEmdCd();
+        //return restTemplate.exchange(url_getLocalCode, HttpMethod.GET, null, LocalCodeDTO.class, keyword).getBody().getEmdCd();
+        String result = "";
+        try {
+            result = restTemplate.exchange(url_getLocalCode, HttpMethod.GET, null, LocalCodeDTO.class, keyword).getBody().getEmdCd();
+        } catch (Exception e) {
+        }
+        return result;
     }
 }
