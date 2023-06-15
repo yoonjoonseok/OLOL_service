@@ -207,7 +207,7 @@
 
             <div class="col-md-6 mb-2">
                 <label for="connectType" class="form-label">연락 방법</label>
-                <input required maxlength="20" autocomplete="off" type="text" placeholder="연락 방법" class="form-control"
+                <input required autocomplete="off" type="text" placeholder="연락 방법" class="form-control"
                        th:field="*{connectType}">
             </div>
 
@@ -235,7 +235,7 @@
         </div>
         <div class="mb-3">
             <label for="content" class="form-label">내용</label>
-            <textarea required maxlength="20000" placeholder="내용(20,000자 이하)" class="form-control" rows="10"
+            <textarea required placeholder="내용" class="form-control" rows="10"
                       th:field="*{content}"></textarea>
             <!--
             th:field="*{content} ==> id="content" name="content" th:text="*{content}"
