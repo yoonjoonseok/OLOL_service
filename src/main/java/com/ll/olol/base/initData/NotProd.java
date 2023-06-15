@@ -142,9 +142,9 @@ public class NotProd {
             RecruitmentArticleForm recruitmentArticleForm2 = createRecruitmentArticleForm(recruitmentArticle2, 2, 2L,
                     "지리산", "사량면", "48220370", 40L, LocalDateTime.now(), LocalDateTime.now().plusDays(2), "카카오톡2");
             RecruitmentArticleForm recruitmentArticleForm3 = createRecruitmentArticleForm(recruitmentArticle3, 1, 2L,
-                    "한라산", null, null, 40L, LocalDateTime.now(), LocalDateTime.now().plusDays(2), "카카오톡3");
+                    "한라산", "석수동", "48220370", 40L, LocalDateTime.now(), LocalDateTime.now().plusDays(2), "카카오톡3");
             RecruitmentArticleForm recruitmentArticleForm4 = createRecruitmentArticleForm(recruitmentArticle4, 2, 4L,
-                    "백두산", null, null, 20L, LocalDateTime.now(), LocalDateTime.now().plusDays(4), "카카오톡4");
+                    "백두산", "석수동ㅎ", "48220370", 20L, LocalDateTime.now(), LocalDateTime.now().plusDays(4), "카카오톡4");
             em.persist(recruitmentArticleForm1);
             em.persist(recruitmentArticleForm2);
             em.persist(recruitmentArticleForm3);
