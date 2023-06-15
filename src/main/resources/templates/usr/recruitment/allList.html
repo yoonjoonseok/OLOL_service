@@ -264,7 +264,7 @@
         <div class="row row-cols-1 row-cols-md-4">
             <div class="col mb-4" th:each="recruitmentArticle, loop : ${paging}">
                 <a class="card mb-4 text-dark"
-                   style="width: 100%; height: 18rem; text-decoration: none; border-radius: 5%;"
+                   style="width: 100%; height: 18rem; text-decoration: none; border-radius: 50px;"
                    th:href="@{|/recruitment/${recruitmentArticle.id}|}">
                     <div class="card-header bg-white">
                         <div class="card-title mt-3">
@@ -352,10 +352,14 @@
                                 <i class="fa-solid fa-eye" style="color: #133b02;"
                                    th:text="${recruitmentArticle.views}">" "</i>
 
+                                <i class="fa bi-heart-fill" style="color: #133b02;"
+                                    th:text="${recruitmentArticle.likeableRecruitmentArticles.size()}">" "</i>
 
                                 <i class="fa-solid fa-comments" style="color: #154304;"
 
                                    th:text="${recruitmentArticle.comment.size()}"> " "</i>
+
+
 
                             </div>
                         </div>

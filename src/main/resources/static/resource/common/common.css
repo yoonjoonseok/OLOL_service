@@ -5,11 +5,11 @@
     font-style: normal;
 }
 
-html > body {
+/*html > body {
     font-family: "Pretendard-Regular";
     text-underline-position: under;
     word-break: keep-all;
-}
+}*/
 
 
 body {
@@ -62,10 +62,6 @@ body {
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-.card:hover {
-    transform: scale(1.03);
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-}
 
 .smaller-text {
     color: #616161;
@@ -176,10 +172,6 @@ body {
 
 /*}*/
 
-.item {
-    flex-basis: 100px;
-
-}
 
 .viewr2 {
     display: flex;
