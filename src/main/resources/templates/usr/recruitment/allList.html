@@ -271,7 +271,7 @@
                             <div class="smaller-text mb-2">
                                 <div class="div">
 
-                                    <div th:if="${recruitmentArticle.isImpromotu()} " style="margin-right: 3px;">
+                                    <div th:if="${recruitmentArticle.isImpromotu()} " style="margin-right: 2px;">
 
                                     <span class="border bg-light rounded-4 p-1">
                                         <i class="fa-solid fa-cloud-bolt"></i>
@@ -282,7 +282,7 @@
 
                                     </div>
 
-                                    <div th:if="${recruitmentArticle.isRegular()}" style="margin-right: 3px;">
+                                    <div th:if="${recruitmentArticle.isRegular()}" style="margin-right: 2px;">
 
 
                                         <span class="border bg-light rounded-4 p-1">
@@ -302,7 +302,7 @@
                                             <span class="fw-bold" style="color: green">NEW</span></span>
                                     </div>
 
-                                    <div th:if="${recruitmentArticle.views >= 100}" style="margin-right: 3px;">
+                                    <div th:if="${recruitmentArticle.views >= 100}" style="margin-right: 2px;">
 
                                         <span class="border bg-light rounded-4 p-1">
                                             <i class="bi bi-balloon-heart" style="color:blue;"></i>
@@ -310,14 +310,13 @@
                                             <span class="fw-bold" style="color:blue;">인기</span></span>
                                     </div>
 
-                                    <div style="margin-right: 3px;">
-                                        <span th:if="${recruitmentArticle.getDeadLineDate().minusHours(1).isAfter(now)}"
-
+                                    <div style="margin-right: 2px;">
+                                        <span th:if="${now.isBefore(recruitmentArticle.getDeadLineDate())} and ${now.isAfter(recruitmentArticle.getDeadLineDate().minusHours(1))}"
                                               class="border bg-light rounded-4 p-1">
                                             <i class="fa-solid fa-fire" style="color: #ff0000;"></i>
                                             <span class="fw-bold" style="color: #ff0000">마감이 코앞!!</span>
                                         </span>
-                                        <span th:unless="${!recruitmentArticle.getDeadLineDate().isAfter(now)}"></span>
+
                                     </div>
 
 
@@ -340,7 +339,8 @@
                         <div style="height: 100rem">
                             <i class="fa-solid fa-mountain" style="color: #2e6501;"></i>
                             <i style="font-size: 13px; color: darkgreen; font-style: normal; font-weight: bold;"
-                               ></i>
+                               th:text="${recruitmentArticle.recruitmentArticleForm.mountainName}"
+                            ></i>
 
                         </div>
                     </div>

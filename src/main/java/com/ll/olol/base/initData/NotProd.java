@@ -57,7 +57,8 @@ public class NotProd {
             em.persist(member4);
             em.persist(member5);
 
-            RecruitmentArticle recruitmentArticle1 = createRecruitmentArticle(LocalDateTime.now(), LocalDateTime.now(),
+            RecruitmentArticle recruitmentArticle1 = createRecruitmentArticle(LocalDateTime.now(),
+                    LocalDateTime.now().plusHours(100L),
                     1L, member1, 1, "테스트용1",
                     "테스트용 게시글 내용입니다1.");
             RecruitmentArticle recruitmentArticle2 = createRecruitmentArticle(LocalDateTime.now(), LocalDateTime.now(),
@@ -99,7 +100,8 @@ public class NotProd {
             for (int i = 5; i < 20; i++) {
                 em.persist(createRecruitmentArticleForm(
                         createRecruitmentArticle(LocalDateTime.now(),
-                                LocalDateTime.now().plusDays(1), 100L, member4, 2, String.format("테스트 데이터[%03d]", i),
+                                LocalDateTime.now().plusMinutes(61), 100L, member4, 2,
+                                String.format("테스트 데이터[%03d]", i),
                                 "테스트용 게시글 내용입니다."),
                         1, 1L,
                         "삼성산", "석수동", "41171102", 30L, LocalDateTime.now(), LocalDateTime.now().plusDays(1), "카카오톡1")
@@ -109,7 +111,7 @@ public class NotProd {
             for (int i = 20; i < 70; i++) {
                 em.persist(createRecruitmentArticleForm(
                         createRecruitmentArticle(LocalDateTime.now(),
-                                LocalDateTime.now().plusDays(1), 30L, member4, 1, String.format("테스트 데이터[%03d]", i),
+                                LocalDateTime.now().plusHours(1), 30L, member4, 1, String.format("테스트 데이터[%03d]", i),
                                 "테스트용 게시글 내용입니다."),
                         2, 1L,
                         "삼성산", "석수동", "41171102", 20L, LocalDateTime.now(), LocalDateTime.now().plusDays(1), "카카오톡1")
@@ -146,7 +148,7 @@ public class NotProd {
             RecruitmentArticleForm recruitmentArticleForm3 = createRecruitmentArticleForm(recruitmentArticle3, 1, 2L,
                     "한라산", "석수동", "48220370", 40L, LocalDateTime.now(), LocalDateTime.now().plusDays(2), "카카오톡3");
             RecruitmentArticleForm recruitmentArticleForm4 = createRecruitmentArticleForm(recruitmentArticle4, 2, 4L,
-                    "백두산", "석수동ㅎ", "48220370", 20L, LocalDateTime.now(), LocalDateTime.now().plusDays(4), "카카오톡4");
+                    "백두산", "석수동", "48220370", 20L, LocalDateTime.now(), LocalDateTime.now().plusDays(4), "카카오톡4");
             em.persist(recruitmentArticleForm1);
             em.persist(recruitmentArticleForm2);
             em.persist(recruitmentArticleForm3);
