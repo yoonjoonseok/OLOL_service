@@ -1,11 +1,11 @@
-package com.ll.olol.boundedContext.member.controller;
+package com.ll.olol.boundedContext.recruitment.controller;
 
 import com.ll.olol.base.rq.Rq;
 import com.ll.olol.base.rsData.RsData;
-import com.ll.olol.boundedContext.member.entity.LikeableRecruitmentArticle;
 import com.ll.olol.boundedContext.member.entity.Member;
-import com.ll.olol.boundedContext.member.service.LikeableRecruitmentArticleService;
+import com.ll.olol.boundedContext.recruitment.entity.LikeableRecruitmentArticle;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
+import com.ll.olol.boundedContext.recruitment.service.LikeableRecruitmentArticleService;
 import com.ll.olol.boundedContext.recruitment.service.RecruitmentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;

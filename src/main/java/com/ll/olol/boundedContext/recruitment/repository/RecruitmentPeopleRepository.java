@@ -1,7 +1,7 @@
-package com.ll.olol.boundedContext.member.repository;
+package com.ll.olol.boundedContext.recruitment.repository;
 
-import com.ll.olol.boundedContext.member.entity.RecruitmentPeople;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
+import com.ll.olol.boundedContext.recruitment.entity.RecruitmentPeople;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

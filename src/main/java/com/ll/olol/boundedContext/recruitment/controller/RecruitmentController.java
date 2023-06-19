@@ -6,11 +6,10 @@ import com.ll.olol.boundedContext.comment.entity.Comment;
 import com.ll.olol.boundedContext.comment.entity.CommentDto;
 import com.ll.olol.boundedContext.comment.service.CommentService;
 import com.ll.olol.boundedContext.member.entity.Member;
-import com.ll.olol.boundedContext.member.entity.RecruitmentPeople;
 import com.ll.olol.boundedContext.member.service.MemberService;
-import com.ll.olol.boundedContext.member.service.RecruitmentPeopleService;
 import com.ll.olol.boundedContext.recruitment.entity.CreateForm;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
+import com.ll.olol.boundedContext.recruitment.service.RecruitmentPeopleService;
 import com.ll.olol.boundedContext.recruitment.service.RecruitmentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -39,7 +38,7 @@ public class RecruitmentController {
     private final MemberService memberService;
     private final CommentService commentService;
     private final RecruitmentPeopleService recruitmentPeopleService;
-    private int limitPeople = 0;
+    private final int limitPeople = 0;
 
     @GetMapping("/list")
     public String list(Model model,
@@ -193,63 +192,6 @@ public class RecruitmentController {
             return rq.historyBack(canDeleteRsData.getMsg());
 
         return "redirect:/";
-    }
-
-    @PreAuthorize("isAuthenticated()")
-    @PostMapping("/{id}/attend/delete")
-    public String deleteAttend(@PathVariable Long id) {
-        RecruitmentPeople one = recruitmentPeopleService.findOne(id);
-        recruitmentPeopleService.delete(one);
-        return "redirect:/recruitment/fromList";
-    }
-
-    @PreAuthorize("isAuthenticated()")
-    @PostMapping("/{id}/attend/create")
-    public String createAttend(@PathVariable Long id) {
-        RecruitmentPeople person = recruitmentPeopleService.findOne(id);
-        RecruitmentArticle recruitmentArticle = person.getRecruitmentArticle();
-        Long recruitsNumbers = recruitmentArticle.getRecruitmentArticleForm().getRecruitsNumbers();
-        if (limitPeople >= recruitsNumbers) {
-            return rq.historyBack("이미 참가 인원이 꽉 찼습니다.");
-        }
-
-        person.setAttend(true);
-
-        recruitmentPeopleService.attend(person);
-        limitPeople++;
-        return "redirect:/recruitment/fromList";
-    }
-
-    @PreAuthorize("isAuthenticated()")
-    @GetMapping("/{id}/attend")
-    public String attendForm(@PathVariable Long id, Model model) {
-        Optional<RecruitmentArticle> recruitmentArticle = recruitmentService.findById(id);
-        List<RecruitmentPeople> recruitmentPeople = recruitmentArticle.get().getRecruitmentPeople();
-        //현재 로그인한 회원에 아이디
-        Long memberId = rq.getMember().getId();
-        //게시글을 쓴 사람에 아이디
-        Long articleMemberId = recruitmentArticle.get().getMember().getId();
-
-        for (RecruitmentPeople people : recruitmentPeople) {
-            if (people.getMember().getId() == memberId) {
-                return rq.historyBack("이미 신청된 공고입니다.");
-            }
-        }
-
-        if (articleMemberId == memberId) {
-            return rq.historyBack("게시글을 작성한 사람은 참가를 누를 수 없습니다.");
-        }
-
-        model.addAttribute("recruitmentArticle", recruitmentArticle.get());
-        return "usr/recruitment/attendForm";
-    }
-
-    @PreAuthorize("isAuthenticated()")
-    @PostMapping("/{id}/attend")
-    public String attend(@PathVariable Long id, @ModelAttribute RecruitmentArticle recruitmentArticle) {
-        recruitmentPeopleService.saveRecruitmentPeople(rq.getMember().getId(), id);
-
-        return "redirect:/recruitment/" + id;
     }
 
     @PreAuthorize("isAuthenticated()")

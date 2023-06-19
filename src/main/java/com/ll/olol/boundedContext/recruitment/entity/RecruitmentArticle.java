@@ -1,9 +1,7 @@
 package com.ll.olol.boundedContext.recruitment.entity;
 
 import com.ll.olol.boundedContext.comment.entity.Comment;
-import com.ll.olol.boundedContext.member.entity.LikeableRecruitmentArticle;
 import com.ll.olol.boundedContext.member.entity.Member;
-import com.ll.olol.boundedContext.member.entity.RecruitmentPeople;
 import com.ll.olol.boundedContext.report.entity.ArticleReport;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

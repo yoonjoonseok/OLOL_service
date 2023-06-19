@@ -1,12 +1,12 @@
-package com.ll.olol.boundedContext.member.service;
+package com.ll.olol.boundedContext.recruitment.service;
 
 import com.ll.olol.boundedContext.member.entity.Member;
-import com.ll.olol.boundedContext.member.entity.RecruitmentPeople;
 import com.ll.olol.boundedContext.member.repository.MemberRepository;
-import com.ll.olol.boundedContext.member.repository.RecruitmentPeopleRepository;
 import com.ll.olol.boundedContext.notification.event.EventAfterRecruitmentAttend;
 import com.ll.olol.boundedContext.notification.event.EventAfterRecruitmentPeople;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
+import com.ll.olol.boundedContext.recruitment.entity.RecruitmentPeople;
+import com.ll.olol.boundedContext.recruitment.repository.RecruitmentPeopleRepository;
 import com.ll.olol.boundedContext.recruitment.repository.RecruitmentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;

@@ -2,12 +2,12 @@ package com.ll.olol.boundedContext.member.controller;
 
 import com.ll.olol.base.rq.Rq;
 import com.ll.olol.base.rsData.RsData;
-import com.ll.olol.boundedContext.member.entity.LikeableRecruitmentArticle;
 import com.ll.olol.boundedContext.member.entity.Member;
-import com.ll.olol.boundedContext.member.entity.RecruitmentPeople;
 import com.ll.olol.boundedContext.member.repository.MemberRepository;
-import com.ll.olol.boundedContext.member.service.LikeableRecruitmentArticleService;
 import com.ll.olol.boundedContext.member.service.MemberService;
+import com.ll.olol.boundedContext.recruitment.entity.LikeableRecruitmentArticle;
+import com.ll.olol.boundedContext.recruitment.entity.RecruitmentPeople;
+import com.ll.olol.boundedContext.recruitment.service.LikeableRecruitmentArticleService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
