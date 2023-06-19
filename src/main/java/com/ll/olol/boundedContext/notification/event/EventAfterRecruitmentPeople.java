@@ -1,6 +1,6 @@
 package com.ll.olol.boundedContext.notification.event;
 
-import com.ll.olol.boundedContext.recruitment.entity.RecruitmentPeople;
+import com.ll.olol.boundedContext.member.entity.RecruitmentPeople;
 import lombok.Getter;
 import org.springframework.context.ApplicationEvent;
 
