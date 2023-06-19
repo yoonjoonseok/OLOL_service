@@ -274,7 +274,11 @@ public class RecruitmentController {
         }
 
         recruitmentService.deleteArticle(recruitmentArticle.get());
-        
+
+        // admin 이면 신고된 게시글 삭제시 뒤로가기
+        if (rq.getMember().isAdmin())
+            return rq.historyBack(canDeleteRsData.getMsg());
+
         return "redirect:/";
     }
 
@@ -353,7 +357,7 @@ public class RecruitmentController {
                 pageable);
         LocalDateTime now = LocalDateTime.now();
         System.out.println("now = " + now);
-        
+
         model.addAttribute("now", now);
         model.addAttribute("paging", paging);
         return "usr/recruitment/allList";
