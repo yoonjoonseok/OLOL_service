@@ -202,7 +202,7 @@
 
                     <i class="fa-solid fa-heart fa-xl ml-3" style="color: #d71d1d;" href="javascript:"
                        onclick="if ( confirm('찜하시겠습니까?') ) $(this).next().submit();"></i>
-                    <form hidden th:action="@{|/member/bookmark/${recruitmentArticle.id}|}" method="POST">
+                    <form hidden th:action="@{|/recruitment/${recruitmentArticle.id}/bookmark|}" method="POST">
                     </form>
                 </div>
 

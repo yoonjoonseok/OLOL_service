@@ -8,8 +8,9 @@ import com.ll.olol.boundedContext.comment.service.CommentService;
 import com.ll.olol.boundedContext.member.entity.Member;
 import com.ll.olol.boundedContext.member.service.MemberService;
 import com.ll.olol.boundedContext.recruitment.entity.CreateForm;
+import com.ll.olol.boundedContext.recruitment.entity.LikeableRecruitmentArticle;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
-import com.ll.olol.boundedContext.recruitment.service.RecruitmentPeopleService;
+import com.ll.olol.boundedContext.recruitment.service.LikeableRecruitmentArticleService;
 import com.ll.olol.boundedContext.recruitment.service.RecruitmentService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -37,8 +38,7 @@ public class RecruitmentController {
     private final RecruitmentService recruitmentService;
     private final MemberService memberService;
     private final CommentService commentService;
-    private final RecruitmentPeopleService recruitmentPeopleService;
-    private final int limitPeople = 0;
+    private final LikeableRecruitmentArticleService likeableRecruitmentArticleService;
 
     @GetMapping("/list")
     public String list(Model model,
@@ -205,5 +205,35 @@ public class RecruitmentController {
         //마감 버튼을 누르면 마감 시간을 현재 시간으로 바꿈
         recruitmentService.updateArticleForm(article.get());
         return "redirect:/recruitment/" + id;
+    }
+
+    @PostMapping("/{id}/bookmark")
+    public String add(@PathVariable Long id) {
+        Optional<RecruitmentArticle> recruitmentArticle = recruitmentService.findById(id);
+        Member actor = rq.getMember();
+
+        RsData canAddRsData = likeableRecruitmentArticleService.canAdd(recruitmentArticle, actor);
+
+        if (canAddRsData.isFail())
+            return rq.historyBack(canAddRsData);
+
+        likeableRecruitmentArticleService.add(recruitmentArticle.get(), actor);
+
+        //return "redirect:/recruitment/" + id;
+        return "redirect:/member/mypage";
+    }
+
+    @DeleteMapping("/{id}/bookmark")
+    public String cancel(@PathVariable Long id) {
+        Optional<LikeableRecruitmentArticle> likeableRecruitmentArticle = likeableRecruitmentArticleService.findById(id);
+
+        RsData canCancelRsData = likeableRecruitmentArticleService.canCancel(likeableRecruitmentArticle, rq.getMember());
+
+        if (canCancelRsData.isFail())
+            return rq.historyBack(canCancelRsData);
+
+        likeableRecruitmentArticleService.cancel(likeableRecruitmentArticle.get());
+
+        return "redirect:/member/mypage";
     }
 }
