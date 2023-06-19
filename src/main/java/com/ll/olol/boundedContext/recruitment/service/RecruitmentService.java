@@ -5,7 +5,7 @@ import com.ll.olol.boundedContext.api.localCode.LocalCodeApiClient;
 import com.ll.olol.boundedContext.comment.entity.Comment;
 import com.ll.olol.boundedContext.member.entity.Member;
 import com.ll.olol.boundedContext.notification.event.EventAfterUpdateArticle;
-import com.ll.olol.boundedContext.recruitment.CreateForm;
+import com.ll.olol.boundedContext.recruitment.entity.CreateForm;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticleForm;
 import com.ll.olol.boundedContext.recruitment.repository.RecruitmentFormRepository;

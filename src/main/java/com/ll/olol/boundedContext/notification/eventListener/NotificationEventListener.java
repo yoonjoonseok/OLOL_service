@@ -2,13 +2,13 @@ package com.ll.olol.boundedContext.notification.eventListener;
 
 import com.ll.olol.boundedContext.member.entity.Member;
 import com.ll.olol.boundedContext.member.entity.RecruitmentPeople;
+import com.ll.olol.boundedContext.member.service.RecruitmentPeopleService;
 import com.ll.olol.boundedContext.notification.event.EventAfterComment;
 import com.ll.olol.boundedContext.notification.event.EventAfterRecruitmentAttend;
 import com.ll.olol.boundedContext.notification.event.EventAfterRecruitmentPeople;
 import com.ll.olol.boundedContext.notification.event.EventAfterUpdateArticle;
 import com.ll.olol.boundedContext.notification.service.NotificationService;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
-import com.ll.olol.boundedContext.recruitment.service.RecruitmentPeopleService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;

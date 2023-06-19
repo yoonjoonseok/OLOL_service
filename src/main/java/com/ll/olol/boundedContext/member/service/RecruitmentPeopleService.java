@@ -1,4 +1,4 @@
-package com.ll.olol.boundedContext.recruitment.service;
+package com.ll.olol.boundedContext.member.service;
 
 import com.ll.olol.boundedContext.member.entity.Member;
 import com.ll.olol.boundedContext.member.entity.RecruitmentPeople;

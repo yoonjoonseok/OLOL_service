@@ -23,6 +23,10 @@ public class MemberService {
         return memberRepository.findByUsername(username);
     }
 
+    public Optional<Member> findById(Long memberId) {
+        return memberRepository.findById(memberId);
+    }
+
     @Transactional
     public RsData<Member> join(String username, String password) {
         return join("GRAMGRAM", username, password);
