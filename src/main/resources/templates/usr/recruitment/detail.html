@@ -204,27 +204,6 @@
                        onclick="if ( confirm('찜하시겠습니까?') ) $(this).next().submit();"></i>
                     <form hidden th:action="@{|/member/bookmark/${recruitmentArticle.id}|}" method="POST">
                     </form>
-                    <!--                    <button href="javascript:" onclick="if ( confirm('수정하시겠습니까?') ) $(this).next().submit();">-->
-                    <!--                        수정-->
-                    <!--                    </button>-->
-                    <!--                    <form hidden th:action="@{|/recruitment/${recruitmentArticle.id}/update|}" method="GET">-->
-                    <!--                    </form>-->
-
-                    <!--                <button href="javascript:" onclick="if ( confirm('삭제하시겠습니까?') ) $(this).next().submit();">-->
-                    <!--                    삭제-->
-                    <!--                </button>-->
-                    <!--                <form hidden th:action="@{|/recruitment/${recruitmentArticle.id}/delete|}" method="POST">-->
-                    <!--                    <input type="hidden" name="_method" value="delete">-->
-                    <!--                </form>-->
-
-                    <!--                    <button href="javascript:" onclick="if ( confirm('찜하시겠습니까?') ) $(this).next().submit();">-->
-                    <!--                        찜-->
-                    <!--                    </button>-->
-                    <!--                    <form hidden th:action="@{|/member/bookmark/${recruitmentArticle.id}|}" method="POST">-->
-                    <!--                    </form>-->
-                    <!--                <button type="button" data-toggle="modal" data-target="#reportingArticleModal">-->
-                    <!--                    신고-->
-                    <!--                </button>-->
                 </div>
 
 
@@ -251,18 +230,6 @@
                                     <i type="button" class="fa-solid fa-pen-to-square "
                                        th:onclick="|location.href='@{/comment/{id}/edit (id=${comment.id})}'|"></i>
                                 </div>
-
-
-                                <!--                                <button type="button" class="btn btn-warning"-->
-                                <!--                                        th:onclick="|location.href='@{/recruitment/comment/{id}/edit (id=${comment.id})}'|">-->
-                                <!--                                    수정-->
-                                <!--                                </button>-->
-
-
-                                <!--                                <button type="button" class="btn btn-danger"-->
-                                <!--                                        th:onclick="|location.href='@{/recruitment/comment/{id}/delete (id=${comment.id})}'|">-->
-                                <!--                                    삭제-->
-                                <!--                                </button>-->
                             </div>
                             <span style="font-size: large" th:text="${comment.content}"></span>
                         </li>
@@ -278,19 +245,6 @@
                                th:field="as">Incorrect content</p>
                             <button class="btn btn-outline-success" type="submit">댓글 작성</button>
                         </div>
-
-
-                        <!--                        <p>-->
-                        <!--                            <textarea th:field="*{content}" rows="5" cols="50" name="content"-->
-                        <!--                                      style="background-color: white"></textarea>-->
-                        <!--                        </p>-->
-                        <!--                        <p th:if="${#fields.hasErrors('content')}" th:errors="*{content}" class="fieldError"-->
-                        <!--                           th:field="as">Incorrect content</p>-->
-
-                        <!--                        <p>-->
-                        <!--                            <button class="btn btn-primary" type="submit">댓글 작성</button>-->
-                        <!--                        </p>-->
-
                     </form>
                 </div>
 
