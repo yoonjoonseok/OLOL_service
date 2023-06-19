@@ -43,6 +43,67 @@ public class RecruitmentController {
     private final RecruitmentPeopleService recruitmentPeopleService;
     private int limitPeople = 0;
 
+    @GetMapping("/list")
+    public String list(Model model,
+                       @RequestParam(defaultValue = "0") Long ageRange,
+                       @RequestParam(defaultValue = "0") int dayNight,
+                       @RequestParam(defaultValue = "0") int typeValue,
+                       @RequestParam(defaultValue = "1") int sortCode,
+                       @RequestParam(defaultValue = "0") int page,
+                       String kw) {
+        List<Sort.Order> sorts = new ArrayList<>();
+
+        if (sortCode == 1) {
+            sorts.add(Sort.Order.desc("createDate"));
+        }
+        if (sortCode == 2) {
+            sorts.add(Sort.Order.asc("createDate"));
+        } else if (sortCode == 3) {
+            sorts.add(Sort.Order.desc("views"));
+        }
+
+        Pageable pageable = PageRequest.of(page, 20, Sort.by(sorts));
+        Page<RecruitmentArticle> paging = recruitmentService.getListByConditions(ageRange, dayNight, typeValue, kw,
+                pageable);
+        LocalDateTime now = LocalDateTime.now();
+        System.out.println("now = " + now);
+
+        model.addAttribute("now", now);
+        model.addAttribute("paging", paging);
+        return "usr/recruitment/allList";
+    }
+
+    @GetMapping("/{id}")
+    public String showDetail(@PathVariable Long id, Model model) {
+        Optional<RecruitmentArticle> recruitmentArticle = recruitmentService.findById(id);
+
+        if (recruitmentArticle.isEmpty()) {
+            return rq.historyBack(RsData.of("F-1", "존재하지 않는 모임 공고입니다"));
+        }
+
+        recruitmentService.addView(recruitmentArticle.get());
+
+        List<Comment> comments = commentService.findComments();
+        List<Comment> commentList = new ArrayList<>();
+
+        for (Comment comment : comments) {
+            if (comment.getRecruitmentArticle().getId() == id) {
+                commentList.add(comment);
+            }
+        }
+
+        model.addAttribute("commentForm", new CommentDto());
+        model.addAttribute("recruitmentArticle", recruitmentArticle.get());
+        model.addAttribute("comments", commentList);
+        model.addAttribute("nowDate", LocalDateTime.now());
+        model.addAttribute("writer", Long.toString(recruitmentArticle.get().getMember().getId()));
+        if (rq.getMember() != null) {
+            model.addAttribute("me", Long.toString(rq.getMember().getId()));
+        }
+
+        return "usr/recruitment/detail";
+    }
+
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/create")
     // @Valid를 붙여야 QuestionForm.java내의 NotBlank나 Size가 동작한다.
@@ -118,14 +179,22 @@ public class RecruitmentController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping("/attendList")
-    public String showAttendList(Model model) {
-        Long memberId = rq.getMember().getId();
-        Optional<Member> member = memberRepository.findById(memberId);
-        List<RecruitmentPeople> recruitmentPeople = member.get().getRecruitmentPeople();
+    @DeleteMapping("/{id}/delete")
+    public String delete(@PathVariable Long id) {
+        Optional<RecruitmentArticle> recruitmentArticle = recruitmentService.findById(id);
+        RsData canDeleteRsData = recruitmentService.canDelete(recruitmentArticle, rq.getMember());
 
-        model.addAttribute("peopleList", recruitmentPeople);
-        return "usr/recruitment/attendList";
+        if (canDeleteRsData.isFail()) {
+            return rq.historyBack(canDeleteRsData);
+        }
+
+        recruitmentService.deleteArticle(recruitmentArticle.get());
+
+        // admin 이면 신고된 게시글 삭제시 뒤로가기
+        if (rq.getMember().isAdmin())
+            return rq.historyBack(canDeleteRsData.getMsg());
+
+        return "redirect:/";
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -161,7 +230,17 @@ public class RecruitmentController {
     }
 
     @PreAuthorize("isAuthenticated()")
+    @GetMapping("/attendList")
+    public String showAttendList(Model model) {
+        Long memberId = rq.getMember().getId();
+        Optional<Member> member = memberRepository.findById(memberId);
+        List<RecruitmentPeople> recruitmentPeople = member.get().getRecruitmentPeople();
 
+        model.addAttribute("peopleList", recruitmentPeople);
+        return "usr/recruitment/attendList";
+    }
+
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/{id}/attend/delete")
     public String deleteAttend(@PathVariable Long id) {
         RecruitmentPeople one = recruitmentPeopleService.findOne(id);
@@ -231,57 +310,6 @@ public class RecruitmentController {
         return "redirect:/recruitment/" + id;
     }
 
-
-    @GetMapping("/{id}")
-    public String showDetail(@PathVariable Long id, Model model) {
-        Optional<RecruitmentArticle> recruitmentArticle = recruitmentService.findById(id);
-
-        if (recruitmentArticle.isEmpty()) {
-            return rq.historyBack(RsData.of("F-1", "존재하지 않는 모임 공고입니다"));
-        }
-
-        recruitmentService.addView(recruitmentArticle.get());
-
-        List<Comment> comments = commentService.findComments();
-        List<Comment> commentList = new ArrayList<>();
-
-        for (Comment comment : comments) {
-            if (comment.getRecruitmentArticle().getId() == id) {
-                commentList.add(comment);
-            }
-        }
-
-        model.addAttribute("commentForm", new CommentDto());
-        model.addAttribute("recruitmentArticle", recruitmentArticle.get());
-        model.addAttribute("comments", commentList);
-        model.addAttribute("nowDate", LocalDateTime.now());
-        model.addAttribute("writer", Long.toString(recruitmentArticle.get().getMember().getId()));
-        if (rq.getMember() != null) {
-            model.addAttribute("me", Long.toString(rq.getMember().getId()));
-        }
-
-        return "usr/recruitment/detail";
-    }
-
-    @PreAuthorize("isAuthenticated()")
-    @DeleteMapping("/{id}/delete")
-    public String delete(@PathVariable Long id) {
-        Optional<RecruitmentArticle> recruitmentArticle = recruitmentService.findById(id);
-        RsData canDeleteRsData = recruitmentService.canDelete(recruitmentArticle, rq.getMember());
-
-        if (canDeleteRsData.isFail()) {
-            return rq.historyBack(canDeleteRsData);
-        }
-
-        recruitmentService.deleteArticle(recruitmentArticle.get());
-
-        // admin 이면 신고된 게시글 삭제시 뒤로가기
-        if (rq.getMember().isAdmin())
-            return rq.historyBack(canDeleteRsData.getMsg());
-
-        return "redirect:/";
-    }
-
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/{id}/comment")
     public String createComment(@PathVariable("id") Long id,
@@ -331,35 +359,5 @@ public class RecruitmentController {
         Long articleId = comment1.getRecruitmentArticle().getId();
 
         return "redirect:/recruitment/" + articleId;
-    }
-
-    @GetMapping("/list")
-    public String list(Model model,
-                       @RequestParam(defaultValue = "0") Long ageRange,
-                       @RequestParam(defaultValue = "0") int dayNight,
-                       @RequestParam(defaultValue = "0") int typeValue,
-                       @RequestParam(defaultValue = "1") int sortCode,
-                       @RequestParam(defaultValue = "0") int page,
-                       String kw) {
-        List<Sort.Order> sorts = new ArrayList<>();
-
-        if (sortCode == 1) {
-            sorts.add(Sort.Order.desc("createDate"));
-        }
-        if (sortCode == 2) {
-            sorts.add(Sort.Order.asc("createDate"));
-        } else if (sortCode == 3) {
-            sorts.add(Sort.Order.desc("views"));
-        }
-
-        Pageable pageable = PageRequest.of(page, 20, Sort.by(sorts));
-        Page<RecruitmentArticle> paging = recruitmentService.getListByConditions(ageRange, dayNight, typeValue, kw,
-                pageable);
-        LocalDateTime now = LocalDateTime.now();
-        System.out.println("now = " + now);
-
-        model.addAttribute("now", now);
-        model.addAttribute("paging", paging);
-        return "usr/recruitment/allList";
     }
 }
