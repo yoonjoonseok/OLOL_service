@@ -245,11 +245,11 @@
                             <div class="container1">
                                 <div>
                                     <i type="button" class="fa-solid fa-trash-can ml-2"
-                                       th:onclick="|location.href='@{/recruitment/comment/{id}/delete (id=${comment.id})}'|"></i>
+                                       th:onclick="|location.href='@{/comment/{id}/delete (id=${comment.id})}'|"></i>
                                 </div>
                                 <div class="ml-2">
                                     <i type="button" class="fa-solid fa-pen-to-square "
-                                       th:onclick="|location.href='@{/recruitment/comment/{id}/edit (id=${comment.id})}'|"></i>
+                                       th:onclick="|location.href='@{/comment/{id}/edit (id=${comment.id})}'|"></i>
                                 </div>
 
 
@@ -269,7 +269,7 @@
                     </form>
 
                     <form th:object="${commentForm}" method="post"
-                          th:action="@{|/recruitment/${recruitmentArticle.id}/comment|}">
+                          th:action="@{|/comment/${recruitmentArticle.id}|}">
 
                         <div class="input-group">
                             <input type="text" class="form-control" id="commentInput" placeholder="댓글 입력"

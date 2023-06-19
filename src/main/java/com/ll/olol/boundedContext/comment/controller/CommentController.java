@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDateTime;
 
 @Controller
-@RequestMapping("/recruitment")
+@RequestMapping("/comment")
 @RequiredArgsConstructor
 public class CommentController {
 
@@ -24,7 +24,7 @@ public class CommentController {
     private final CommentService commentService;
 
     @PreAuthorize("isAuthenticated()")
-    @PostMapping("/{id}/comment")
+    @PostMapping("/{id}")
     public String createComment(@PathVariable("id") Long id,
                                 @Valid CommentDto commentDto, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
@@ -38,7 +38,7 @@ public class CommentController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping("/comment/{id}/delete")
+    @GetMapping("/{id}/delete")
     public String deleteComment(@PathVariable("id") Long id) {
         RsData rsData = commentService.isEqualMemberById(id);
         if (rsData.isFail()) {
@@ -51,7 +51,7 @@ public class CommentController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @GetMapping("/comment/{id}/edit")
+    @GetMapping("/{id}/edit")
     public String editCommentForm(@PathVariable("id") Long id, Model model) {
         Comment comment = commentService.findOne(id);
         RsData rsData = commentService.isEqualMemberById(id);
@@ -65,7 +65,7 @@ public class CommentController {
     }
 
     @PreAuthorize("isAuthenticated()")
-    @PostMapping("/comment/{id}/edit")
+    @PostMapping("/{id}/edit")
     public String editComment(@PathVariable("id") Long id, @ModelAttribute Comment comment) {
         commentService.update(id, comment.getContent());
         Comment comment1 = commentService.findOne(id);
