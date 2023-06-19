@@ -7,7 +7,6 @@ import com.ll.olol.boundedContext.comment.entity.CommentDto;
 import com.ll.olol.boundedContext.comment.service.CommentService;
 import com.ll.olol.boundedContext.member.entity.Member;
 import com.ll.olol.boundedContext.member.entity.RecruitmentPeople;
-import com.ll.olol.boundedContext.member.repository.MemberRepository;
 import com.ll.olol.boundedContext.member.service.MemberService;
 import com.ll.olol.boundedContext.member.service.RecruitmentPeopleService;
 import com.ll.olol.boundedContext.recruitment.entity.CreateForm;
@@ -37,7 +36,6 @@ import java.util.Optional;
 public class RecruitmentController {
     private final Rq rq;
     private final RecruitmentService recruitmentService;
-    private final MemberRepository memberRepository;
     private final MemberService memberService;
     private final CommentService commentService;
     private final RecruitmentPeopleService recruitmentPeopleService;
