@@ -104,7 +104,7 @@
                             <span class="font-weight-bold fs-5 text-secondary">모집 인원</span>
                             <div class="vr"></div>
                             <span class="fs-5 fw-bold"
-                                  th:text="${recruitmentArticle.recruitmentArticleForm.recruitsNumbers}">모집 인원</span>
+                                  th:text="|${recruitmentArticle.getAttend()}/${recruitmentArticle.recruitmentArticleForm.recruitsNumbers}|">모집 인원</span>
                         </div>
                     </div>
                     <div class="d-flex justify-content-start mb-3">
@@ -183,7 +183,8 @@
 
                                 <span class="font-weight-bold"
                                       th:if="${nowDate.isAfter(recruitmentArticle.getDeadLineDate())} or ${recruitmentArticle.getAttend() == recruitmentArticle.getRecruitmentArticleForm().recruitsNumbers}"
-                                      th:text="마감 시간이 지났어요. 다음에 신청해주세요!">
+                                >
+                                    마감 시간이 지났어요. 다음에 신청해주세요!
 
                                 </span>
 
@@ -276,7 +277,7 @@
                         <span class="font-weight-bold fs-5">모집 인원</span>
                         <div class="vr"></div>
                         <span class="fs-5"
-                              th:text="${recruitmentArticle.recruitmentArticleForm.recruitsNumbers}">모집 인원</span>
+                              th:text="|${recruitmentArticle.getAttend()}/${recruitmentArticle.recruitmentArticleForm.recruitsNumbers}|">모집 인원</span>
 
                     </div>
 
@@ -285,26 +286,28 @@
                         <div class="vr"></div>
                         <span class="fs-5" th:text="${recruitmentArticle.getDeadLineDateToString()}">마감일</span>
                         <div class="containerIn d-flex justify-content-end mb-3">
-                            <form>
+                            <form th:if="${nowDate.isBefore(recruitmentArticle.getDeadLineDate())} and ${recruitmentArticle.getAttend() != recruitmentArticle.getRecruitmentArticleForm().recruitsNumbers}">
                                 <button type="button"
                                         class="btn btn-outline-success btn-sm"
-                                        th:if="${recruitmentArticle.getDeadLineDate().isAfter(nowDate)}"
                                         th:onclick="|location.href='@{/recruitment/{id}/attend (id=${recruitmentArticle.id})}'|">
                                     신청
                                 </button>
                             </form>
-                            <span class="font-weight-bold"
-                                  th:unless="${recruitmentArticle.getDeadLineDate().isAfter(nowDate)}">
-            마감 시간이 지났어요. 다음에 신청해주세요!
-            </span>
-                            <form th:action="@{/recruitment/{id}/deadLine (id=${recruitmentArticle.id})}"
+                            <form th:if="${nowDate.isBefore(recruitmentArticle.getDeadLineDate())} and ${recruitmentArticle.getAttend() != recruitmentArticle.getRecruitmentArticleForm().recruitsNumbers}"
+                                  th:action="@{/recruitment/{id}/deadLine (id=${recruitmentArticle.id})}"
                                   method="post">
                                 <button type="submit"
-                                        class="btn btn-outline-success btn-sm ml-3"
-                                        th:if="${recruitmentArticle.getDeadLineDate().isAfter(nowDate)}">
+                                        class="btn btn-outline-success btn-sm ml-3">
                                     마감
                                 </button>
                             </form>
+
+                            <span class="font-weight-bold"
+                                  th:if="${nowDate.isAfter(recruitmentArticle.getDeadLineDate())} or ${recruitmentArticle.getAttend() == recruitmentArticle.getRecruitmentArticleForm().recruitsNumbers}"
+                            >
+                                    마감 시간이 지났어요. 다음에 신청해주세요!
+
+                                </span>
                         </div>
                     </div>
 
