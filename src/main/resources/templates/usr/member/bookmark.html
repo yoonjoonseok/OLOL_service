@@ -25,7 +25,7 @@
                                     onclick="if ( confirm('찜을 해제하시겠습니까?') ) $(this).next().submit();">
                                 찜 해제
                             </button>
-                            <form hidden th:action="@{|/member/bookmark/${likeableRecruitmentArticle.id}|}"
+                            <form hidden th:action="@{|/recruitment/${likeableRecruitmentArticle.id}/bookmark|}"
                                   method="POST">
                                 <input type="hidden" name="_method" value="delete">
                             </form>

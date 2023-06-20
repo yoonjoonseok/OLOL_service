@@ -5,7 +5,7 @@ import com.ll.olol.boundedContext.api.localCode.LocalCodeApiClient;
 import com.ll.olol.boundedContext.comment.entity.Comment;
 import com.ll.olol.boundedContext.member.entity.Member;
 import com.ll.olol.boundedContext.notification.event.EventAfterUpdateArticle;
-import com.ll.olol.boundedContext.recruitment.CreateForm;
+import com.ll.olol.boundedContext.recruitment.entity.CreateForm;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticleForm;
 import com.ll.olol.boundedContext.recruitment.repository.RecruitmentFormRepository;
@@ -40,6 +40,10 @@ public class RecruitmentService {
 
     public Optional<RecruitmentArticle> findById(Long id) {
         return recruitmentRepository.findById(id);
+    }
+
+    public List<RecruitmentArticle> findAll() {
+        return recruitmentRepository.findAll();
     }
 
     @Transactional
@@ -205,10 +209,6 @@ public class RecruitmentService {
             return RsData.of("F-2", "모집자만이 삭제 가능합니다");
 
         return RsData.of("S-1", "모임 공고 삭제 가능");
-    }
-
-    public List<RecruitmentArticle> findAll() {
-        return recruitmentRepository.findAll();
     }
 
     @Transactional

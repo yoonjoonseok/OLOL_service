@@ -1,6 +1,6 @@
-package com.ll.olol.boundedContext.member.entity;
+package com.ll.olol.boundedContext.recruitment.entity;
 
-import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
+import com.ll.olol.boundedContext.member.entity.Member;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
