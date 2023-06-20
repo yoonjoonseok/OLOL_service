@@ -58,7 +58,7 @@ public class RecruitmentPeopleController {
         }
 
         model.addAttribute("attendList", list);
-        return "usr/recruitment/fromAttendList";
+        return "usr/member/fromAttendList";
     }
 
     @PreAuthorize("isAuthenticated()")
