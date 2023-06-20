@@ -170,7 +170,7 @@ public class RecruitmentService {
 
     @Transactional
     public void updateArticleForm(RecruitmentArticle recruitmentArticle) {
-        recruitmentRepository.save(recruitmentArticle);
+        recruitmentRepository.save(recruitmentArticle); // 이거 save안해줘도 되는것이 아닌가?
     }
 
     @Transactional

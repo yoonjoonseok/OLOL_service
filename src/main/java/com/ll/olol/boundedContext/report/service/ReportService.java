@@ -24,9 +24,6 @@ import java.util.List;
 public class ReportService {
     private final ReportRepository reportRepository;
 
-//    public List<ArticleReport> findByFromMember(Member actor) {
-//    }
-
     @Transactional
     public void report(RecruitmentArticle recruitmentArticle, Member actor, int reason) {
 
