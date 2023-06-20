@@ -5,7 +5,12 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
+    <script id="script" type="text/javascript"
+            src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=x30bss140l">
+    </script>
+    <script type="text/javascript"
+            src="https://openapi.map.naver.com/openapi/v3/maps-geocoder.js">
+    </script>
     <style>
         /* 추가적인 스타일을 적용할 수 있습니다 */
         /* 모집 공고 등록 화면에서 산 검색 결과에 호버효과 적용을 위한 스타일 */
@@ -70,6 +75,8 @@
                                         <button type="button" onclick="search()" class="btn btn-primary mt-2">검색
                                         </button>
 
+                                        <div id="map" style="width:100%;height:400px;"></div>
+
                                         <ul id="searchResults" class="list-group mt-3"></ul>
                                         <br>
                                         <span>선택한 주소 확인</span>
@@ -108,13 +115,30 @@
 
                                         for (var i = 0; i < response.length; i++) {
                                             var li = document.createElement("li");
-                                            li.textContent = response[i];
+                                            li.textContent = response[i].address;
+                                            //li.textContent = response[i].title + " (" + response[i].address + ")";
                                             li.classList.add("list-group-item");
                                             li.style.cursor = "pointer";
+
+                                            li.setAttribute("data-title", response[i].title);
+                                            li.setAttribute("data-mapx", response[i].mapx);
+                                            li.setAttribute("data-mapy", response[i].mapy);
+                                            li.setAttribute("data-category", response[i].category);
+
                                             li.onclick = function () {
                                                 // 검색 결과를 클릭하면 해당 값을 입력란에 채움
                                                 document.getElementById("resultInput").value = this.textContent;
                                                 //document.getElementById("textInput").value = this.textContent;
+
+                                                var tm128 = new naver.maps.Point(this.dataset.mapx, this.dataset.mapy);
+                                                var center = naver.maps.TransCoord.fromTM128ToLatLng(tm128);
+
+                                                var map = new naver.maps.Map('map', {
+                                                    //center: center,
+                                                    zoom: 13,
+                                                    zoomControl: true
+                                                });
+                                                map.setCenter(center);
                                             };
                                             searchResults.appendChild(li);
                                         }
