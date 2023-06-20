@@ -111,7 +111,7 @@ public class RecruitmentController {
             return rq.historyBack("마이페이지에서 추가정보를 입력해주세요.");
         }
 
-        return "recruitmentArticle/createRecruitment_form";
+        return "usr/recruitment/createRecruitment_form";
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -121,7 +121,7 @@ public class RecruitmentController {
     // questionForm 변수와 bindingResult 변수는 model.addAttribute 없이 바로 뷰에서 접근할 수 있다.
     public String questionCreate(@Valid CreateForm createForm, BindingResult bindingResult, Principal principal) {
         if (bindingResult.hasErrors()) {
-            return "recruitmentArticle/createRecruitment_form";
+            return "usr/recruitment/createRecruitment_form";
         }
 
         RecruitmentArticle recruitmentArticle = recruitmentService.createArticle(createForm.getArticleName(),
@@ -147,7 +147,7 @@ public class RecruitmentController {
 
         createForm.set(recruitmentArticle.get());
 
-        return "recruitmentArticle/updateRecruitment_form";
+        return "usr/recruitment/updateRecruitment_form";
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -157,7 +157,7 @@ public class RecruitmentController {
     // questionForm 변수와 bindingResult 변수는 model.addAttribute 없이 바로 뷰에서 접근할 수 있다.
     public String update(@PathVariable Long id, @Valid CreateForm createForm, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return "recruitmentArticle/updateRecruitment_form";
+            return "usr/recruitment/updateRecruitment_form";
         }
 
         Optional<RecruitmentArticle> recruitmentArticle = recruitmentService.findById(id);

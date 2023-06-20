@@ -61,7 +61,7 @@ public class CommentController {
         }
 
         model.addAttribute("comment", comment);
-        return "usr/home/editComment";
+        return "usr/comment/editComment";
     }
 
     @PreAuthorize("isAuthenticated()")
