@@ -44,12 +44,14 @@ public class RecruitmentPeopleController {
         Long memberId = rq.getMember().getId();
         List<RecruitmentArticle> all = recruitmentService.findAll();
         List<RecruitmentPeople> list = new ArrayList<>();
+        List<RecruitmentArticle> myArticle = new ArrayList<>();
         //모든 게시물중에서
         //내가 쓴 게시물을 찾아서
         //내가 쓴 게시물에 신청자들을 다 뽑아온다.
 
         for (RecruitmentArticle recruitmentArticle : all) {
             if (recruitmentArticle.getMember().getId() == memberId) {
+                myArticle.add(recruitmentArticle);
                 List<RecruitmentPeople> recruitmentPeople = recruitmentArticle.getRecruitmentPeople();
                 for (RecruitmentPeople recruitmentPeople1 : recruitmentPeople) {
                     //신청자가 false일 경우만 추가
@@ -59,7 +61,7 @@ public class RecruitmentPeopleController {
                 }
             }
         }
-
+        model.addAttribute("myArticle", myArticle);
         model.addAttribute("attendList", list);
         return "usr/member/fromAttendList";
     }
