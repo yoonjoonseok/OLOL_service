@@ -165,27 +165,29 @@
                             <span class="fs-5 fw-bold"
                                   th:text="${recruitmentArticle.getDeadLineDateToString()}">마감일</span>
                             <div class="containerIn">
-                                <form>
+                                <form th:if="${nowDate.isBefore(recruitmentArticle.getDeadLineDate())} and ${recruitmentArticle.getAttend() != recruitmentArticle.getRecruitmentArticleForm().recruitsNumbers}">
                                     <button type="button"
                                             class="btn btn-outline-success btn-sm"
-                                            th:if="${recruitmentArticle.getDeadLineDate().isAfter(nowDate)}"
                                             th:onclick="|location.href='@{/recruitment/{id}/attend (id=${recruitmentArticle.id})}'|">
                                         신청
                                     </button>
                                 </form>
-
-                                <span class="font-weight-bold"
-                                      th:unless="${recruitmentArticle.getDeadLineDate().isAfter(nowDate)}">
-            마감 시간이 지났어요. 다음에 신청해주세요!
-            </span>
-                                <form th:action="@{/recruitment/{id}/deadLine (id=${recruitmentArticle.id})}"
+                                <form th:if="${nowDate.isBefore(recruitmentArticle.getDeadLineDate())} and ${recruitmentArticle.getAttend() != recruitmentArticle.getRecruitmentArticleForm().recruitsNumbers}"
+                                      th:action="@{/recruitment/{id}/deadLine (id=${recruitmentArticle.id})}"
                                       method="post">
                                     <button type="submit"
-                                            class="btn btn-outline-success btn-sm ml-3"
-                                            th:if="${recruitmentArticle.getDeadLineDate().isAfter(nowDate)}">
+                                            class="btn btn-outline-success btn-sm ml-3">
                                         마감
                                     </button>
                                 </form>
+
+                                <span class="font-weight-bold"
+                                      th:if="${nowDate.isAfter(recruitmentArticle.getDeadLineDate())} or ${recruitmentArticle.getAttend() == recruitmentArticle.getRecruitmentArticleForm().recruitsNumbers}"
+                                      th:text="마감 시간이 지났어요. 다음에 신청해주세요!">
+
+                                </span>
+
+
                             </div>
                         </div>
 

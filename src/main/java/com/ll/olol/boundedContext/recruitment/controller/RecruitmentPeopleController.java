@@ -7,15 +7,18 @@ import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentPeople;
 import com.ll.olol.boundedContext.recruitment.service.RecruitmentPeopleService;
 import com.ll.olol.boundedContext.recruitment.service.RecruitmentService;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/recruitment")
@@ -26,7 +29,7 @@ public class RecruitmentPeopleController {
     private final MemberService memberService;
     private final RecruitmentService recruitmentService;
     private final RecruitmentPeopleService recruitmentPeopleService;
-    private int limitPeople = 0;
+
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/fromList")
@@ -86,14 +89,13 @@ public class RecruitmentPeopleController {
         RecruitmentPeople person = recruitmentPeopleService.findOne(id);
         RecruitmentArticle recruitmentArticle = person.getRecruitmentArticle();
         Long recruitsNumbers = recruitmentArticle.getRecruitmentArticleForm().getRecruitsNumbers();
-        if (limitPeople >= recruitsNumbers) {
+        if (recruitmentArticle.getAttend() >= recruitsNumbers) {
             return rq.historyBack("이미 참가 인원이 꽉 찼습니다.");
         }
 
         person.setAttend(true);
 
         recruitmentPeopleService.attend(person);
-        limitPeople++;
         return "redirect:/recruitment/fromList";
     }
 
