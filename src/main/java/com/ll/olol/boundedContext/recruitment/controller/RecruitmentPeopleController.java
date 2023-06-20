@@ -132,4 +132,14 @@ public class RecruitmentPeopleController {
 
         return "redirect:/recruitment/" + id;
     }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/{id}/modalAttendList")
+    public String modalAttendList(@PathVariable Long id, Model model) {
+        Optional<RecruitmentArticle> article = recruitmentService.findById(id);
+        List<RecruitmentPeople> recruitmentPeople = article.get().getRecruitmentPeople();
+
+        model.addAttribute("recruitmentPeople", recruitmentPeople);
+        return "usr/member/fromAttendListModal";
+    }
 }
