@@ -202,29 +202,8 @@
 
                     <i class="fa-solid fa-heart fa-xl ml-3" style="color: #d71d1d;" href="javascript:"
                        onclick="if ( confirm('찜하시겠습니까?') ) $(this).next().submit();"></i>
-                    <form hidden th:action="@{|/member/bookmark/${recruitmentArticle.id}|}" method="POST">
+                    <form hidden th:action="@{|/recruitment/${recruitmentArticle.id}/bookmark|}" method="POST">
                     </form>
-                    <!--                    <button href="javascript:" onclick="if ( confirm('수정하시겠습니까?') ) $(this).next().submit();">-->
-                    <!--                        수정-->
-                    <!--                    </button>-->
-                    <!--                    <form hidden th:action="@{|/recruitment/${recruitmentArticle.id}/update|}" method="GET">-->
-                    <!--                    </form>-->
-
-                    <!--                <button href="javascript:" onclick="if ( confirm('삭제하시겠습니까?') ) $(this).next().submit();">-->
-                    <!--                    삭제-->
-                    <!--                </button>-->
-                    <!--                <form hidden th:action="@{|/recruitment/${recruitmentArticle.id}/delete|}" method="POST">-->
-                    <!--                    <input type="hidden" name="_method" value="delete">-->
-                    <!--                </form>-->
-
-                    <!--                    <button href="javascript:" onclick="if ( confirm('찜하시겠습니까?') ) $(this).next().submit();">-->
-                    <!--                        찜-->
-                    <!--                    </button>-->
-                    <!--                    <form hidden th:action="@{|/member/bookmark/${recruitmentArticle.id}|}" method="POST">-->
-                    <!--                    </form>-->
-                    <!--                <button type="button" data-toggle="modal" data-target="#reportingArticleModal">-->
-                    <!--                    신고-->
-                    <!--                </button>-->
                 </div>
 
 
@@ -245,31 +224,19 @@
                             <div class="container1">
                                 <div>
                                     <i type="button" class="fa-solid fa-trash-can ml-2"
-                                       th:onclick="|location.href='@{/recruitment/comment/{id}/delete (id=${comment.id})}'|"></i>
+                                       th:onclick="|location.href='@{/comment/{id}/delete (id=${comment.id})}'|"></i>
                                 </div>
                                 <div class="ml-2">
                                     <i type="button" class="fa-solid fa-pen-to-square "
-                                       th:onclick="|location.href='@{/recruitment/comment/{id}/edit (id=${comment.id})}'|"></i>
+                                       th:onclick="|location.href='@{/comment/{id}/edit (id=${comment.id})}'|"></i>
                                 </div>
-
-
-                                <!--                                <button type="button" class="btn btn-warning"-->
-                                <!--                                        th:onclick="|location.href='@{/recruitment/comment/{id}/edit (id=${comment.id})}'|">-->
-                                <!--                                    수정-->
-                                <!--                                </button>-->
-
-
-                                <!--                                <button type="button" class="btn btn-danger"-->
-                                <!--                                        th:onclick="|location.href='@{/recruitment/comment/{id}/delete (id=${comment.id})}'|">-->
-                                <!--                                    삭제-->
-                                <!--                                </button>-->
                             </div>
                             <span style="font-size: large" th:text="${comment.content}"></span>
                         </li>
                     </form>
 
                     <form th:object="${commentForm}" method="post"
-                          th:action="@{|/recruitment/${recruitmentArticle.id}/comment|}">
+                          th:action="@{|/comment/${recruitmentArticle.id}|}">
 
                         <div class="input-group">
                             <input type="text" class="form-control" id="commentInput" placeholder="댓글 입력"
@@ -278,19 +245,6 @@
                                th:field="as">Incorrect content</p>
                             <button class="btn btn-outline-success" type="submit">댓글 작성</button>
                         </div>
-
-
-                        <!--                        <p>-->
-                        <!--                            <textarea th:field="*{content}" rows="5" cols="50" name="content"-->
-                        <!--                                      style="background-color: white"></textarea>-->
-                        <!--                        </p>-->
-                        <!--                        <p th:if="${#fields.hasErrors('content')}" th:errors="*{content}" class="fieldError"-->
-                        <!--                           th:field="as">Incorrect content</p>-->
-
-                        <!--                        <p>-->
-                        <!--                            <button class="btn btn-primary" type="submit">댓글 작성</button>-->
-                        <!--                        </p>-->
-
                     </form>
                 </div>
 
@@ -361,7 +315,7 @@
     <th:block th:replace="~{usr/api/hikingTrail :: hikingTrail()}"></th:block>
     <th:block th:replace="~{usr/api/restaurant :: restaurant}"></th:block>
     <th:block th:replace="~{usr/api/parkingLot :: parkingLot}"></th:block>
-    <th:block th:replace="~{report/report :: reporting()}"></th:block>
+    <th:block th:replace="~{usr/report/report :: reporting()}"></th:block>
 
 </main>
 </body>

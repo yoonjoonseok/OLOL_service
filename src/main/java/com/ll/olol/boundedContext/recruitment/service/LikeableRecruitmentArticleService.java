@@ -1,10 +1,10 @@
-package com.ll.olol.boundedContext.member.service;
+package com.ll.olol.boundedContext.recruitment.service;
 
 import com.ll.olol.base.rsData.RsData;
-import com.ll.olol.boundedContext.member.entity.LikeableRecruitmentArticle;
 import com.ll.olol.boundedContext.member.entity.Member;
-import com.ll.olol.boundedContext.member.repository.LikeableRecruitmentArticleRepository;
+import com.ll.olol.boundedContext.recruitment.entity.LikeableRecruitmentArticle;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
+import com.ll.olol.boundedContext.recruitment.repository.LikeableRecruitmentArticleRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

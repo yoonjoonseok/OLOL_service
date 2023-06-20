@@ -1,7 +1,5 @@
-package com.ll.olol.boundedContext.recruitment;
+package com.ll.olol.boundedContext.recruitment.entity;
 
-import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
-import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticleForm;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

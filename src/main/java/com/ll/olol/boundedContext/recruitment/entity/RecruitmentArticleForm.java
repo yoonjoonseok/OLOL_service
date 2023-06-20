@@ -1,6 +1,5 @@
 package com.ll.olol.boundedContext.recruitment.entity;
 
-import com.ll.olol.boundedContext.recruitment.CreateForm;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
