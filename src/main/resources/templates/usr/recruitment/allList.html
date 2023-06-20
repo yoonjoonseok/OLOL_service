@@ -327,7 +327,7 @@
                                     </div>
 
 
-                                    <div th:if="${recruitmentArticle.getCreateDate().plusHours(3).isAfter(now)}"
+                                    <div th:if="${recruitmentArticle.getCreateDate().plusHours(2).isAfter(now)} and ${recruitmentArticle.getDeadLineDate().isAfter(now)}"
                                          style="margin-right: 3px;">
                                         <span class="border bg-light rounded-4 p-1">
 
