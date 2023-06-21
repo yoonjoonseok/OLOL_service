@@ -7,15 +7,18 @@ import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentPeople;
 import com.ll.olol.boundedContext.recruitment.service.RecruitmentPeopleService;
 import com.ll.olol.boundedContext.recruitment.service.RecruitmentService;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/recruitment")
@@ -26,7 +29,7 @@ public class RecruitmentPeopleController {
     private final MemberService memberService;
     private final RecruitmentService recruitmentService;
     private final RecruitmentPeopleService recruitmentPeopleService;
-    private int limitPeople = 0;
+
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/fromList")
@@ -40,24 +43,32 @@ public class RecruitmentPeopleController {
 
         Long memberId = rq.getMember().getId();
         List<RecruitmentArticle> all = recruitmentService.findAll();
-        List<RecruitmentPeople> list = new ArrayList<>();
+
+        List<RecruitmentPeople> attendList = new ArrayList<>();
+        List<RecruitmentArticle> myArticle = new ArrayList<>();
+
         //모든 게시물중에서
         //내가 쓴 게시물을 찾아서
         //내가 쓴 게시물에 신청자들을 다 뽑아온다.
 
         for (RecruitmentArticle recruitmentArticle : all) {
             if (recruitmentArticle.getMember().getId() == memberId) {
+                myArticle.add(recruitmentArticle);
+
                 List<RecruitmentPeople> recruitmentPeople = recruitmentArticle.getRecruitmentPeople();
                 for (RecruitmentPeople recruitmentPeople1 : recruitmentPeople) {
-                    //신청자가 false일 경우만 추가
-                    if (!recruitmentPeople1.isAttend()) {
-                        list.add(recruitmentPeople1);
-                    }
+
+                    attendList.add(recruitmentPeople1);
+
                 }
             }
         }
 
-        model.addAttribute("attendList", list);
+        //내 게시글에 정보
+        model.addAttribute("myArticle", myArticle);
+        //내 글에 대한 신청자들 정보
+        model.addAttribute("attendList", attendList);
+        model.addAttribute("recruitmentService", recruitmentService);
         return "usr/member/fromAttendList";
     }
 
@@ -86,14 +97,13 @@ public class RecruitmentPeopleController {
         RecruitmentPeople person = recruitmentPeopleService.findOne(id);
         RecruitmentArticle recruitmentArticle = person.getRecruitmentArticle();
         Long recruitsNumbers = recruitmentArticle.getRecruitmentArticleForm().getRecruitsNumbers();
-        if (limitPeople >= recruitsNumbers) {
+        if (recruitmentArticle.getAttend() >= recruitsNumbers) {
             return rq.historyBack("이미 참가 인원이 꽉 찼습니다.");
         }
 
         person.setAttend(true);
 
         recruitmentPeopleService.attend(person);
-        limitPeople++;
         return "redirect:/recruitment/fromList";
     }
 
