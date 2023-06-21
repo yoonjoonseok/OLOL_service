@@ -33,4 +33,9 @@ public class HomeController {
     public String showHello() {
         return "hello";
     }
+
+    @GetMapping("/quiz")
+    public String showQuiz() {
+        return "usr/layout/quiz";
+    }
 }
