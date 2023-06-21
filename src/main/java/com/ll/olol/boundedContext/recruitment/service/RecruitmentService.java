@@ -8,9 +8,19 @@ import com.ll.olol.boundedContext.notification.event.EventAfterUpdateArticle;
 import com.ll.olol.boundedContext.recruitment.entity.CreateForm;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticleForm;
+import com.ll.olol.boundedContext.recruitment.entity.RecruitmentPeople;
 import com.ll.olol.boundedContext.recruitment.repository.RecruitmentFormRepository;
 import com.ll.olol.boundedContext.recruitment.repository.RecruitmentRepository;
-import jakarta.persistence.criteria.*;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.JoinType;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
@@ -20,11 +30,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -150,15 +155,18 @@ public class RecruitmentService {
         return recruitmentRepository.findAll(spec, pageable);
     }
 
-    public Page<RecruitmentArticle> getListByConditions(Long ageRange, int dayNight, int typeValue, String kw, Pageable pageable) {
+    public Page<RecruitmentArticle> getListByConditions(Long ageRange, int dayNight, int typeValue, String kw,
+                                                        Pageable pageable) {
         Specification<RecruitmentArticle> spec = Specification.where(null);
 
         if (ageRange != 0L) {
-            spec = spec.and((root, query, cb) -> cb.equal(root.get("recruitmentArticleForm").get("ageRange"), ageRange));
+            spec = spec.and(
+                    (root, query, cb) -> cb.equal(root.get("recruitmentArticleForm").get("ageRange"), ageRange));
         }
 
         if (dayNight != 0) {
-            spec = spec.and((root, query, cb) -> cb.equal(root.get("recruitmentArticleForm").get("dayNight"), dayNight));
+            spec = spec.and(
+                    (root, query, cb) -> cb.equal(root.get("recruitmentArticleForm").get("dayNight"), dayNight));
         }
 
         if (typeValue != 0) {
@@ -186,12 +194,15 @@ public class RecruitmentService {
     }
 
     public RsData canUpdate(Optional<RecruitmentArticle> recruitmentArticle, Member member) {
-        if (recruitmentArticle.isEmpty())
+        if (recruitmentArticle.isEmpty()) {
             return RsData.of("F-1", "존재하지 않는 모임 공고입니다");
-        if (recruitmentArticle.get().getMember().getId() != member.getId())
+        }
+        if (recruitmentArticle.get().getMember().getId() != member.getId()) {
             return RsData.of("F-2", "모집자만이 수정 가능합니다");
-        if (recruitmentArticle.get().getDeadLineDate().isBefore(LocalDateTime.now()))
+        }
+        if (recruitmentArticle.get().getDeadLineDate().isBefore(LocalDateTime.now())) {
             return RsData.of("F-3", " 마감 후에는 수정이 불가능합니다");
+        }
 
         return RsData.of("S-1", "모임 공고 수정 가능");
     }
@@ -202,11 +213,13 @@ public class RecruitmentService {
     }
 
     public RsData canDelete(Optional<RecruitmentArticle> recruitmentArticle, Member member) {
-        if (recruitmentArticle.isEmpty())
+        if (recruitmentArticle.isEmpty()) {
             return RsData.of("F-1", "존재하지 않는 모임 공고입니다");
+        }
 
-        if (recruitmentArticle.get().getMember().getId() != member.getId() && !member.isAdmin())
+        if (recruitmentArticle.get().getMember().getId() != member.getId() && !member.isAdmin()) {
             return RsData.of("F-2", "모집자만이 삭제 가능합니다");
+        }
 
         return RsData.of("S-1", "모임 공고 삭제 가능");
     }
@@ -215,5 +228,10 @@ public class RecruitmentService {
     public void addView(RecruitmentArticle recruitmentArticle) {
         recruitmentArticle.setViews(recruitmentArticle.getViews() + 1);
         recruitmentRepository.save(recruitmentArticle);
+    }
+
+    public List<RecruitmentPeople> findByRecruitmentPeopleId(Long id) {
+        Optional<RecruitmentArticle> article = findById(id);
+        return article.get().getRecruitmentPeople();
     }
 }
