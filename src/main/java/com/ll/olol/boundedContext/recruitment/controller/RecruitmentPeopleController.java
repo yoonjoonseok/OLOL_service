@@ -43,8 +43,10 @@ public class RecruitmentPeopleController {
 
         Long memberId = rq.getMember().getId();
         List<RecruitmentArticle> all = recruitmentService.findAll();
-        List<RecruitmentPeople> list = new ArrayList<>();
+
+        List<RecruitmentPeople> attendList = new ArrayList<>();
         List<RecruitmentArticle> myArticle = new ArrayList<>();
+
         //모든 게시물중에서
         //내가 쓴 게시물을 찾아서
         //내가 쓴 게시물에 신청자들을 다 뽑아온다.
@@ -52,17 +54,21 @@ public class RecruitmentPeopleController {
         for (RecruitmentArticle recruitmentArticle : all) {
             if (recruitmentArticle.getMember().getId() == memberId) {
                 myArticle.add(recruitmentArticle);
+
                 List<RecruitmentPeople> recruitmentPeople = recruitmentArticle.getRecruitmentPeople();
                 for (RecruitmentPeople recruitmentPeople1 : recruitmentPeople) {
-                    //신청자가 false일 경우만 추가
-                    if (!recruitmentPeople1.isAttend()) {
-                        list.add(recruitmentPeople1);
-                    }
+
+                    attendList.add(recruitmentPeople1);
+
                 }
             }
         }
+
+        //내 게시글에 정보
         model.addAttribute("myArticle", myArticle);
-        model.addAttribute("attendList", list);
+        //내 글에 대한 신청자들 정보
+        model.addAttribute("attendList", attendList);
+        model.addAttribute("recruitmentService", recruitmentService);
         return "usr/member/fromAttendList";
     }
 
@@ -131,15 +137,5 @@ public class RecruitmentPeopleController {
         recruitmentPeopleService.saveRecruitmentPeople(rq.getMember().getId(), id);
 
         return "redirect:/recruitment/" + id;
-    }
-
-    @PreAuthorize("isAuthenticated()")
-    @GetMapping("/{id}/modalAttendList")
-    public String modalAttendList(@PathVariable Long id, Model model) {
-        Optional<RecruitmentArticle> article = recruitmentService.findById(id);
-        List<RecruitmentPeople> recruitmentPeople = article.get().getRecruitmentPeople();
-
-        model.addAttribute("recruitmentPeople", recruitmentPeople);
-        return "usr/member/fromAttendListModal";
     }
 }
