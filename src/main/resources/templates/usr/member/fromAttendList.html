@@ -2,6 +2,9 @@
 <link rel="stylesheet" href="common.css">
 <head>
 </head>
+<style>
+</style>
+
 <body>
 <main layout:fragment="main">
     <div class="container">
@@ -9,43 +12,85 @@
             <div class="col-md-8">
                 <section>
                     <h2>참가자 목록</h2>
-                    <ul th:if="${!#lists.isEmpty(attendList)}" class="list-group">
-                        <li th:each="attendLists: ${attendList}"
-                            class="list-group-item">
-                            <a th:href="@{|/recruitment/${attendLists.recruitmentArticle.id}|}"
-                               th:text="${attendLists.recruitmentArticle.articleName}">
-                                공고 제목</a>
-                            <div class="vr"></div>
-                            <span th:text="${attendLists.member.nickname}">
-                            </span>
-                            <div class="vr"></div>
-                            <span th:text="${attendLists.member.gender}">
-                            </span>
-                            <div class="vr"></div>
-                            <span th:text="${attendLists.member.email}">
-                            </span>
-                            <div class="vr"></div>
-                            <span th:text="${attendLists.member.age}">
-                            </span>
-                            <div class="vr"></div>
-                            <div class="containerIn">
-                                <form th:action="@{|/recruitment/${attendLists.id}/attend/create|}"
-                                      method="POST">
-                                    <button onclick="if ( confirm('수락하시겠습니까?') ) $(this).next().submit();"
-                                            class="btn btn-primary" type="submit">수락
-                                    </button>
-                                </form>
 
-                                <form th:action="@{|/recruitment/${attendLists.id}/attend/delete|}"
-                                      method="POST">
-                                    <button href="javascript:"
-                                            onclick="if ( confirm('거절하시겠습니까?') ) $(this).next().submit();"
-                                            class="btn btn-primary" type="submit">거절
-                                    </button>
-                                </form>
-                            </div>
-                        </li>
-                    </ul>
+
+                    <li class="list-group-item" th:each="myArticleList : ${myArticle}">
+                        <div class="container2">
+                            <a th:href="@{|/recruitment/${myArticleList.id}|}"
+                               th:text="${myArticleList.articleName} "></a>
+
+
+                            </form>
+                            <span th:if="${myArticleList.recruitmentPeople.isEmpty()}">
+                            <i class="fa-regular fa-face-frown-open"> 아직 신청한 사람이 없습니다</i>
+                            <i class="fa-regular fa-face-frown-open"></i>
+
+                        </span>
+                            <details
+                                    th:if="${!recruitmentService.findByRecruitmentPeopleId(myArticleList.id).isEmpty()}">
+                                <summary>참가 인원 보기</summary>
+                                <span th:each="service : ${recruitmentService.findByRecruitmentPeopleId(myArticleList.id)}"
+                                      th:if="${service.isAttend()}">
+                            <span th:text="${service.member.nickname}">
+                                </span>
+                            <div class="vr"></div>
+                            <span th:if="${service.member.gender.equals('female')}"
+                                  th:text="여자">
+                                </span>
+                            <span th:if="${service.member.gender.equals('male')}"
+                                  th:text="남자">
+                                </span>
+                            <div class="vr"></div>
+                            <span th:text="${service.member.email}"></span>
+                            <div class="vr"></div>
+                            <span th:text="${service.member.age}"></span>
+                                    <br>
+                            </span>
+
+                            </details>
+                        </div>
+
+
+                        <ul th:if="${!#lists.isEmpty(attendList)}" class="list-group">
+
+                            <li th:if="${attendLists.recruitmentArticle.id} == ${myArticleList.id} and ${attendLists.isAttend() == false}"
+                                th:each="attendLists: ${attendList}"
+                                class="list-group-item">
+
+
+                                <span th:text="${attendLists.member.nickname}">
+                                </span>
+                                <div class="vr"></div>
+                                <span th:if="${attendLists.member.gender.equals('female')}"
+                                      th:text="여자">
+                                </span>
+                                <span th:if="${attendLists.member.gender.equals('male')}"
+                                      th:text="남자">
+                                </span>
+                                <div class="vr"></div>
+                                <span th:text="${attendLists.member.email}"></span>
+                                <div class="vr"></div>
+                                <span th:text="${attendLists.member.age}"></span>
+                                <div class="vr"></div>
+                                <div class="containerIn">
+                                    <form th:action="@{|/recruitment/${attendLists.id}/attend/create|}"
+                                          method="POST">
+                                        <button class="btn btn-primary" type="submit">수락
+                                        </button>
+                                    </form>
+
+                                    <form th:action="@{|/recruitment/${attendLists.id}/attend/delete|}"
+                                          method="post">
+                                        <button
+                                                class="btn btn-primary" type="submit">거절
+                                        </button>
+                                    </form>
+                                </div>
+                            </li>
+
+                        </ul>
+                    </li>
+
                 </section>
             </div>
         </div>
