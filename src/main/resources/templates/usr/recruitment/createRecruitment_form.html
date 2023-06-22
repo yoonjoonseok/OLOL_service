@@ -2,6 +2,7 @@
 
 <head>
     <title>모집 공고 등록</title>
+    <script src="https://cdn.ckeditor.com/ckeditor5/38.0.1/classic/ckeditor.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
@@ -13,9 +14,9 @@
             background-color: #007bff;
             color: #fff;
         }
+
     </style>
 </head>
-
 <body>
 
 <main layout:fragment="main" class="container">
@@ -25,7 +26,7 @@
         </div>
     </div>
 
-    <form th:action method="post" th:object="${createForm}">
+    <form th:action method="POST" th:object="${createForm}">
         <div th:replace="~{usr/recruitment/form_errors :: formErrorsFragment}"></div>
 
         <div class="row g-3 mb-3 mt-4">
@@ -235,10 +236,12 @@
             <!--
             th:field="*{subject}" ==> id="subject" name="subject" th:value="*{subject}"
             -->
+
+
         </div>
         <div class="mb-3">
             <label for="content" class="form-label">내용</label>
-            <textarea required placeholder="내용" class="form-control" rows="10"
+            <textarea id="editor" name="content"
                       th:field="*{content}"></textarea>
             <!--
             th:field="*{content} ==> id="content" name="content" th:text="*{content}"
@@ -247,10 +250,72 @@
             required를 입력하면 해당칸들을 빈칸으로 넘어갈 수가 없다. 또 "이 입력란을 작성하세요" 라는 메시지가 뜸
             -->
         </div>
-
         <button type="submit" class="btn btn-primary my-2">저장하기</button>
+        <script>
+            ClassicEditor
+                .create(document.querySelector('#editor'), {
+                    toolbar: {
+                        items: [
+                            'heading',
+                            '|',
+                            'fontFamily',
+                            'fontSize',
+                            'fontColor',
+                            'bold',
+                            'underline',
+                            'italic',
+                            'blockQuote',
+                            'specialCharacters',
+                            '|',
+                            'bulletedList',
+                            'numberedList',
+                            'indent',
+                            'outdent',
+                            '|',
+                            'insertTable',
+                            'mediaEmbed',
+                            'link',
+                            'imageUpload',
+                            'undo',
+                            'redo'
+                        ]
+                    },
+                    language: 'ko',
+                    image: {
+                        toolbar: [
+                            'imageTextAlternative',
+                            'imageStyle:full',
+                            'imageStyle:side'
+                        ]
+                    },
+                    table: {
+                        contentToolbar: [
+                            'tableColumn',
+                            'tableRow',
+                            'mergeTableCells',
+                            'tableCellProperties',
+                            'tableProperties'
+                        ]
+                    },
+                    licenseKey: '',
+                })
+                .then(editor => {
+                    window.editor = editor;
+                })
+                .catch(error => {
+                    console.error('Oops, something went wrong!');
+                    console.error('Please, report the following error on https://github.com/ckeditor/ckeditor5/issues with the build id and the error stack trace:');
+
+                    console.error(error);
+                });
+
+        </script>
+
     </form>
+
+
 </main>
+
 
 </body>
 
