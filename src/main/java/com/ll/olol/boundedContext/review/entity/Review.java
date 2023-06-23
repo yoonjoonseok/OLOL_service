@@ -1,8 +1,11 @@
-package com.ll.olol.boundedContext.recruitment.entity;
+package com.ll.olol.boundedContext.review.entity;
 
 import com.ll.olol.boundedContext.member.entity.Member;
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.ToString;
 import lombok.experimental.SuperBuilder;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -18,19 +21,22 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 @EntityListeners(AuditingEntityListener.class)
 @SuperBuilder
 @ToString
-public class LikeableRecruitmentArticle {
+public class Review {
     @Id
     @GeneratedValue(strategy = IDENTITY)
     private Long id;
 
     @CreatedDate
-    private LocalDateTime createDate;
+    LocalDateTime createDate;
+
 
     @ManyToOne
-    @Setter //
-    private RecruitmentArticle recruitmentArticle;
+    Member toMember;
 
     @ManyToOne
-    private Member fromMember;
+    Member fromMember;
+
+    private int reviewTypeCode; // 매력포인트(1 = 최고에요, 2 = 좋아요, 3 = 별로에요)
+
     
 }
