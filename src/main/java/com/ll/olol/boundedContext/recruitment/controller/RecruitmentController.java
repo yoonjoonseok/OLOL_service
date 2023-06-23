@@ -124,14 +124,14 @@ public class RecruitmentController {
     // @Valid QuestionForm questionForm
     // questionForm 값을 바인딩 할 때 유효성 체크를 해라!
     // questionForm 변수와 bindingResult 변수는 model.addAttribute 없이 바로 뷰에서 접근할 수 있다.
-    public String questionCreate(@RequestParam("content") String content, @Valid CreateForm createForm,
+    public String questionCreate(@Valid CreateForm createForm,
                                  BindingResult bindingResult, Principal principal) {
         if (bindingResult.hasErrors()) {
             return "usr/recruitment/createRecruitment_form";
         }
-        System.out.println("content = " + content);
+        
         RecruitmentArticle recruitmentArticle = recruitmentService.createArticle(createForm.getArticleName(),
-                content, rq.getMember(), createForm.getTypeValue(), createForm.getDeadLineDate());
+                createForm.getContent(), rq.getMember(), createForm.getTypeValue(), createForm.getDeadLineDate());
         recruitmentService.createArticleForm(recruitmentArticle, createForm.getDayNight(),
                 createForm.getRecruitsNumber(), createForm.getMountainName(), createForm.getMtAddress(),
                 createForm.getAgeRange(), createForm.getConnectType(), createForm.getStartTime(),
