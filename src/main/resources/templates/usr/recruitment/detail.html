@@ -168,12 +168,16 @@
                             <span class="fs-5 fw-bold"
                                   th:text="${recruitmentArticle.getDeadLineDateToString()}">마감일</span>
                             <div class="containerIn">
-                                <form th:if="${nowDate.isBefore(recruitmentArticle.getDeadLineDate())} and ${recruitmentArticle.getAttend() != recruitmentArticle.getRecruitmentArticleForm().recruitsNumbers}">
-                                    <button type="button"
-                                            class="btn btn-outline-success btn-sm"
-                                            th:onclick="|location.href='@{/recruitment/{id}/attend (id=${recruitmentArticle.id})}'|">
+                                <form th:if="${nowDate.isBefore(recruitmentArticle.getDeadLineDate())} and ${recruitmentArticle.getAttend() != recruitmentArticle.getRecruitmentArticleForm().recruitsNumbers}"
+                                      th:action="@{/recruitment/{id}/attend (id=${recruitmentArticle.id})}"
+                                      method="post">
+                                    <button class="btn btn-outline-success btn-sm"
+                                            type="button"
+                                            href="javascript:"
+                                            onclick="if ( confirm('신청하시겠습니까?') ) $(this).closest('form').submit();">
                                         신청
                                     </button>
+
                                 </form>
                                 <form th:if="${nowDate.isBefore(recruitmentArticle.getDeadLineDate())} and ${recruitmentArticle.getAttend() != recruitmentArticle.getRecruitmentArticleForm().recruitsNumbers}"
                                       th:action="@{/recruitment/{id}/deadLine (id=${recruitmentArticle.id})}"
@@ -290,12 +294,16 @@
                         <div class="vr"></div>
                         <span class="fs-5" th:text="${recruitmentArticle.getDeadLineDateToString()}">마감일</span>
                         <div class="containerIn d-flex justify-content-end mb-3">
-                            <form th:if="${nowDate.isBefore(recruitmentArticle.getDeadLineDate())} and ${recruitmentArticle.getAttend() != recruitmentArticle.getRecruitmentArticleForm().recruitsNumbers}">
-                                <button type="button"
-                                        class="btn btn-outline-success btn-sm"
-                                        th:onclick="|location.href='@{/recruitment/{id}/attend (id=${recruitmentArticle.id})}'|">
+                            <form th:if="${nowDate.isBefore(recruitmentArticle.getDeadLineDate())} and ${recruitmentArticle.getAttend() != recruitmentArticle.getRecruitmentArticleForm().recruitsNumbers}"
+                                  th:action="@{/recruitment/{id}/attend (id=${recruitmentArticle.id})}"
+                                  method="post">
+                                <button class="btn btn-outline-success btn-sm"
+                                        type="button"
+                                        href="javascript:"
+                                        onclick="if ( confirm('신청하시겠습니까?') ) $(this).closest('form').submit();">
                                     신청
                                 </button>
+
                             </form>
                             <form th:if="${nowDate.isBefore(recruitmentArticle.getDeadLineDate())} and ${recruitmentArticle.getAttend() != recruitmentArticle.getRecruitmentArticleForm().recruitsNumbers}"
                                   th:action="@{/recruitment/{id}/deadLine (id=${recruitmentArticle.id})}"

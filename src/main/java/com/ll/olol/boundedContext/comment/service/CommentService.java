@@ -9,13 +9,12 @@ import com.ll.olol.boundedContext.member.entity.Member;
 import com.ll.olol.boundedContext.notification.event.EventAfterComment;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
 import com.ll.olol.boundedContext.recruitment.repository.RecruitmentRepository;
+import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -57,8 +56,12 @@ public class CommentService {
     @Transactional
     public RsData update(Long id, String content) {
         Comment updateComment = findOne(id);
+        RsData rsData = isEqualMemberById(id);
         if (updateComment == null) {
             return RsData.of("F-1", "업데이트 하려는 댓글이 없습니다.");
+        }
+        if (rsData.isFail()) {
+            return isEqualMemberById(id);
         }
         updateComment.setContent(content);
         return RsData.of("S-1", "댓글 수정 성공");
@@ -67,8 +70,12 @@ public class CommentService {
     @Transactional
     public RsData commentDelete(Long id) {
         Optional<Comment> id1 = commentRepository.findById(id);
+        RsData rsData = isEqualMemberById(id);
         if (id1.isEmpty()) {
             return RsData.of("F-1", "삭제하려는 댓글이 없습니다.");
+        }
+        if (rsData.isFail()) {
+            return isEqualMemberById(id);
         }
         commentRepository.delete(id1.get());
         return RsData.of("S-1", "댓글 삭제 성공");

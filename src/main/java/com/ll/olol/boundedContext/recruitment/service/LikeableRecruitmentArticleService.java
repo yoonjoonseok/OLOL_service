@@ -5,12 +5,11 @@ import com.ll.olol.boundedContext.member.entity.Member;
 import com.ll.olol.boundedContext.recruitment.entity.LikeableRecruitmentArticle;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
 import com.ll.olol.boundedContext.recruitment.repository.LikeableRecruitmentArticleRepository;
+import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -19,7 +18,7 @@ public class LikeableRecruitmentArticleService {
     private final LikeableRecruitmentArticleRepository likeableRecruitmentArticleRepository;
 
     @Transactional
-    public void add(RecruitmentArticle recruitmentArticle, Member actor) {
+    public RsData add(RecruitmentArticle recruitmentArticle, Member actor) {
         LikeableRecruitmentArticle likeableRecruitmentArticle = LikeableRecruitmentArticle
                 .builder()
                 .recruitmentArticle(recruitmentArticle)
@@ -27,33 +26,40 @@ public class LikeableRecruitmentArticleService {
                 .build();
 
         likeableRecruitmentArticleRepository.save(likeableRecruitmentArticle);
+        return RsData.of("S-1", "찜 성공");
     }
 
     public RsData canAdd(Optional<RecruitmentArticle> recruitmentArticle, Member actor) {
-        if (recruitmentArticle.isEmpty())
+        if (recruitmentArticle.isEmpty()) {
             return RsData.of("F-1", "존재하지 않는 모임 공고입니다");
+        }
 
-        Optional<LikeableRecruitmentArticle> likeableRecruitmentArticle = likeableRecruitmentArticleRepository.findByRecruitmentArticleAndFromMember(recruitmentArticle.get(), actor);
+        Optional<LikeableRecruitmentArticle> likeableRecruitmentArticle = likeableRecruitmentArticleRepository.findByRecruitmentArticleAndFromMember(
+                recruitmentArticle.get(), actor);
 
-        if (likeableRecruitmentArticle.isPresent())
+        if (likeableRecruitmentArticle.isPresent()) {
             return RsData.of("F-2", "이미 찜한 모임 공고입니다");
+        }
 
         return RsData.of("S-1", "찜 가능한 모임 공고입니다");
     }
 
     @Transactional
-    public void cancel(LikeableRecruitmentArticle likeableRecruitmentArticle) {
+    public RsData cancel(LikeableRecruitmentArticle likeableRecruitmentArticle) {
         likeableRecruitmentArticleRepository.delete(likeableRecruitmentArticle);
+        return RsData.of("S-1", "찜 삭제 성공");
     }
 
     public RsData canCancel(Optional<LikeableRecruitmentArticle> likeableRecruitmentArticle, Member actor) {
-        if (likeableRecruitmentArticle.isEmpty())
+        if (likeableRecruitmentArticle.isEmpty()) {
             return RsData.of("F-1", "존재하지 않는 찜입니다");
+        }
 
-        if (actor.getId() != likeableRecruitmentArticle.get().getFromMember().getId())
+        if (actor.getId() != likeableRecruitmentArticle.get().getFromMember().getId()) {
             return RsData.of("F-2", "사용자가 일치하지 않습니다");
+        }
 
-        return RsData.of("S-1", "찜 취소가 가능합니다");
+        return RsData.of("S-1", "찜 취소 가능한 모임 공고입니다");
     }
 
     public List<LikeableRecruitmentArticle> findByFromMember(Member FromMember) {
