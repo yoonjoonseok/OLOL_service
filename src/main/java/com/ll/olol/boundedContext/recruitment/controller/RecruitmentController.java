@@ -13,6 +13,11 @@ import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
 import com.ll.olol.boundedContext.recruitment.service.LikeableRecruitmentArticleService;
 import com.ll.olol.boundedContext.recruitment.service.RecruitmentService;
 import jakarta.validation.Valid;
+import java.security.Principal;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,13 +27,13 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
-
-import java.security.Principal;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequestMapping("/recruitment")
@@ -119,11 +124,12 @@ public class RecruitmentController {
     // @Valid QuestionForm questionForm
     // questionForm 값을 바인딩 할 때 유효성 체크를 해라!
     // questionForm 변수와 bindingResult 변수는 model.addAttribute 없이 바로 뷰에서 접근할 수 있다.
-    public String questionCreate(@Valid CreateForm createForm, BindingResult bindingResult, Principal principal) {
+    public String questionCreate(@Valid CreateForm createForm,
+                                 BindingResult bindingResult, Principal principal) {
         if (bindingResult.hasErrors()) {
             return "usr/recruitment/createRecruitment_form";
         }
-
+        
         RecruitmentArticle recruitmentArticle = recruitmentService.createArticle(createForm.getArticleName(),
                 createForm.getContent(), rq.getMember(), createForm.getTypeValue(), createForm.getDeadLineDate());
         recruitmentService.createArticleForm(recruitmentArticle, createForm.getDayNight(),
@@ -188,8 +194,9 @@ public class RecruitmentController {
         recruitmentService.deleteArticle(recruitmentArticle.get());
 
         // admin 이면 신고된 게시글 삭제시 뒤로가기
-        if (rq.getMember().isAdmin())
+        if (rq.getMember().isAdmin()) {
             return rq.historyBack(canDeleteRsData.getMsg());
+        }
 
         return "redirect:/";
     }
@@ -214,8 +221,9 @@ public class RecruitmentController {
 
         RsData canAddRsData = likeableRecruitmentArticleService.canAdd(recruitmentArticle, actor);
 
-        if (canAddRsData.isFail())
+        if (canAddRsData.isFail()) {
             return rq.historyBack(canAddRsData);
+        }
 
         likeableRecruitmentArticleService.add(recruitmentArticle.get(), actor);
 
@@ -225,12 +233,15 @@ public class RecruitmentController {
 
     @DeleteMapping("/{id}/bookmark")
     public String cancel(@PathVariable Long id) {
-        Optional<LikeableRecruitmentArticle> likeableRecruitmentArticle = likeableRecruitmentArticleService.findById(id);
+        Optional<LikeableRecruitmentArticle> likeableRecruitmentArticle = likeableRecruitmentArticleService.findById(
+                id);
 
-        RsData canCancelRsData = likeableRecruitmentArticleService.canCancel(likeableRecruitmentArticle, rq.getMember());
+        RsData canCancelRsData = likeableRecruitmentArticleService.canCancel(likeableRecruitmentArticle,
+                rq.getMember());
 
-        if (canCancelRsData.isFail())
+        if (canCancelRsData.isFail()) {
             return rq.historyBack(canCancelRsData);
+        }
 
         likeableRecruitmentArticleService.cancel(likeableRecruitmentArticle.get());
 
