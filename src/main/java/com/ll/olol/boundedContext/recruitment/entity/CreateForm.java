@@ -1,13 +1,16 @@
 package com.ll.olol.boundedContext.recruitment.entity;
 
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
-
-import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @Getter
@@ -20,7 +23,7 @@ public class CreateForm {
     @Size(max = 65, message = "제목을 200자 이하로 설정해주세요.") // 최대 200까지 가능하다.
     private String articleName;
 
-    @NotBlank(message = "내용은 필수항목입니다.")
+
     @Size(max = 100000, message = "제목을 20000자 이하로 설정해주세요.")
     private String content;
 

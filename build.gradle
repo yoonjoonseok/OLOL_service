@@ -39,7 +39,7 @@ dependencies {
 
     implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect' // 타임리프에서 layout.html 사용하려고
 
-    implementation 'com.google.firebase:firebase-admin:9.1.1'
+    implementation 'org.commonmark:commonmark:0.21.0'//마크다운 문법
 }
 
 tasks.named('test') {
