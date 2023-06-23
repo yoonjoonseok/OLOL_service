@@ -172,12 +172,12 @@ public class RecruitmentController {
             return rq.historyBack(canUpdateRsData);
         }
 
-        recruitmentService.update(recruitmentArticle.get(), createForm);
+        RsData rsData = recruitmentService.update(recruitmentArticle.get(), createForm);
 
         recruitmentArticle.get().update(createForm);
         recruitmentArticle.get().getRecruitmentArticleForm().update(createForm);
 
-        return rq.redirectWithMsg("/recruitment/" + id, canUpdateRsData);
+        return rq.redirectWithMsg("/recruitment/" + id, rsData);
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -190,14 +190,14 @@ public class RecruitmentController {
             return rq.historyBack(canDeleteRsData);
         }
 
-        recruitmentService.deleteArticle(recruitmentArticle.get());
+        RsData rsData = recruitmentService.deleteArticle(recruitmentArticle.get());
 
         // admin 이면 신고된 게시글 삭제시 뒤로가기
         if (rq.getMember().isAdmin()) {
             return rq.historyBack(canDeleteRsData.getMsg());
         }
 
-        return rq.redirectWithMsg("/recruitment/list", canDeleteRsData);
+        return rq.redirectWithMsg("/recruitment/list", rsData);
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -223,10 +223,10 @@ public class RecruitmentController {
             return rq.historyBack(canAddRsData);
         }
 
-        likeableRecruitmentArticleService.add(recruitmentArticle.get(), actor);
+        RsData rsData = likeableRecruitmentArticleService.add(recruitmentArticle.get(), actor);
 
         //return "redirect:/recruitment/" + id;
-        return rq.redirectWithMsg("/member/mypage", canAddRsData);
+        return rq.redirectWithMsg("/member/mypage", rsData);
     }
 
     @DeleteMapping("/{id}/bookmark")
@@ -241,9 +241,9 @@ public class RecruitmentController {
             return rq.historyBack(canCancelRsData);
         }
 
-        likeableRecruitmentArticleService.cancel(likeableRecruitmentArticle.get());
+        RsData rsData = likeableRecruitmentArticleService.cancel(likeableRecruitmentArticle.get());
 
-        return rq.redirectWithMsg("/member/mypage", canCancelRsData);
+        return rq.redirectWithMsg("/member/mypage", rsData);
 
     }
 }

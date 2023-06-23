@@ -32,7 +32,7 @@ public class ReportService {
 //    }
 
     @Transactional
-    public void report(RecruitmentArticle recruitmentArticle, Member actor, int reason) {
+    public RsData report(RecruitmentArticle recruitmentArticle, Member actor, int reason) {
 
         ArticleReport articleReport = ArticleReport
                 .builder()
@@ -42,6 +42,7 @@ public class ReportService {
                 .build();
 
         reportRepository.save(articleReport);
+        return RsData.of("S-1", "신고 완료");
     }
 
     public RsData canReport(RecruitmentArticle recruitmentArticle, Member actor) {
@@ -55,7 +56,7 @@ public class ReportService {
             return RsData.of("F-2", "이미 신고한 모임 공고입니다");
         }
 
-        return RsData.of("S-1", "신고 완료");
+        return RsData.of("S-1", "신고 가능한 모임 공고입니다.");
     }
 
     public List<ArticleReport> findAll() {

@@ -88,25 +88,25 @@ public class RecruitmentPeopleController {
     @PostMapping("/{id}/attend/delete")
     public String deleteAttend(@PathVariable Long id) {
         RecruitmentPeople one = recruitmentPeopleService.findOne(id);
-        RsData<Object> delete = recruitmentPeopleService.delete(one);
-        if (delete.isFail()) {
-            return rq.historyBack(delete);
+        RsData<Object> rsData = recruitmentPeopleService.delete(one);
+        if (rsData.isFail()) {
+            return rq.historyBack(rsData);
         }
 
-        return rq.redirectWithMsg("/recruitment/fromList", delete);
+        return rq.redirectWithMsg("/recruitment/fromList", rsData);
     }
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/{id}/attend/create")
     public String createAttend(@PathVariable Long id) {
         RecruitmentPeople person = recruitmentPeopleService.findOne(id);
-        RsData attend = recruitmentPeopleService.attend(person);
+        RsData rsData = recruitmentPeopleService.attend(person);
 
-        if (attend.isFail()) {
-            return rq.historyBack(attend);
+        if (rsData.isFail()) {
+            return rq.historyBack(rsData);
         }
 
-        return rq.redirectWithMsg("/recruitment/fromList", attend);
+        return rq.redirectWithMsg("/recruitment/fromList", rsData);
     }
 
     @PreAuthorize("isAuthenticated()")

@@ -52,9 +52,9 @@ public class ReportController {
             return rq.historyBack(canAddRsData);
         }
 
-        reportService.report(recruitmentArticle, actor, reason);
+        RsData report = reportService.report(recruitmentArticle, actor, reason);
 
-        return rq.redirectWithMsg("/recruitment/" + id, canAddRsData);
+        return rq.redirectWithMsg("/recruitment/" + id, report);
         //return "redirect:/recruit/bookmark";
     }
 
