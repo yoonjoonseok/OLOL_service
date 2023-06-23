@@ -209,7 +209,6 @@ public class RecruitmentController {
         if (rsData.isFail()) {
             return rq.historyBack(rsData);
         }
-
         return rq.redirectWithMsg("/recruitment/" + id, rsData);
     }
 
