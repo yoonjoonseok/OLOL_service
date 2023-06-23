@@ -136,8 +136,8 @@ public class RecruitmentController {
                 createForm.getRecruitsNumber(), createForm.getMountainName(), createForm.getMtAddress(),
                 createForm.getAgeRange(), createForm.getConnectType(), createForm.getStartTime(),
                 createForm.getCourseTime());
-
-        return "redirect:/";
+        RsData rsdata = RsData.of("S-1", "모임 글 작성 성공");
+        return rq.redirectWithMsg("/recruitment/list", rsdata.getMsg());
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -173,12 +173,12 @@ public class RecruitmentController {
             return rq.historyBack(canUpdateRsData);
         }
 
-        recruitmentService.update(recruitmentArticle.get(), createForm);
+        RsData rsData = recruitmentService.update(recruitmentArticle.get(), createForm);
 
         recruitmentArticle.get().update(createForm);
         recruitmentArticle.get().getRecruitmentArticleForm().update(createForm);
 
-        return "redirect:/recruitment/" + id;
+        return rq.redirectWithMsg("/recruitment/" + id, rsData);
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -191,27 +191,26 @@ public class RecruitmentController {
             return rq.historyBack(canDeleteRsData);
         }
 
-        recruitmentService.deleteArticle(recruitmentArticle.get());
+        RsData rsData = recruitmentService.deleteArticle(recruitmentArticle.get());
 
         // admin 이면 신고된 게시글 삭제시 뒤로가기
         if (rq.getMember().isAdmin()) {
             return rq.historyBack(canDeleteRsData.getMsg());
         }
 
-        return "redirect:/";
+        return rq.redirectWithMsg("/recruitment/list", rsData);
     }
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/{id}/deadLine")
     public String deadLineForm(@PathVariable Long id, @ModelAttribute RecruitmentArticle recruitmentArticle) {
         Optional<RecruitmentArticle> article = recruitmentService.findById(id);
-        if (rq.getMember().getId() != article.get().getMember().getId()) {
-            return rq.historyBack("만든 사람만 마감버튼을 누를 수 있어요.");
+        RsData rsData = recruitmentService.deadLine(rq.getMember(), article.get());
+
+        if (rsData.isFail()) {
+            return rq.historyBack(rsData);
         }
-        article.get().setDeadLineDate(LocalDateTime.now());
-        //마감 버튼을 누르면 마감 시간을 현재 시간으로 바꿈
-        recruitmentService.updateArticleForm(article.get());
-        return "redirect:/recruitment/" + id;
+        return rq.redirectWithMsg("/recruitment/" + id, rsData);
     }
 
     @PostMapping("/{id}/bookmark")
@@ -225,10 +224,10 @@ public class RecruitmentController {
             return rq.historyBack(canAddRsData);
         }
 
-        likeableRecruitmentArticleService.add(recruitmentArticle.get(), actor);
+        RsData rsData = likeableRecruitmentArticleService.add(recruitmentArticle.get(), actor);
 
         //return "redirect:/recruitment/" + id;
-        return "redirect:/member/mypage";
+        return rq.redirectWithMsg("/member/mypage", rsData);
     }
 
     @DeleteMapping("/{id}/bookmark")
@@ -243,8 +242,9 @@ public class RecruitmentController {
             return rq.historyBack(canCancelRsData);
         }
 
-        likeableRecruitmentArticleService.cancel(likeableRecruitmentArticle.get());
+        RsData rsData = likeableRecruitmentArticleService.cancel(likeableRecruitmentArticle.get());
 
-        return "redirect:/member/mypage";
+        return rq.redirectWithMsg("/member/mypage", rsData);
+
     }
 }

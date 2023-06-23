@@ -5,7 +5,14 @@ import com.ll.olol.boundedContext.member.entity.Member;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
 import com.ll.olol.boundedContext.report.entity.ArticleReport;
 import com.ll.olol.boundedContext.report.repository.ReportRepository;
-import jakarta.persistence.criteria.*;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Join;
+import jakarta.persistence.criteria.JoinType;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -15,9 +22,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true) // 아래 메서드들이 전부 readonly 라는 것을 명시, 나중을 위해
@@ -25,8 +29,7 @@ public class ReportService {
     private final ReportRepository reportRepository;
 
     @Transactional
-    public void report(RecruitmentArticle recruitmentArticle, Member actor, int reason) {
-
+    public RsData report(RecruitmentArticle recruitmentArticle, Member actor, int reason) {
 
         ArticleReport articleReport = ArticleReport
                 .builder()
@@ -36,18 +39,21 @@ public class ReportService {
                 .build();
 
         reportRepository.save(articleReport);
+        return RsData.of("S-1", "신고 완료");
     }
 
     public RsData canReport(RecruitmentArticle recruitmentArticle, Member actor) {
-        if (recruitmentArticle == null)
+        if (recruitmentArticle == null) {
             return RsData.of("F-1", "존재하지 않는 모임 공고입니다");
+        }
 
         ArticleReport articleReport = reportRepository.findByRecruitmentArticleAndFromMember(recruitmentArticle, actor);
 
-        if (articleReport != null)
+        if (articleReport != null) {
             return RsData.of("F-2", "이미 신고한 모임 공고입니다");
+        }
 
-        return RsData.of("S-1", "신고 가능한 모임 공고입니다");
+        return RsData.of("S-1", "신고 가능한 모임 공고입니다.");
     }
 
     public List<ArticleReport> findAll() {
