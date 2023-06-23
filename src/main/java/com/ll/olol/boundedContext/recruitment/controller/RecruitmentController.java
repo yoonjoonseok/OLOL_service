@@ -147,7 +147,7 @@ public class RecruitmentController {
 
         createForm.set(recruitmentArticle.get());
 
-        return "usr/recruitment/updateRecruitment_form";
+        return "usr/recruitment/createRecruitment_form";
     }
 
     @PreAuthorize("isAuthenticated()")
@@ -157,7 +157,7 @@ public class RecruitmentController {
     // questionForm 변수와 bindingResult 변수는 model.addAttribute 없이 바로 뷰에서 접근할 수 있다.
     public String update(@PathVariable Long id, @Valid CreateForm createForm, BindingResult bindingResult) {
         if (bindingResult.hasErrors()) {
-            return "usr/recruitment/updateRecruitment_form";
+            return "usr/recruitment/createRecruitment_form";
         }
 
         Optional<RecruitmentArticle> recruitmentArticle = recruitmentService.findById(id);

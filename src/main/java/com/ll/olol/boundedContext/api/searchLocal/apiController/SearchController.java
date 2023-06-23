@@ -21,19 +21,21 @@ public class SearchController {
     }
 
     @PostMapping("/search")
-    public List<String> search(@RequestParam String query) {
+    public List<SearchLocalRes.Item> search(@RequestParam String query) {
         SearchLocalReq searchLocalReq = new SearchLocalReq();
         searchLocalReq.setQuery(query);
 
         SearchLocalRes searchLocalRes = naverSearchClient.searchLocal(searchLocalReq);
 
-        List<String> addresses = new ArrayList<>();
+        List<SearchLocalRes.Item> items = new ArrayList<>();
+
         if (searchLocalRes != null && searchLocalRes.getItems() != null) {
             for (SearchLocalRes.Item item : searchLocalRes.getItems()) {
-                addresses.add(item.getAddress());
+                String category = item.getCategory();
+                if (category.equals("여행,명소>산,고개") || category.equals("지명>산"))
+                    items.add(item);
             }
         }
-
-        return addresses;
+        return items;
     }
 }
