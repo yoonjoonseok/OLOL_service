@@ -211,7 +211,7 @@ public class RecruitmentController {
     public String add(@PathVariable Long id) {
         Optional<RecruitmentArticle> recruitmentArticle = recruitmentService.findById(id);
         Member actor = rq.getMember();
-
+        
         RsData canAddRsData = likeableRecruitmentArticleService.canAdd(recruitmentArticle, actor);
 
         if (canAddRsData.isFail())
