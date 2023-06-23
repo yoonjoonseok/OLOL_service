@@ -12,6 +12,9 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -21,10 +24,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/member")
@@ -45,7 +44,8 @@ public class MemberController {
         List<RecruitmentPeople> recruitmentPeople = member.get().getRecruitmentPeople();
         model.addAttribute("peopleList", recruitmentPeople);
 
-        List<LikeableRecruitmentArticle> likeableRecruitmentArticles = likeableRecruitmentArticleService.findByFromMember(actor);
+        List<LikeableRecruitmentArticle> likeableRecruitmentArticles = likeableRecruitmentArticleService.findByFromMember(
+                actor);
         Collections.reverse(likeableRecruitmentArticles);
         model.addAttribute("likeableRecruitmentArticles", likeableRecruitmentArticles);
         return "usr/layout/myPage";
@@ -72,12 +72,13 @@ public class MemberController {
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/mypage")
     public String editInfo(@Valid EditForm editForm) {
-        RsData result = memberService.modifyMemberInfo(rq.getMember(), editForm.getNickname(), editForm.getAgeRange(), editForm.getGender(), editForm.getEmail());
+        RsData result = memberService.modifyMemberInfo(rq.getMember(), editForm.getNickname(), editForm.getAgeRange(),
+                editForm.getGender(), editForm.getEmail());
         if (result.isFail()) {
             rq.historyBack("다시 시도해주세요");
         }
 
-        return "redirect:/";
+        return rq.redirectWithMsg("/recruitment/list", result.getMsg());
     }
 
     @PreAuthorize("isAnonymous()")

@@ -204,7 +204,7 @@ public class RecruitmentService {
             return RsData.of("F-3", " 마감 후에는 수정이 불가능합니다");
         }
 
-        return RsData.of("S-1", "모임 공고 수정 가능");
+        return RsData.of("S-1", "모임 글 수정 완료");
     }
 
     @Transactional
@@ -221,7 +221,7 @@ public class RecruitmentService {
             return RsData.of("F-2", "모집자만이 삭제 가능합니다");
         }
 
-        return RsData.of("S-1", "모임 공고 삭제 가능");
+        return RsData.of("S-1", "모임 삭제 완료");
     }
 
     @Transactional
@@ -233,5 +233,14 @@ public class RecruitmentService {
     public List<RecruitmentPeople> findByRecruitmentPeopleId(Long id) {
         Optional<RecruitmentArticle> article = findById(id);
         return article.get().getRecruitmentPeople();
+    }
+
+    @Transactional
+    public RsData deadLine(Member member, RecruitmentArticle article) {
+        if (member.getId() != article.getMember().getId()) {
+            return RsData.of("F-1", "만든 사람만 마감버튼을 누를 수 있어요.");
+        }
+        article.setDeadLineDate(LocalDateTime.now());
+        return RsData.of("S-1", "마감 성공공");
     }
 }
