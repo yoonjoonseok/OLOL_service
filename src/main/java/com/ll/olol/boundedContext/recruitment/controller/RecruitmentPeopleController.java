@@ -70,7 +70,6 @@ public class RecruitmentPeopleController {
         model.addAttribute("myArticle", myArticle);
         //내 글에 대한 신청자들 정보
         model.addAttribute("attendList", attendList);
-        model.addAttribute("recruitmentService", recruitmentService);
         return "usr/member/fromAttendList";
     }
 
