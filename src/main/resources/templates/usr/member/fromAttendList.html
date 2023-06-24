@@ -32,11 +32,11 @@
                                 <span th:each="recruitmentPeople : ${@recruitmentService.findByRecruitmentPeopleId(myArticleList.id)}"
                                       th:if="${recruitmentPeople.isAttend()}">
 
-
                                     <span th:text="${recruitmentPeople.member.nickname}"></span>
                                     <div class="vr"></div>
 
-                                    <span th:if="${recruitmentPeople.member.gender.equals('female')}" th:text="여자"></span>
+                                    <span th:if="${recruitmentPeople.member.gender.equals('female')}"
+                                          th:text="여자"></span>
                                     <span th:if="${recruitmentPeople.member.gender.equals('male')}" th:text="남자"></span>
                                     <div class="vr"></div>
                                     <span th:text="${recruitmentPeople.member.email}"></span>
@@ -58,10 +58,9 @@
                         </div>
 
 
-                        <ul th:if="${!#lists.isEmpty(attendList)}" class="list-group">
-
-                            <li th:if="${attendLists.recruitmentArticle.id} == ${myArticleList.id} and ${attendLists.isAttend() == false}"
-                                th:each="attendLists: ${attendList}"
+                        <ul th:if="${!@recruitmentService.findByRecruitmentPeopleId(myArticleList.id).isEmpty()}" class="list-group">
+                            <li th:each="attendLists : ${@recruitmentService.findByRecruitmentPeopleId(myArticleList.id)}"
+                                th:if="${attendLists.isAttend() == false}"
                                 class="list-group-item">
 
 

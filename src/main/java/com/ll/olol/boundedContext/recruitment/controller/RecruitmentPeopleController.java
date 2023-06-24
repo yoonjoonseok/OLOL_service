@@ -59,9 +59,7 @@ public class RecruitmentPeopleController {
 
                 List<RecruitmentPeople> recruitmentPeople = recruitmentArticle.getRecruitmentPeople();
                 for (RecruitmentPeople recruitmentPeople1 : recruitmentPeople) {
-
                     attendList.add(recruitmentPeople1);
-
                 }
             }
         }

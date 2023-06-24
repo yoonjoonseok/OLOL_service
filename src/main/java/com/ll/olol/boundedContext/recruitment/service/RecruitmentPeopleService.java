@@ -86,8 +86,9 @@ public class RecruitmentPeopleService {
         return RsData.of("S-1", "수락 완료");
     }
 
+    @Transactional
     public RsData deport(RecruitmentPeople recruitmentPeople) {
-        delete(recruitmentPeople);
+        recruitmentPeopleRepository.delete(recruitmentPeople);
         publisher.publishEvent(new EventAfterDeportPeople(this, recruitmentPeople));
         return RsData.of("S-1", "추방 완료");
     }
