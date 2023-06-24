@@ -129,7 +129,7 @@ public class RecruitmentController {
         if (bindingResult.hasErrors()) {
             return "usr/recruitment/createRecruitment_form";
         }
-        
+
         RecruitmentArticle recruitmentArticle = recruitmentService.createArticle(createForm.getArticleName(),
                 createForm.getContent(), rq.getMember(), createForm.getTypeValue(), createForm.getDeadLineDate());
         recruitmentService.createArticleForm(recruitmentArticle, createForm.getDayNight(),
@@ -213,11 +213,12 @@ public class RecruitmentController {
         return rq.redirectWithMsg("/recruitment/" + id, rsData);
     }
 
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/{id}/bookmark")
     public String add(@PathVariable Long id) {
         Optional<RecruitmentArticle> recruitmentArticle = recruitmentService.findById(id);
         Member actor = rq.getMember();
-        
+
         RsData canAddRsData = likeableRecruitmentArticleService.canAdd(recruitmentArticle, actor);
 
         if (canAddRsData.isFail()) {
@@ -230,6 +231,7 @@ public class RecruitmentController {
         return rq.redirectWithMsg("/member/mypage", rsData);
     }
 
+    @PreAuthorize("isAuthenticated()")
     @DeleteMapping("/{id}/bookmark")
     public String cancel(@PathVariable Long id) {
         Optional<LikeableRecruitmentArticle> likeableRecruitmentArticle = likeableRecruitmentArticleService.findById(
