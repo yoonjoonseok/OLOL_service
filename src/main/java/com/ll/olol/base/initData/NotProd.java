@@ -65,6 +65,9 @@ public class NotProd {
             em.persist(notification);
             em.persist(notification1);
 
+            Member member_jun = createMember(20, "남자", "KAKAO__2867045488", "1234", "test@test.com", "검성 장영실", LocalDateTime.now(), LocalDateTime.now());
+            em.persist(member_jun);
+            
             RecruitmentArticle recruitmentArticle1 = createRecruitmentArticle(LocalDateTime.now(),
                     LocalDateTime.now().plusHours(100L),
                     1L, member1, 1, "테스트용1",
