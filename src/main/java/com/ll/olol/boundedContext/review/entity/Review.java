@@ -38,5 +38,14 @@ public class Review {
 
     private int reviewTypeCode; // 매력포인트(1 = 최고에요, 2 = 좋아요, 3 = 별로에요)
 
-    
+
+    // 시간약속을 잘 지켰는지의 여부. (1 = 잘 지켰어요, 2 = 아쉬워요)
+    private int appointmentTimeCode;
+
+    // 매너가 좋았는지의 여부. (1 = 좋아요, 2 = 아쉬워요)
+    private int mannerCode;
+
+    // 체력이 좋았는지의 여부 (1 = 좋아요, 2 = 아쉬워요)
+    private int pysicalCode;
+
 }
