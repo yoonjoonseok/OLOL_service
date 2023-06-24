@@ -3,6 +3,7 @@ package com.ll.olol.boundedContext.recruitment.service;
 import com.ll.olol.base.rsData.RsData;
 import com.ll.olol.boundedContext.member.entity.Member;
 import com.ll.olol.boundedContext.member.repository.MemberRepository;
+import com.ll.olol.boundedContext.notification.event.EventAfterDeportPeople;
 import com.ll.olol.boundedContext.notification.event.EventAfterRecruitmentAttend;
 import com.ll.olol.boundedContext.notification.event.EventAfterRecruitmentPeople;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
@@ -85,5 +86,10 @@ public class RecruitmentPeopleService {
         return RsData.of("S-1", "수락 완료");
     }
 
+    public RsData deport(RecruitmentPeople recruitmentPeople) {
+        delete(recruitmentPeople);
+        publisher.publishEvent(new EventAfterDeportPeople(this, recruitmentPeople));
+        return RsData.of("S-1", "추방 완료");
+    }
 
 }

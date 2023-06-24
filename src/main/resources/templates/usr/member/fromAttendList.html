@@ -42,8 +42,14 @@
                                     <span th:text="${service.member.email}"></span>
                                     <div class="vr"></div>
                                     <span th:text="${service.member.age}"></span>
-                                    <form th:action="@{|/recruitment/${service.id}/attend/delete|}" method="post">
-                                        <button class="btn btn-primary" type="submit">삭제</button>
+                                    <button href="javascript:"
+                                            onclick="if ( confirm('추방하시겠습니까?') ) $(this).next().submit();">
+                                        추방
+                                    </button>
+                                    <form hidden th:action="@{|/recruitment/${service.id}/attend/delete|}"
+                                          method="post">
+                                        <input type="hidden" name="_method" value="delete">
+
                                     </form>
                                     <br>
                                 </span>
