@@ -1,6 +1,7 @@
 package com.ll.olol.boundedContext.notification.eventListener;
 
 import com.ll.olol.boundedContext.member.entity.Member;
+import com.ll.olol.boundedContext.notification.entity.Notification;
 import com.ll.olol.boundedContext.notification.event.EventAfterComment;
 import com.ll.olol.boundedContext.notification.event.EventAfterRecruitmentAttend;
 import com.ll.olol.boundedContext.notification.event.EventAfterRecruitmentPeople;
@@ -29,7 +30,8 @@ public class NotificationEventListener {
     public void listen(EventAfterComment event) {
         RecruitmentArticle recruitmentArticle = event.getRecruitmentArticle();
         String content = recruitmentArticle.getArticleName() + " 공고에 댓글이 달렸습니다";
-        notificationService.make(recruitmentArticle.getMember(), 1, content, recruitmentArticle.getId());
+        Notification notification = notificationService.make(recruitmentArticle.getMember(), 1, content, recruitmentArticle.getId());
+        notificationService.send(recruitmentArticle.getMember().getId(), notification);
     }
 
     @EventListener
