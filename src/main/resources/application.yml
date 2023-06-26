@@ -55,6 +55,7 @@ spring:
         use_sql_comments: true
         default_batch_fetch_size: 100
 
+
 naver:
   url:
     search:
@@ -70,6 +71,8 @@ logging:
     com.ll.olol: DEBUG
     org.hibernate.orm.jdbc.bind: TRACE
     org.hibernate.orm.jdbc.extract: TRACE
+    com.zaxxer.hikari.HikariConfig: DEBUG
+    com.zaxxer.hikari: TRACE
 custom:
   site:
     baseUrl: http://localhost:8080/
