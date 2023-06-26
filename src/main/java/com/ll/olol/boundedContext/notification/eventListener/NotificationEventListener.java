@@ -3,6 +3,7 @@ package com.ll.olol.boundedContext.notification.eventListener;
 import com.ll.olol.boundedContext.member.entity.Member;
 import com.ll.olol.boundedContext.notification.entity.Notification;
 import com.ll.olol.boundedContext.notification.event.EventAfterComment;
+import com.ll.olol.boundedContext.notification.event.EventAfterDeportPeople;
 import com.ll.olol.boundedContext.notification.event.EventAfterRecruitmentAttend;
 import com.ll.olol.boundedContext.notification.event.EventAfterRecruitmentPeople;
 import com.ll.olol.boundedContext.notification.event.EventAfterUpdateArticle;
@@ -10,13 +11,12 @@ import com.ll.olol.boundedContext.notification.service.NotificationService;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentPeople;
 import com.ll.olol.boundedContext.recruitment.service.RecruitmentPeopleService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -30,7 +30,8 @@ public class NotificationEventListener {
     public void listen(EventAfterComment event) {
         RecruitmentArticle recruitmentArticle = event.getRecruitmentArticle();
         String content = recruitmentArticle.getArticleName() + " 공고에 댓글이 달렸습니다";
-        Notification notification = notificationService.make(recruitmentArticle.getMember(), 1, content, recruitmentArticle.getId());
+        Notification notification = notificationService.make(recruitmentArticle.getMember(), 1, content,
+                recruitmentArticle.getId());
         notificationService.send(recruitmentArticle.getMember().getId(), notification);
     }
 
@@ -38,7 +39,9 @@ public class NotificationEventListener {
     public void listen(EventAfterRecruitmentPeople event) {
         RecruitmentPeople recruitmentPeople = event.getRecruitmentPeople();
         Member member = recruitmentPeople.getRecruitmentArticle().getMember();
-        String content = recruitmentPeople.getRecruitmentArticle().getArticleName() + " 공고에 " + recruitmentPeople.getMember().getNickname() + "님이 참가 신청을 하였습니다.";
+        String content =
+                recruitmentPeople.getRecruitmentArticle().getArticleName() + " 공고에 " + recruitmentPeople.getMember()
+                        .getNickname() + "님이 참가 신청을 하였습니다.";
         notificationService.make(member, 2, content, recruitmentPeople.getRecruitmentArticle().getId());
     }
 
@@ -55,6 +58,16 @@ public class NotificationEventListener {
         }
 
         notificationService.make(member, 3, content, recruitmentPeople.getRecruitmentArticle().getId());
+    }
+
+    @EventListener
+    public void listen(EventAfterDeportPeople event) {
+        RecruitmentPeople recruitmentPeople = event.getRecruitmentPeople();
+        Member member = recruitmentPeople.getMember();
+        String content =
+                recruitmentPeople.getRecruitmentArticle().getArticleName() + " 공고의 " + member.getNickname() + "님이 "
+                        + "추방을 했습니다.";
+        notificationService.make(member, 4, content, recruitmentPeople.getRecruitmentArticle().getId());
     }
 
     @EventListener
