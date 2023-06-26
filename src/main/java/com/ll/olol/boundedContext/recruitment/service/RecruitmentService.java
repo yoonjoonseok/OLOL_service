@@ -4,6 +4,7 @@ import com.ll.olol.base.rsData.RsData;
 import com.ll.olol.boundedContext.api.localCode.LocalCodeApiClient;
 import com.ll.olol.boundedContext.comment.entity.Comment;
 import com.ll.olol.boundedContext.member.entity.Member;
+import com.ll.olol.boundedContext.notification.event.EventAfterCourseTime;
 import com.ll.olol.boundedContext.notification.event.EventAfterUpdateArticle;
 import com.ll.olol.boundedContext.recruitment.entity.CreateForm;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
@@ -242,5 +243,9 @@ public class RecruitmentService {
         return RsData.of("S-1", "마감 성공");
     }
 
+    @Transactional
+    public void sendNotificationAuthor(RecruitmentArticle recruitmentArticle) {
+        publisher.publishEvent(new EventAfterCourseTime(this, recruitmentArticle));
+    }
 
 }

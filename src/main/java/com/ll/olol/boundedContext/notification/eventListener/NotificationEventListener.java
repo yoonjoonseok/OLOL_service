@@ -80,11 +80,11 @@ public class NotificationEventListener {
     @EventListener
     public void listen(EventAfterCourseTime event) {
         RecruitmentArticle recruitmentArticle = event.getRecruitmentArticle();
+        Member author = recruitmentArticle.getMember();
 
-        List<RecruitmentPeople> list = recruitmentPeopleService.findByRecruitmentArticle(recruitmentArticle);
-        for (RecruitmentPeople r : list) {
-            String content = recruitmentArticle.getArticleName() + " 공고의 내용이 변경되었습니다";
-            notificationService.make(r.getMember(), 4, content, recruitmentArticle.getId());
-        }
+        String content = recruitmentArticle.getArticleName() + " 공고의 산행이 완료 됐습니다.";
+
+        notificationService.make(author, 4, content, recruitmentArticle.getId());
     }
+
 }
