@@ -8,15 +8,19 @@ import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentPeople;
 import com.ll.olol.boundedContext.recruitment.service.RecruitmentPeopleService;
 import com.ll.olol.boundedContext.recruitment.service.RecruitmentService;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/recruitment")
@@ -55,19 +59,15 @@ public class RecruitmentPeopleController {
 
                 List<RecruitmentPeople> recruitmentPeople = recruitmentArticle.getRecruitmentPeople();
                 for (RecruitmentPeople recruitmentPeople1 : recruitmentPeople) {
-
                     attendList.add(recruitmentPeople1);
-
                 }
             }
         }
 
         //내 게시글에 정보
         model.addAttribute("myArticle", myArticle);
-
         //내 글에 대한 신청자들 정보
         model.addAttribute("attendList", attendList);
-        model.addAttribute("recruitmentService", recruitmentService);
         return "usr/member/fromAttendList";
     }
 
@@ -93,6 +93,19 @@ public class RecruitmentPeopleController {
 
         return rq.redirectWithMsg("/recruitment/fromList", rsData);
     }
+
+    @PreAuthorize("isAuthenticated()")
+    @DeleteMapping("/{id}/attend/delete")
+    public String deportPerson(@PathVariable Long id) {
+        RecruitmentPeople one = recruitmentPeopleService.findOne(id);
+        RsData<Object> rsData = recruitmentPeopleService.deport(one);
+        if (rsData.isFail()) {
+            return rq.historyBack(rsData);
+        }
+
+        return rq.redirectWithMsg("/recruitment/fromList", rsData);
+    }
+
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/{id}/attend/create")
