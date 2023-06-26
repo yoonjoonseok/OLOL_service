@@ -1,4 +1,4 @@
-var eventSource = new EventSource('/notification/subscribe');
+//var eventSource = new EventSource('/notification/subscribe');
 
 eventSource.onmessage = function (event) {
     const message = event.data;
