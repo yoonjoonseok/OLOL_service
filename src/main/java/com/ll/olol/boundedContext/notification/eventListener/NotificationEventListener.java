@@ -2,21 +2,18 @@ package com.ll.olol.boundedContext.notification.eventListener;
 
 import com.ll.olol.boundedContext.member.entity.Member;
 import com.ll.olol.boundedContext.notification.entity.Notification;
-import com.ll.olol.boundedContext.notification.event.EventAfterComment;
-import com.ll.olol.boundedContext.notification.event.EventAfterDeportPeople;
-import com.ll.olol.boundedContext.notification.event.EventAfterRecruitmentAttend;
-import com.ll.olol.boundedContext.notification.event.EventAfterRecruitmentPeople;
-import com.ll.olol.boundedContext.notification.event.EventAfterUpdateArticle;
+import com.ll.olol.boundedContext.notification.event.*;
 import com.ll.olol.boundedContext.notification.service.NotificationService;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentPeople;
 import com.ll.olol.boundedContext.recruitment.service.RecruitmentPeopleService;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Component
 @RequiredArgsConstructor
@@ -73,6 +70,17 @@ public class NotificationEventListener {
     @EventListener
     public void listen(EventAfterUpdateArticle event) {
         RecruitmentArticle recruitmentArticle = event.getRecruitmentArticle();
+        List<RecruitmentPeople> list = recruitmentPeopleService.findByRecruitmentArticle(recruitmentArticle);
+        for (RecruitmentPeople r : list) {
+            String content = recruitmentArticle.getArticleName() + " 공고의 내용이 변경되었습니다";
+            notificationService.make(r.getMember(), 4, content, recruitmentArticle.getId());
+        }
+    }
+
+    @EventListener
+    public void listen(EventAfterCourseTime event) {
+        RecruitmentArticle recruitmentArticle = event.getRecruitmentArticle();
+
         List<RecruitmentPeople> list = recruitmentPeopleService.findByRecruitmentArticle(recruitmentArticle);
         for (RecruitmentPeople r : list) {
             String content = recruitmentArticle.getArticleName() + " 공고의 내용이 변경되었습니다";

@@ -1,27 +1,9 @@
 package com.ll.olol.boundedContext.recruitment.entity;
 
-import static jakarta.persistence.GenerationType.IDENTITY;
-
 import com.ll.olol.boundedContext.comment.entity.Comment;
 import com.ll.olol.boundedContext.member.entity.Member;
 import com.ll.olol.boundedContext.report.entity.ArticleReport;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.OrderBy;
-import java.time.DayOfWeek;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.TextStyle;
-import java.util.List;
-import java.util.Locale;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,6 +12,15 @@ import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import java.time.DayOfWeek;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.TextStyle;
+import java.util.List;
+import java.util.Locale;
+
+import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Getter
@@ -71,6 +62,8 @@ public class RecruitmentArticle {
 
     @OneToMany(mappedBy = "recruitmentArticle", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<LikeableRecruitmentArticle> likeableRecruitmentArticles;
+
+    boolean eventTriggered;
 
     public String getTypeValueToString() {
         if (typeValue == 1) {

@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
-@RequestMapping("/member/review")
+@RequestMapping("/review")
 @RequiredArgsConstructor
 public class ReviewController {
     private final Rq rq;
@@ -30,7 +30,7 @@ public class ReviewController {
         return "usr/review/reviewWrite";
     }
 
-    
+
     @AllArgsConstructor
     @Getter
     public static class ReviewForm {
@@ -60,5 +60,10 @@ public class ReviewController {
         return "redirect:/";
     }
 
+    @GetMapping("/list")
+    public String showList() {
+
+        return "usr/review/reviewWrite";
+    }
 
 }

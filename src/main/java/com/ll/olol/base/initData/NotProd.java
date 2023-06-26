@@ -67,7 +67,7 @@ public class NotProd {
 
             Member member_jun = createMember(20, "남자", "KAKAO__2867045488", "1234", "test@test.com", "검성 장영실", LocalDateTime.now(), LocalDateTime.now());
             em.persist(member_jun);
-            
+
             RecruitmentArticle recruitmentArticle1 = createRecruitmentArticle(LocalDateTime.now(),
                     LocalDateTime.now().plusHours(100L),
                     1L, member1, 1, "테스트용1",
@@ -139,6 +139,7 @@ public class NotProd {
                 );
             }
 
+            
             Comment comment1 = createComment(recruitmentArticle1, member1, "안녕하세요11", LocalDateTime.now(),
                     LocalDateTime.now());
             Comment comment2 = createComment(recruitmentArticle2, member2, "안녕하세요22", LocalDateTime.now(),
