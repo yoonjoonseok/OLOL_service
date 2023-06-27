@@ -84,7 +84,8 @@ public class NotificationEventListener {
 
         String content = recruitmentArticle.getArticleName() + " 공고의 산행이 완료 됐습니다.";
 
-        notificationService.make(author, 4, content, recruitmentArticle.getId());
+
+        notificationService.makeReviewNotification(author, 4, content, recruitmentArticle.getId(), true);
     }
 
 }

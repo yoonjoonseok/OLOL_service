@@ -43,6 +43,21 @@ public class NotificationService {
     }
 
     @Transactional
+    public Notification makeReviewNotification(Member member, int type, String content, Long articleId, boolean reviewed) {
+        Notification notification = Notification.builder()
+                .member(member)
+                .type(type)
+                .content(content)
+                .articleId(articleId)
+                .reviewed(reviewed)
+                .build();
+
+        notificationRepository.save(notification);
+
+        return notification;
+    }
+
+    @Transactional
     public RsData markAsRead(List<Notification> notifications) {
         notifications
                 .stream()
