@@ -304,7 +304,7 @@
                         <div class="card-title mt-3">
                             <div class="smaller-text mb-2">
                                 <div class="div">
-
+                                    <span class="div" th:if="${recruitmentArticle.getDeadLineDate().isAfter(now)} and ${recruitmentArticle.getAttend() != recruitmentArticle.getRecruitmentArticleForm().recruitsNumbers}">
                                     <div th:if="${recruitmentArticle.isImpromotu()} " style="margin-right: 2px;">
 
                                     <span class="border bg-light rounded-4 p-1">
@@ -352,8 +352,15 @@
                                         </span>
 
                                     </div>
+                                    </span>
 
-
+                                    <div style="margin-right: 2px;">
+                                    <span class="border bg-light rounded-4 p-1"
+                                          th:unless="${recruitmentArticle.getDeadLineDate().isAfter(now)} and ${recruitmentArticle.getAttend() != recruitmentArticle.getRecruitmentArticleForm().recruitsNumbers}">
+                                        <i class="fa-regular fa-face-frown"></i>
+                                        <span class="fw-bold">마감</span>
+                                    </span>
+                                    </div>
                                 </div>
                             </div>
 
