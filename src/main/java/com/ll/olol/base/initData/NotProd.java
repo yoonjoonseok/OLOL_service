@@ -132,7 +132,7 @@ public class NotProd {
             for (int i = 70; i < 100; i++) {
                 em.persist(createRecruitmentArticleForm(
                         createRecruitmentArticle(LocalDateTime.now(),
-                                LocalDateTime.now().plusDays(1), 20L, member4, 2, String.format("테스트 데이터[%03d]", i),
+                                LocalDateTime.now().plusDays(1), 20L, member, 2, String.format("테스트 데이터[%03d]", i),
                                 "테스트용 게시글 내용입니다."),
                         1, 1L,
                         "삼성산", "석수동", "41171102", 40L, LocalDateTime.now(), LocalDateTime.now().plusDays(1), "카카오톡1")

@@ -11,6 +11,8 @@ spring:
     username: sa
     password:
     driver-class-name: org.h2.Driver
+    hikari:
+      maximumPoolSize: 100
   security:
     oauth2:
       client:
@@ -54,6 +56,9 @@ spring:
         format_sql: true
         use_sql_comments: true
         default_batch_fetch_size: 100
+    open-in-view:
+      exclude-patterns: /notification/subscribe
+
 
 naver:
   url:
@@ -70,6 +75,8 @@ logging:
     com.ll.olol: DEBUG
     org.hibernate.orm.jdbc.bind: TRACE
     org.hibernate.orm.jdbc.extract: TRACE
+    com.zaxxer.hikari.HikariConfig: DEBUG
+    com.zaxxer.hikari: TRACE
 custom:
   site:
     baseUrl: http://localhost:8080/
