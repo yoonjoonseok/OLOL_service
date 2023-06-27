@@ -142,11 +142,9 @@ body {
 
 }
 
-.div {
+.div.div {
     display: flex;
     flex-wrap: wrap;
-
-
 }
 
 .containerIn {
