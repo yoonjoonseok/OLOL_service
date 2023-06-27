@@ -141,6 +141,7 @@
         }
         localStorage.setItem('isLoggedIn', 'true');
     } else {
+        navigator.serviceWorker.controller.postMessage({type: 'logout'});
         removeServiceWorker();
         localStorage.removeItem('isLoggedIn');
     }
