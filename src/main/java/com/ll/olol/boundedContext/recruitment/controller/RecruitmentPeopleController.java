@@ -15,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -58,9 +59,7 @@ public class RecruitmentPeopleController {
 
                 List<RecruitmentPeople> recruitmentPeople = recruitmentArticle.getRecruitmentPeople();
                 for (RecruitmentPeople recruitmentPeople1 : recruitmentPeople) {
-
                     attendList.add(recruitmentPeople1);
-
                 }
             }
         }
@@ -69,7 +68,6 @@ public class RecruitmentPeopleController {
         model.addAttribute("myArticle", myArticle);
         //내 글에 대한 신청자들 정보
         model.addAttribute("attendList", attendList);
-        model.addAttribute("recruitmentService", recruitmentService);
         return "usr/member/fromAttendList";
     }
 
@@ -95,6 +93,19 @@ public class RecruitmentPeopleController {
 
         return rq.redirectWithMsg("/recruitment/fromList", rsData);
     }
+
+    @PreAuthorize("isAuthenticated()")
+    @DeleteMapping("/{id}/attend/delete")
+    public String deportPerson(@PathVariable Long id) {
+        RecruitmentPeople one = recruitmentPeopleService.findOne(id);
+        RsData<Object> rsData = recruitmentPeopleService.deport(one);
+        if (rsData.isFail()) {
+            return rq.historyBack(rsData);
+        }
+
+        return rq.redirectWithMsg("/recruitment/fromList", rsData);
+    }
+
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/{id}/attend/create")
