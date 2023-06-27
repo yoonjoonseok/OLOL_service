@@ -29,9 +29,9 @@
 
 
     <script>
-
         // 타임리프 문법(파라미터, ? 뒤에 입력된 매개변수들)
         const params = JSON.parse('[( ${@rq.paramsJsonStr} )]');
+        const isLogin = '[( ${@rq.isLogin} )]';
     </script>
 </head>
 
@@ -85,6 +85,21 @@
     });
 </script>
 <script>
+    function getNotificationPermission() {
+        // 브라우저 지원 여부 체크
+        if (!("Notification" in window)) {
+            alert("데스크톱 알림을 지원하지 않는 브라우저입니다.");
+        }
+        // 데스크탑 알림 권한 요청
+        Notification.requestPermission(function (result) {
+            // 권한 거절
+            if (result == 'denied') {
+                alert('알림을 차단하셨습니다.\n브라우저의 사이트 설정에서 변경하실 수 있습니다.');
+                return false;
+            }
+        });
+    }
+
     const registerServiceWorker = async () => {
         if ("serviceWorker" in navigator) {
             try {
@@ -102,7 +117,33 @@
         }
     };
 
-    registerServiceWorker();
+    const removeServiceWorker = async () => {
+        if ("serviceWorker" in navigator) {
+            navigator.serviceWorker.getRegistration().then(function (registration) {
+                if (registration) {
+                    registration.unregister().then(function (success) {
+                        console.log('서비스 워커가 성공적으로 삭제되었습니다.');
+                    }).catch(function (error) {
+                        console.log('서비스 워커 삭제 중 오류가 발생했습니다:', error);
+                    });
+                } else {
+                    console.log('현재 등록된 서비스 워커가 없습니다.');
+                }
+            });
+        }
+    };
+
+    if (isLogin == 'true') {
+        var isLoggedIn = localStorage.getItem('isLoggedIn');
+        if (!isLoggedIn) {
+            getNotificationPermission();
+            registerServiceWorker();
+        }
+        localStorage.setItem('isLoggedIn', 'true');
+    } else {
+        removeServiceWorker();
+        localStorage.removeItem('isLoggedIn');
+    }
 </script>
 </body>
 </html>
