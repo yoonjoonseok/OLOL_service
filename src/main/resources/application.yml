@@ -59,6 +59,7 @@ spring:
     open-in-view:
       exclude-patterns: /notification/subscribe
 
+
 naver:
   url:
     search:
