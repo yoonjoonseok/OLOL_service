@@ -35,7 +35,7 @@ public class NotificationEventListener {
                 recruitmentArticle.getId());
 
         NotificationDTO notificationDTO = NotificationDTO.builder().title(notification.getContent()).body(event.getComment().getContent()).link(domain + "recruitment/" + recruitmentArticle.getId()).build();
-        notificationService.send(recruitmentArticle.getMember().getId(), notificationDTO);
+        notificationService.send(notification.getMember().getId(), notificationDTO);
     }
 
     @EventListener
@@ -45,7 +45,10 @@ public class NotificationEventListener {
         String content =
                 recruitmentPeople.getRecruitmentArticle().getArticleName() + " 공고에 " + recruitmentPeople.getMember()
                         .getNickname() + "님이 참가 신청을 하였습니다.";
-        notificationService.make(member, 2, content, recruitmentPeople.getRecruitmentArticle().getId());
+        Notification notification = notificationService.make(member, 2, content, recruitmentPeople.getRecruitmentArticle().getId());
+
+        NotificationDTO notificationDTO = NotificationDTO.builder().title(notification.getContent()).body("").link(domain + "recruitment/fromList").build();
+        notificationService.send(notification.getMember().getId(), notificationDTO);
     }
 
     @EventListener
@@ -60,7 +63,10 @@ public class NotificationEventListener {
             content += "님이 참가 거절을 했습니다.";
         }
 
-        notificationService.make(member, 3, content, recruitmentPeople.getRecruitmentArticle().getId());
+        Notification notification = notificationService.make(member, 3, content, recruitmentPeople.getRecruitmentArticle().getId());
+
+        NotificationDTO notificationDTO = NotificationDTO.builder().title(notification.getContent()).body("").link(domain + "member/mypage").build();
+        notificationService.send(notification.getMember().getId(), notificationDTO);
     }
 
     @EventListener
@@ -70,7 +76,10 @@ public class NotificationEventListener {
         String content =
                 recruitmentPeople.getRecruitmentArticle().getArticleName() + " 공고의 " + recruitmentPeople.getRecruitmentArticle().getMember().getNickname() + "님이 "
                         + "추방을 했습니다.";
-        notificationService.make(member, 4, content, recruitmentPeople.getRecruitmentArticle().getId());
+        Notification notification = notificationService.make(member, 4, content, recruitmentPeople.getRecruitmentArticle().getId());
+
+        NotificationDTO notificationDTO = NotificationDTO.builder().title(notification.getContent()).body("").link(domain + "member/mypage").build();
+        notificationService.send(notification.getMember().getId(), notificationDTO);
     }
 
     @EventListener
@@ -79,7 +88,10 @@ public class NotificationEventListener {
         List<RecruitmentPeople> list = recruitmentPeopleService.findByRecruitmentArticle(recruitmentArticle);
         for (RecruitmentPeople r : list) {
             String content = recruitmentArticle.getArticleName() + " 공고의 내용이 변경되었습니다";
-            notificationService.make(r.getMember(), 5, content, recruitmentArticle.getId());
+            Notification notification = notificationService.make(r.getMember(), 5, content, recruitmentArticle.getId());
+
+            NotificationDTO notificationDTO = NotificationDTO.builder().title(notification.getContent()).body("").link(domain + "recruitment/" + recruitmentArticle.getId()).build();
+            notificationService.send(notification.getMember().getId(), notificationDTO);
         }
     }
 }

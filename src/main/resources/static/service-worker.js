@@ -2,7 +2,6 @@ var eventSource = new EventSource('/notification/subscribe');
 
 eventSource.onmessage = function (event) {
     const message = JSON.parse(event.data);
-    console.log(message);
 
     const title = message.title;
     const options = {
