@@ -1,9 +1,11 @@
 package com.ll.olol.boundedContext.review.controller;
 
 import com.ll.olol.base.rq.Rq;
+import com.ll.olol.base.rsData.RsData;
 import com.ll.olol.boundedContext.member.entity.Member;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentPeople;
+import com.ll.olol.boundedContext.recruitment.service.RecruitmentPeopleService;
 import com.ll.olol.boundedContext.recruitment.service.RecruitmentService;
 import com.ll.olol.boundedContext.review.service.ReviewService;
 import jakarta.validation.Valid;
@@ -30,6 +32,8 @@ public class ReviewController {
     private final Rq rq;
 
     private final RecruitmentService recruitmentService;
+
+    private final RecruitmentPeopleService recruitmentPeopleService;
     private final ReviewService reviewService;
 
 
@@ -87,6 +91,47 @@ public class ReviewController {
 
         return "usr/review/authorReviewerCheckList";
     }
+
+
+//    @PostMapping("/publish-event-endpoint")
+//    public void publishEvent(@RequestBody RecruitmentPeople recruitmentPeople) {
+//        reviewService.realParticipant(recruitmentPeople);
+//        // eventData를 기반으로 이벤트를 발행하거나 처리하는 로직을 구현
+////        publisher.publishEvent(new EventAfterUpdateArticle(this, eventData.getRecruitmentPeople()));
+//    }
+
+    @GetMapping("/realMember/{id}")
+    public String checkedRealParticipant(@PathVariable Long id, Model model) {
+        RecruitmentPeople recruitmentPeople = recruitmentPeopleService.findById(id);
+        Long articleId = recruitmentPeople.getRecruitmentArticle().getId();
+
+        RsData rsData = reviewService.realParticipant(recruitmentPeople);
+
+
+        rq.historyBack("성공띠");
+
+
+//        return "usr/review/authorReviewerCheckList";
+        return "redirect:/review/reviewerList/" + articleId;
+    }
+
+    @GetMapping("/participantList/{id}")
+    public String showRealParticipantList(@PathVariable Long id, Model model) {
+        Member reviewer = rq.getMember();
+
+        RecruitmentArticle recruitmentArticle = recruitmentService.findById(id).get();
+
+        Member author = recruitmentArticle.getMember();
+
+        List<Member> realParticipantMemberList = reviewService.findRealParticipant(reviewer, author, recruitmentArticle);
+
+        model.addAttribute("recruitmentArticle", recruitmentArticle);
+        model.addAttribute("realParticipantMemberList", realParticipantMemberList);
+
+//        return "usr/review/authorReviewerCheckList";
+        return "/usr/review/realParticipantMemberList";
+    }
+
 
     @GetMapping("/list")
     public String showList() {

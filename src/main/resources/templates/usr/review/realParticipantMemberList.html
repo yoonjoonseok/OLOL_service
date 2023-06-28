@@ -17,20 +17,20 @@
                     </a>
                 </div>
 
-                <ul th:if="${!#lists.isEmpty(attendList)}" class="list-group">
-                    <li th:each="recruitmentPeople: ${attendList}" class="list-group-item">
+                <ul th:if="${!#lists.isEmpty(realParticipantMemberList)}" class="list-group">
+                    <li th:each="realParticipantMember: ${realParticipantMemberList}" class="list-group-item">
                         <div class="d-flex align-items-center">
                             <div class="mr-3">
-                                <span th:text="${recruitmentPeople.getMember().getNickname()}">
+                                <span th:text="${realParticipantMember.getNickname()}">
                                 </span>
-                                <a th:unless="${!recruitmentPeople.isRealParticipant()}"
-                                   class="btn btn-outline-success disabled"
-                                   role="button"
-                                   aria-disabled="true">확인</a>
+                                <!--                                <a th:unless="${!recruitmentPeople.isRealParticipant()}"-->
+                                <!--                                   class="btn btn-outline-success disabled"-->
+                                <!--                                   role="button"-->
+                                <!--                                   aria-disabled="true">확인</a>-->
 
-                                <a th:if="${!recruitmentPeople.isRealParticipant()}"
-                                   class="btn btn-outline-success"
-                                   th:href="@{|/review/realMember/${recruitmentPeople.id}|}">확인</a>
+                                <!--                                <a th:if="${!recruitmentPeople.isRealParticipant()}"-->
+                                <!--                                   class="btn btn-outline-success"-->
+                                <!--                                   th:href="@{|/review/realMember/${recruitmentPeople.id}|}">확인</a>-->
                             </div>
                         </div>
                     </li>

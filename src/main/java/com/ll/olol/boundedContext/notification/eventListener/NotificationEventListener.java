@@ -1,5 +1,6 @@
 package com.ll.olol.boundedContext.notification.eventListener;
 
+import com.ll.olol.base.rsData.RsData;
 import com.ll.olol.boundedContext.member.entity.Member;
 import com.ll.olol.boundedContext.notification.entity.Notification;
 import com.ll.olol.boundedContext.notification.event.*;
@@ -88,4 +89,16 @@ public class NotificationEventListener {
         notificationService.makeReviewNotification(author, 4, content, recruitmentArticle.getId(), true);
     }
 
+    @EventListener
+    public void listen(EventAfterCheckedRealParticipant event) {
+        RecruitmentPeople recruitmentPeople = event.getRecruitmentPeople();
+
+        Member reviewer = recruitmentPeople.getMember();
+
+        String content = recruitmentPeople.getRecruitmentArticle().getArticleName() + " 공고의 산행이 완료 됐습니다. 참여했던 인원들에게 후기를 남겨주세요.";
+
+        RsData rsData = recruitmentPeopleService.checkedRealParticipant(recruitmentPeople, true);
+
+        notificationService.makeReviewWriteNotification(reviewer, 4, content, recruitmentPeople.getRecruitmentArticle().getId(), true);
+    }
 }

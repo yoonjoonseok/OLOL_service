@@ -84,6 +84,7 @@ public class Member {
     @OneToMany(mappedBy = "member")
     private List<RecruitmentPeople> recruitmentPeople;
 
+
 //    @OneToMany(mappedBy = "fromMember", cascade = {CascadeType.ALL})
 //    @OrderBy("id desc") // 정렬
 //    @LazyCollection(LazyCollectionOption.EXTRA)

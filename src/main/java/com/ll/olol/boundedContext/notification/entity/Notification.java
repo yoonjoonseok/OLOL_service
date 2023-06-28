@@ -38,6 +38,8 @@ public class Notification {
 
     private boolean reviewed;
 
+    private boolean participant;
+
     public boolean isRead() {
         return readDate != null;
     }
@@ -48,5 +50,9 @@ public class Notification {
 
     public boolean isReviewed() {
         return reviewed;
+    }
+
+    public boolean isParticipant() {
+        return participant;
     }
 }

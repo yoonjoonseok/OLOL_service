@@ -16,7 +16,12 @@
                                th:text="${notification.getContent()}" style="color: green;">
                             </a>
 
-                            <a th:if="${!notification.isReviewed()}"
+                            <a th:if="${!notification.isReviewed()} and ${notification.isParticipant()}"
+                               th:href="@{|/review/participantList/${notification.getArticleId()}|}"
+                               th:text="${notification.getContent()}" style="color: green;">
+                            </a>
+
+                            <a th:if="${!notification.isReviewed()} and ${!notification.isParticipant()}"
                                th:href="@{|/recruitment/${notification.getArticleId()}|}"
                                th:text="${notification.getContent()}" style="color: green;">
                             </a>

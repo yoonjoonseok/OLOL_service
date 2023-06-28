@@ -10,12 +10,13 @@ import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentPeople;
 import com.ll.olol.boundedContext.recruitment.repository.RecruitmentPeopleRepository;
 import com.ll.olol.boundedContext.recruitment.repository.RecruitmentRepository;
-import java.util.List;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -93,4 +94,14 @@ public class RecruitmentPeopleService {
         return RsData.of("S-1", "추방 완료");
     }
 
+    public RecruitmentPeople findById(Long id) {
+        return recruitmentPeopleRepository.findById(id).get();
+    }
+
+    @Transactional
+    public RsData checkedRealParticipant(RecruitmentPeople recruitmentPeople, boolean checkedReal) {
+        recruitmentPeople.checkedParticipant(checkedReal);
+
+        return RsData.of("S-1", "실제 참여자로 체크했습니다.");
+    }
 }

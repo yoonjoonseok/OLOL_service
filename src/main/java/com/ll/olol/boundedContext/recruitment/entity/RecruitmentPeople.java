@@ -29,4 +29,15 @@ public class RecruitmentPeople {
     private RecruitmentArticle recruitmentArticle;
 
     private boolean isAttend;
+
+    private boolean realParticipant;
+
+    public void checkedParticipant(boolean participant) {
+        this.realParticipant = participant;
+    }
+
+    public boolean isRealParticipant() {
+        return realParticipant;
+    }
+    
 }
