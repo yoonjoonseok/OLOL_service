@@ -51,11 +51,6 @@ public class NotificationController {
     @GetMapping(value = "/subscribe", produces = "text/event-stream")
     public SseEmitter subscribe() {
         Member member = rq.getMember();
-//        // Authentication을 UserDto로 업캐스팅
-//        UserDto userDto = ClassUtils.getCastInstance(authentication.getPrincipal(), UserDto.class)
-//                .orElseThrow(() -> new ApplicationException(ErrorCode.INTERNAL_SERVER_ERROR,
-//                        "Casting to UserDto class failed"));
-
         // 서비스를 통해 생성된 SseEmitter를 반환
         return notificationService.connectNotification(member.getId());
     }
