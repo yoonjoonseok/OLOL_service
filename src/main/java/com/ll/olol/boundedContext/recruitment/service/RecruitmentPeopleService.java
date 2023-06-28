@@ -78,6 +78,7 @@ public class RecruitmentPeopleService {
         RecruitmentArticle recruitmentArticle = recruitmentPeople.getRecruitmentArticle();
         Long recruitsNumbers = recruitmentArticle.getRecruitmentArticleForm().getRecruitsNumbers();
         if (recruitmentArticle.getAttend() >= recruitsNumbers) {
+            recruitmentArticle.setDeadLine(true);
             return RsData.of("F-1", "이미 참가 인원이 꽉 찼습니다.");
         }
 
@@ -89,6 +90,7 @@ public class RecruitmentPeopleService {
     @Transactional
     public RsData deport(RecruitmentPeople recruitmentPeople) {
         recruitmentPeopleRepository.delete(recruitmentPeople);
+        recruitmentPeople.getRecruitmentArticle().setDeadLine(false);
         publisher.publishEvent(new EventAfterDeportPeople(this, recruitmentPeople));
         return RsData.of("S-1", "추방 완료");
     }
