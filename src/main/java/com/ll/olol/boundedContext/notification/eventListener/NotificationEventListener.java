@@ -74,8 +74,8 @@ public class NotificationEventListener {
         RecruitmentPeople recruitmentPeople = event.getRecruitmentPeople();
         Member member = recruitmentPeople.getMember();
         String content =
-                recruitmentPeople.getRecruitmentArticle().getArticleName() + " 공고의 " + recruitmentPeople.getRecruitmentArticle().getMember().getNickname() + "님이 "
-                        + "추방을 했습니다.";
+                recruitmentPeople.getRecruitmentArticle().getArticleName() + " 공고의 " + recruitmentPeople.getRecruitmentArticle().getMember().getNickname() + "님께 "
+                        + "추방되었습니다.";
         Notification notification = notificationService.make(member, 4, content, recruitmentPeople.getRecruitmentArticle().getId());
 
         NotificationDTO notificationDTO = NotificationDTO.builder().title(notification.getContent()).body("").link(domain + "member/mypage").build();
