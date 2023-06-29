@@ -68,7 +68,7 @@ public class RecruitmentArticle {
     @OneToMany(mappedBy = "recruitmentArticle", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<ReviewMember> reviewMemberList;
 
-    private boolean eventTriggered;
+    private boolean isEventTriggered;
 
     public String getTypeValueToString() {
         if (typeValue == 1) {
@@ -118,11 +118,11 @@ public class RecruitmentArticle {
     }
 
     public void updateEventTrigger(boolean eventTriggered) {
-        this.eventTriggered = eventTriggered;
+        this.isEventTriggered = eventTriggered;
     }
 
-    public boolean isEventTrigger() {
-        return eventTriggered;
-    }
+//    public boolean isEventTrigger() {
+//        return eventTriggered;
+//    }
 
 }

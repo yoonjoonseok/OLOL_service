@@ -257,12 +257,36 @@ public class RecruitmentService {
 
     }
 
+    @Transactional
+    @Scheduled(fixedDelay = 60 * 1000) // 1분마다 실행 (단위: 밀리초)
+    public void triggerEvent() {
+        //List<RecruitmentArticle> recruitmentArticleList = recruitmentService.findAll();
+
+        LocalDateTime currentTime = LocalDateTime.now();
+        List<RecruitmentArticle> recruitmentArticleList = recruitmentRepository.findByRecruitmentArticleForm_CourseTimeBeforeAndIsEventTriggered(currentTime, false);
+
+        for (RecruitmentArticle article : recruitmentArticleList) {
+            if (article.getRecruitmentArticleForm().getCourseTime().plusSeconds(120L).isBefore(currentTime)) {
+                article.setEventTriggered(true);
+                sendNotificationAuthor(article);
+            }
+//            if (article.getRecruitmentArticleForm().getCourseTime().plusHours(2).isBefore(currentTime)) {
+//                Member author = rq.getMember();
+//                recruitmentService.sendNotificationAuthor(article, author);
+//            }
+
+
+        }
+    }
+
 
     @Transactional
     public void sendNotificationAuthor(RecruitmentArticle recruitmentArticle) {
-        recruitmentArticle.updateEventTrigger(true);
         System.out.println(recruitmentArticle.isEventTriggered());
         publisher.publishEvent(new EventAfterCourseTime(this, recruitmentArticle));
     }
 
+    public List<RecruitmentArticle> findByRecruitmentArticleForm_CourseTimeBeforeAndIsEventTriggered(LocalDateTime currentTime, boolean isEventTriggered) {
+        return recruitmentRepository.findByRecruitmentArticleForm_CourseTimeBeforeAndIsEventTriggered(currentTime, isEventTriggered);
+    }
 }
