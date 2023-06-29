@@ -28,6 +28,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -245,4 +246,18 @@ public class RecruitmentService {
         article.setDeadLineDate(LocalDateTime.now());
         return RsData.of("S-1", "마감 성공");
     }
+
+    @Scheduled(fixedRate = 60000)
+    @Transactional
+    public void checkTimeDeadLine() {
+        List<RecruitmentArticle> all = recruitmentRepository.findByDeadLineDateBeforeAndIsDeadLine(LocalDateTime.now(),
+                false);
+        for (RecruitmentArticle article : all) {
+            if (LocalDateTime.now().isAfter(article.getDeadLineDate())) {
+                article.setDeadLine(true);
+            }
+        }
+
+    }
+
 }
