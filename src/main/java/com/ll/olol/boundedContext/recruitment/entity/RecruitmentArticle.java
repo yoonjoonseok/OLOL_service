@@ -47,6 +47,7 @@ public class RecruitmentArticle {
     private String content;
     private LocalDateTime deadLineDate;
     private Long views;
+    private boolean isDeadLine;
 
     @OneToMany(mappedBy = "recruitmentArticle", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     @OrderBy("id desc")
