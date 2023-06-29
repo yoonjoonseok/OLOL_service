@@ -10,12 +10,13 @@ import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentPeople;
 import com.ll.olol.boundedContext.recruitment.repository.RecruitmentPeopleRepository;
 import com.ll.olol.boundedContext.recruitment.repository.RecruitmentRepository;
-import java.util.List;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -81,8 +82,9 @@ public class RecruitmentPeopleService {
             return RsData.of("F-1", "이미 참가 인원이 꽉 찼습니다.");
         }
 
-        publisher.publishEvent(new EventAfterRecruitmentAttend(this, recruitmentPeople));
         recruitmentPeople.setAttend(true);
+        publisher.publishEvent(new EventAfterRecruitmentAttend(this, recruitmentPeople));
+
         return RsData.of("S-1", "수락 완료");
     }
 
