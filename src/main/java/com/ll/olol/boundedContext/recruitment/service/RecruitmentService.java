@@ -250,10 +250,10 @@ public class RecruitmentService {
     @Scheduled(fixedRate = 60000)
     @Transactional
     public void checkTimeDeadLine() {
-        List<RecruitmentArticle> all = recruitmentRepository.findByDeadLineDateBefore(LocalDateTime.now());
+        List<RecruitmentArticle> all = recruitmentRepository.findByDeadLineDateBeforeAndIsDeadLine(LocalDateTime.now(),
+                false);
         for (RecruitmentArticle article : all) {
             if (LocalDateTime.now().isAfter(article.getDeadLineDate())) {
-                System.out.println("article = " + article.getArticleName());
                 article.setDeadLine(true);
             }
         }
