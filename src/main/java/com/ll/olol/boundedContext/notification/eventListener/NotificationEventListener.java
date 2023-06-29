@@ -9,6 +9,7 @@ import com.ll.olol.boundedContext.notification.service.NotificationService;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentPeople;
 import com.ll.olol.boundedContext.recruitment.service.RecruitmentPeopleService;
+import com.ll.olol.boundedContext.review.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,6 +26,9 @@ import java.util.List;
 public class NotificationEventListener {
     private final NotificationService notificationService;
     private final RecruitmentPeopleService recruitmentPeopleService;
+
+    private final ReviewService reviewService;
+
     @Value("${custom.site.baseUrl}")
     private String domain;
 
@@ -103,7 +107,10 @@ public class NotificationEventListener {
 
         String content = recruitmentArticle.getArticleName() + " 공고의 산행이 완료 됐습니다.";
 
+        RsData reviewMemberRsData = reviewService.createReviewMember(author, recruitmentArticle, null);
 
+
+        // 공고자에게 산행 종료 알림 보냄
         notificationService.makeReviewNotification(author, 4, content, recruitmentArticle.getId(), true);
     }
 
@@ -115,7 +122,10 @@ public class NotificationEventListener {
 
         String content = recruitmentPeople.getRecruitmentArticle().getArticleName() + " 공고의 산행이 완료 됐습니다. 참여했던 인원들에게 후기를 남겨주세요.";
 
+        // recruimentPeople 내부의 realParticipant 여부로 진짜 참여자를 판별
         RsData rsData = recruitmentPeopleService.checkedRealParticipant(recruitmentPeople, true);
+
+        RsData reviewMemberRsData = reviewService.createReviewMember(reviewer, recruitmentPeople.getRecruitmentArticle(), recruitmentPeople);
 
         notificationService.makeReviewWriteNotification(reviewer, 4, content, recruitmentPeople.getRecruitmentArticle().getId(), true);
     }

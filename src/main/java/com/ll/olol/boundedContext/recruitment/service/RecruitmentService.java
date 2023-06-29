@@ -245,6 +245,8 @@ public class RecruitmentService {
 
     @Transactional
     public void sendNotificationAuthor(RecruitmentArticle recruitmentArticle) {
+        recruitmentArticle.updateEventTrigger(true);
+        System.out.println(recruitmentArticle.isEventTriggered());
         publisher.publishEvent(new EventAfterCourseTime(this, recruitmentArticle));
     }
 

@@ -3,6 +3,7 @@ package com.ll.olol.boundedContext.member.entity;
 import com.ll.olol.boundedContext.comment.entity.Comment;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentPeople;
 import com.ll.olol.boundedContext.review.entity.Review;
+import com.ll.olol.boundedContext.review.entity.ReviewMember;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -45,6 +46,8 @@ public class Member {
     @OneToMany(mappedBy = "member")
     private List<Comment> comments;
 
+    @OneToMany(mappedBy = "reviewMember")
+    private List<ReviewMember> reviewMembers;
 
     @OneToMany(mappedBy = "fromMember", cascade = CascadeType.REMOVE)
     @OrderBy("id desc") // 정렬

@@ -23,13 +23,16 @@ public class RecruitmentArticleScheduler {
         LocalDateTime currentTime = LocalDateTime.now();
 
         for (RecruitmentArticle article : recruitmentArticleList) {
-            if (article.getRecruitmentArticleForm().getCourseTime().plusSeconds(60L).isBefore(currentTime)) {
-                recruitmentService.sendNotificationAuthor(article);
-            }
+            if (!article.isEventTrigger()) {
+                if (article.getRecruitmentArticleForm().getCourseTime().plusSeconds(60L).isBefore(currentTime)) {
+                    recruitmentService.sendNotificationAuthor(article);
+                }
 //            if (article.getRecruitmentArticleForm().getCourseTime().plusHours(2).isBefore(currentTime)) {
 //                Member author = rq.getMember();
 //                recruitmentService.sendNotificationAuthor(article, author);
 //            }
+            }
+
 
         }
     }

@@ -3,6 +3,7 @@ package com.ll.olol.boundedContext.recruitment.entity;
 import com.ll.olol.boundedContext.comment.entity.Comment;
 import com.ll.olol.boundedContext.member.entity.Member;
 import com.ll.olol.boundedContext.report.entity.ArticleReport;
+import com.ll.olol.boundedContext.review.entity.ReviewMember;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -63,7 +64,10 @@ public class RecruitmentArticle {
     @OneToMany(mappedBy = "recruitmentArticle", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<LikeableRecruitmentArticle> likeableRecruitmentArticles;
 
-    boolean eventTriggered;
+    @OneToMany(mappedBy = "recruitmentArticle", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private List<ReviewMember> reviewMemberList;
+
+    private boolean eventTriggered;
 
     public String getTypeValueToString() {
         if (typeValue == 1) {
@@ -110,6 +114,14 @@ public class RecruitmentArticle {
     public String getLocalDateTimeTextStyleDay() {
         DayOfWeek dayOfWeek = deadLineDate.getDayOfWeek();
         return dayOfWeek.getDisplayName(TextStyle.FULL, Locale.KOREA);
+    }
+
+    public void updateEventTrigger(boolean eventTriggered) {
+        this.eventTriggered = eventTriggered;
+    }
+
+    public boolean isEventTrigger() {
+        return eventTriggered;
     }
 
 }

@@ -17,20 +17,42 @@
                     </a>
                 </div>
 
-                <ul th:if="${!#lists.isEmpty(realParticipantMemberList)}" class="list-group">
-                    <li th:each="realParticipantMember: ${realParticipantMemberList}" class="list-group-item">
+                <ul th:if="${!#lists.isEmpty(reviewMemberList)}" class="list-group">
+                    <!--                    <li class="list-group-item">-->
+                    <!--                        <div class="d-flex align-items-center">-->
+                    <!--                            <div class="mr-3">-->
+                    <!--                                <span th:text="${recruitmentArticle.getMember().getNickname()}"> </span>-->
+
+                    <!--                                <a th:unless="${!realParticipant.isReviewComplete()}"-->
+                    <!--                                   class="btn btn-outline-success disabled"-->
+                    <!--                                   role="button"-->
+                    <!--                                   aria-disabled="true">리뷰남기러 가기</a>-->
+
+                    <!--                                <a th:if="${!realParticipant.isReviewComplete()}"-->
+                    <!--                                   class="btn btn-outline-success"-->
+                    <!--                                   th:href="@{|/review/write/${realParticipant.id}|}">리뷰남기러 가기</a>-->
+
+                    <!--                            </div>-->
+                    <!--                        </div>-->
+
+                    <!--                    </li>-->
+                    <li th:each="reviewMember: ${reviewMemberList}" class="list-group-item"
+                        th:if="${reviewMember.getReviewMember() != me}">
                         <div class="d-flex align-items-center">
                             <div class="mr-3">
-                                <span th:text="${realParticipantMember.getNickname()}">
+
+                                <span th:text="${reviewMember.getReviewMember().getNickname()}">
                                 </span>
-                                <!--                                <a th:unless="${!recruitmentPeople.isRealParticipant()}"-->
+
+                                <!--                                <a th:unless="${!reviewMember.isReviewComplete()}"-->
                                 <!--                                   class="btn btn-outline-success disabled"-->
                                 <!--                                   role="button"-->
-                                <!--                                   aria-disabled="true">확인</a>-->
+                                <!--                                   aria-disabled="true">리뷰남기러 가기</a>-->
 
-                                <!--                                <a th:if="${!recruitmentPeople.isRealParticipant()}"-->
+                                <!--                                <a th:if="${!reviewMember.isReviewComplete()}"-->
                                 <!--                                   class="btn btn-outline-success"-->
-                                <!--                                   th:href="@{|/review/realMember/${recruitmentPeople.id}|}">확인</a>-->
+                                <!--                                   th:href="@{|/review/write/${realParticipant.id}|}">리뷰남기러 가기</a>-->
+
                             </div>
                         </div>
                     </li>
@@ -38,8 +60,8 @@
 
 
                 <!-- 신청한 공고 없을 때의 메시지 -->
-                <div th:if="${#lists.isEmpty(attendList)}" class="text-muted mt-4">
-                    신청한 공고가 없습니다.
+                <div th:if="${#lists.isEmpty(reviewMemberList)}" class="text-muted mt-4">
+                    참가한 멤버가 없습니다.
                 </div>
             </div>
         </div>

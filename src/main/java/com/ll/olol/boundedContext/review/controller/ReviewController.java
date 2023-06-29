@@ -7,6 +7,7 @@ import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentPeople;
 import com.ll.olol.boundedContext.recruitment.service.RecruitmentPeopleService;
 import com.ll.olol.boundedContext.recruitment.service.RecruitmentService;
+import com.ll.olol.boundedContext.review.entity.ReviewMember;
 import com.ll.olol.boundedContext.review.service.ReviewService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
@@ -38,8 +39,8 @@ public class ReviewController {
 
 
     //    @PreAuthorize("isAuthenticated()")
-    @GetMapping("/write")
-    public String showWrite() {
+    @GetMapping("/write/{id}")
+    public String showWrite(@PathVariable Long id, Model model) {
 
         return "usr/review/reviewWrite";
     }
@@ -65,8 +66,10 @@ public class ReviewController {
 
     }
 
-    @PostMapping("/write")
-    public String write(@Valid ReviewForm reviewForm) {
+    @PostMapping("/write/{id}")
+    public String write(@Valid ReviewForm reviewForm, @PathVariable Long id, Model model) {
+        Member reviewTarget = recruitmentPeopleService.findById(id).getMember();
+
         Member me = rq.getMember();
 
         reviewService.write(reviewForm.reviewTypeCode, reviewForm.appointmentTimeCode, reviewForm.mannerCode, me);
@@ -123,10 +126,17 @@ public class ReviewController {
 
         Member author = recruitmentArticle.getMember();
 
-        List<Member> realParticipantMemberList = reviewService.findRealParticipant(reviewer, author, recruitmentArticle);
+//        List<Member> realParticipantMemberList = reviewService.findRealParticipant(reviewer, author, recruitmentArticle);
+        List<RecruitmentPeople> realParticipantList = reviewService.findRealParticipant(reviewer, author, recruitmentArticle);
+
+        List<ReviewMember> reviewMemberList = reviewService.findAllByRecruitmentArticle(recruitmentArticle);
 
         model.addAttribute("recruitmentArticle", recruitmentArticle);
-        model.addAttribute("realParticipantMemberList", realParticipantMemberList);
+        model.addAttribute("realParticipantList", realParticipantList);
+//        model.addAttribute("realParticipantMemberList", realParticipantMemberList);
+        model.addAttribute("me", reviewer);
+
+        model.addAttribute("reviewMemberList", reviewMemberList);
 
 //        return "usr/review/authorReviewerCheckList";
         return "/usr/review/realParticipantMemberList";
