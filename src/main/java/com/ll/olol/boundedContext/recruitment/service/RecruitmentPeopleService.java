@@ -82,8 +82,9 @@ public class RecruitmentPeopleService {
             return RsData.of("F-1", "이미 참가 인원이 꽉 찼습니다.");
         }
 
-        publisher.publishEvent(new EventAfterRecruitmentAttend(this, recruitmentPeople));
         recruitmentPeople.setAttend(true);
+        publisher.publishEvent(new EventAfterRecruitmentAttend(this, recruitmentPeople));
+
         return RsData.of("S-1", "수락 완료");
     }
 
