@@ -18,24 +18,6 @@
                 </div>
 
                 <ul th:if="${!#lists.isEmpty(reviewMemberList)}" class="list-group">
-                    <!--                    <li class="list-group-item">-->
-                    <!--                        <div class="d-flex align-items-center">-->
-                    <!--                            <div class="mr-3">-->
-                    <!--                                <span th:text="${recruitmentArticle.getMember().getNickname()}"> </span>-->
-
-                    <!--                                <a th:unless="${!realParticipant.isReviewComplete()}"-->
-                    <!--                                   class="btn btn-outline-success disabled"-->
-                    <!--                                   role="button"-->
-                    <!--                                   aria-disabled="true">리뷰남기러 가기</a>-->
-
-                    <!--                                <a th:if="${!realParticipant.isReviewComplete()}"-->
-                    <!--                                   class="btn btn-outline-success"-->
-                    <!--                                   th:href="@{|/review/write/${realParticipant.id}|}">리뷰남기러 가기</a>-->
-
-                    <!--                            </div>-->
-                    <!--                        </div>-->
-
-                    <!--                    </li>-->
                     <li th:each="reviewMember: ${reviewMemberList}" class="list-group-item"
                         th:if="${reviewMember.getReviewMember() != me}">
                         <div class="d-flex align-items-center">
@@ -44,19 +26,23 @@
                                 <span th:text="${reviewMember.getReviewMember().getNickname()}">
                                 </span>
 
-                                <!--                                <a th:unless="${!reviewMember.isReviewComplete()}"-->
-                                <!--                                   class="btn btn-outline-success disabled"-->
-                                <!--                                   role="button"-->
-                                <!--                                   aria-disabled="true">리뷰남기러 가기</a>-->
+                                <a th:unless="${!reviewMember.isReviewComplete()}"
+                                   class="btn btn-outline-success disabled"
+                                   role="button"
+                                   aria-disabled="true">리뷰남기러 가기</a>
 
-                                <!--                                <a th:if="${!reviewMember.isReviewComplete()}"-->
-                                <!--                                   class="btn btn-outline-success"-->
-                                <!--                                   th:href="@{|/review/write/${realParticipant.id}|}">리뷰남기러 가기</a>-->
+                                <a th:if="${!reviewMember.isReviewComplete()}"
+                                   class="btn btn-outline-success"
+                                   th:href="@{|/review/write/${reviewMember.id}|}">리뷰남기러 가기</a>
 
                             </div>
                         </div>
                     </li>
                 </ul>
+
+                <a class="btn btn-outline-success"
+                   th:href="@{|/|}">리뷰를 다 남겼어요.</a>>
+                </a>
 
 
                 <!-- 신청한 공고 없을 때의 메시지 -->

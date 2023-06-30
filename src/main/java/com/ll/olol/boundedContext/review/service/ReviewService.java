@@ -30,17 +30,22 @@ public class ReviewService {
     private final ApplicationEventPublisher publisher;
 
     @Transactional
-    public void write(int reviewTypeCode, int appointmentTimeCode, int mannerCode, Member me) {
+    public void write(int reviewTypeCode, int appointmentTimeCode, int mannerCode, Member me, Member reviewTarget) {
         Review review = Review
                 .builder()
                 .reviewTypeCode(reviewTypeCode)
                 .appointmentTimeCode(appointmentTimeCode)
                 .mannerCode(mannerCode)
-                .toMember(null)
+                .toMember(reviewTarget)
                 .fromMember(me)
                 .build();
 
         reviewRepository.save(review);
+    }
+
+    @Transactional
+    public void updateReviewComplete(ReviewMember reviewMember, boolean complete) {
+        reviewMember.updateReviewComplete(complete);
     }
 
     @Transactional
@@ -65,6 +70,10 @@ public class ReviewService {
 
     public List<ReviewMember> findAllByRecruitmentArticle(RecruitmentArticle recruitmentArticle) {
         return reviewMemberRepository.findAllByRecruitmentArticle(recruitmentArticle);
+    }
+
+    public ReviewMember reviewMemberFindById(Long id) {
+        return reviewMemberRepository.findById(id).get();
     }
 
     public List<RecruitmentPeople> findRealParticipant(Member me, Member author, RecruitmentArticle recruitmentArticle) {

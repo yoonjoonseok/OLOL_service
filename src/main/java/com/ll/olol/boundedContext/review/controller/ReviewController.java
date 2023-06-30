@@ -68,13 +68,18 @@ public class ReviewController {
 
     @PostMapping("/write/{id}")
     public String write(@Valid ReviewForm reviewForm, @PathVariable Long id, Model model) {
-        Member reviewTarget = recruitmentPeopleService.findById(id).getMember();
+        ReviewMember reviewMember = reviewService.reviewMemberFindById(id);
+        Long articleId = reviewMember.getRecruitmentArticle().getId();
+
+        Member reviewTarget = reviewMember.getReviewMember();
 
         Member me = rq.getMember();
 
-        reviewService.write(reviewForm.reviewTypeCode, reviewForm.appointmentTimeCode, reviewForm.mannerCode, me);
+        reviewService.write(reviewForm.reviewTypeCode, reviewForm.appointmentTimeCode, reviewForm.mannerCode, me, reviewTarget);
 
-        return "redirect:/";
+        reviewService.updateReviewComplete(reviewMember, true);
+
+        return "redirect:/review/participantList/" + articleId;
     }
 
     @GetMapping("/reviewerList/{id}")
