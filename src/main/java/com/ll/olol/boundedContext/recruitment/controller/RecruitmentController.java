@@ -100,7 +100,7 @@ public class RecruitmentController {
         if (oldCookie != null) {
             if (!oldCookie.getValue().contains("[" + id.toString() + "]")) {
                 recruitmentService.addView(recruitmentArticle.get());
-                oldCookie.setValue("[" + id + "]");
+                oldCookie.setValue(oldCookie.getValue() + "_[" + id + "]");
                 oldCookie.setPath("/");
                 oldCookie.setMaxAge(60 * 60 * 24);
                 response.addCookie(oldCookie);
