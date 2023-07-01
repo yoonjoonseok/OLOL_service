@@ -16,6 +16,11 @@
                 <!--                    <a class="nav-link" href="/">홈</a>-->
                 <!--                </li>-->
 
+                <li class="nav-item active ">
+                    <a th:href="@{/chat/rooms}" class="btn">
+                        <i class="fa-solid fa-comments fa-2xl"></i>
+                    </a>
+                </li>
                 <li class="nav-item active mr-4">
                     <a th:href="@{/recruitment/report/list}" class="btn btn-outline-secondary"
                        th:if="${@rq.admin}">신고된 공고 목록</a>
@@ -65,6 +70,7 @@
                     </div>
                     <th:block th:replace="~{usr/layout/loginModal :: setLogin(~{this::login} )}"></th:block>
                 </li>
+
             </ul>
         </div>
     </nav>
