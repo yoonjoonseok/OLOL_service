@@ -1,0 +1,25 @@
+<html layout:decorate="~{usr/layout/layout.html}" xmlns:layout="http://www.w3.org/1999/xhtml"
+      xmlns="http://www.w3.org/1999/html">
+<body>
+<main layout:fragment="main" class="d-flex justify-content-center">
+    <div>
+        <h1>대화 목록</h1>
+        <table class="table">
+            <thead>
+            <tr>
+                <th th:text="${myNickname}"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="conversation : ${roomList}">
+                <td>
+                    <a class="chat-name" th:text="${conversation.roomId}"
+                       th:href="@{/chat/room/{roomId}(roomId=${conversation.roomId})}"></a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</main>
+</body>
+</html>
