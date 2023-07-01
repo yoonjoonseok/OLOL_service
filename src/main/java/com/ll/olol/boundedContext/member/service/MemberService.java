@@ -75,4 +75,12 @@ public class MemberService {
     public boolean hasAdditionalInfo(Member loginedMember) {
         return loginedMember.getEmail() != null || loginedMember.getNickname() != null;
     }
+
+    public Optional<Member> findByNickname(String writer) {
+        return memberRepository.findByNickname(writer);
+    }
+
+//    public Optional<Member> findByUsername(String username) {
+//        return memberRepository.findByUsername(username);
+//    }
 }
