@@ -40,7 +40,7 @@ public class ChatController {
         for (ChatRoomDetailDTO list : roomList) {
             System.out.println(list);
         }
-        return "usr/chat/exam";
+        return "usr/chat/chatList";
     }
 
     //채팅방 개설
