@@ -1,5 +1,6 @@
 package com.ll.olol.boundedContext.member.entity;
 
+import com.ll.olol.boundedContext.chat.entity.ChatRoom;
 import com.ll.olol.boundedContext.comment.entity.Comment;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentPeople;
 import jakarta.persistence.*;
@@ -74,6 +75,10 @@ public class Member {
 //    @LazyCollection(LazyCollectionOption.EXTRA)
 //    @Builder.Default // @Builder 가 있으면 ` = new ArrayList<>();` 가 작동하지 않는다. 그래서 이걸 붙여야 한다.
 //    private List<LikeableRecruitmentArticle> fromLikeableArticle = new ArrayList<>();
+
+    @OneToMany(mappedBy = "roomHost")
+    private List<ChatRoom> chatRooms = new ArrayList<>();
+
 
     // 이 함수 자체는 만들어야 한다. 스프링 시큐리티 규격
     public List<? extends GrantedAuthority> getGrantedAuthorities() {
