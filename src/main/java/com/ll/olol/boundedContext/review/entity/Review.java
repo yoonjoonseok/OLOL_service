@@ -1,6 +1,7 @@
 package com.ll.olol.boundedContext.review.entity;
 
 import com.ll.olol.boundedContext.member.entity.Member;
+import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -29,6 +30,8 @@ public class Review {
     @CreatedDate
     LocalDateTime createDate;
 
+    @ManyToOne
+    RecruitmentArticle recruitmentArticle;
 
     @ManyToOne
     Member toMember;

@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,9 +31,10 @@ public class ReviewService {
     private final ApplicationEventPublisher publisher;
 
     @Transactional
-    public void write(int reviewTypeCode, int appointmentTimeCode, int mannerCode, Member me, Member reviewTarget) {
+    public void write(int reviewTypeCode, int appointmentTimeCode, int mannerCode, Member me, Member reviewTarget, RecruitmentArticle recruitmentArticle) {
         Review review = Review
                 .builder()
+                .recruitmentArticle(recruitmentArticle)
                 .reviewTypeCode(reviewTypeCode)
                 .appointmentTimeCode(appointmentTimeCode)
                 .mannerCode(mannerCode)
@@ -47,6 +49,26 @@ public class ReviewService {
     public void updateReviewComplete(ReviewMember reviewMember, boolean complete) {
         reviewMember.updateReviewComplete(complete);
     }
+
+
+    public Review findReviewWrite(Member reviewTarget, Member me, RecruitmentArticle recruitmentArticle) {
+        Optional<Review> opReview = reviewRepository.findByRecruitmentArticleAndToMemberAndFromMember(recruitmentArticle, reviewTarget, me);
+
+        if (opReview.isPresent()) {
+            return opReview.get();
+        }
+
+        return null;
+    }
+
+//    public RsData<Review> canReviewWrite(Member reviewTarget, Member me, RecruitmentArticle recruitmentArticle) {
+//        Optional<Review> OpReview = reviewRepository.findByRecruitmentArticleAndToMemberAndFromMember(recruitmentArticle, reviewTarget, me);
+//
+//        if (OpReview.isPresent()) {
+//            return RsData.of("F-1", "작성한 리뷰가 있습니다.", OpReview.get());
+//        }
+//        return RsData.of("S-1", "리뷰 작성 가능", OpReview.get());
+//    }
 
     @Transactional
     public RsData realParticipant(RecruitmentPeople recruitmentPeople) {

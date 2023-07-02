@@ -26,19 +26,34 @@
                                 <span th:text="${reviewMember.getReviewMember().getNickname()}">
                                 </span>
 
-                                <a th:unless="${!reviewMember.isReviewComplete()}"
-                                   class="btn btn-outline-success disabled"
-                                   role="button"
-                                   aria-disabled="true">리뷰남기러 가기</a>
+<!--                                <a th:unless="${#lists.isEmpty(wroteReviewList)}"-->
+<!--                                   class="btn btn-outline-success disabled"-->
+<!--                                   role="button"-->
+<!--                                   aria-disabled="true">리뷰남기러 가기</a>-->
 
-                                <a th:if="${!reviewMember.isReviewComplete()}"
-                                   class="btn btn-outline-success"
-                                   th:href="@{|/review/write/${reviewMember.id}|}">리뷰남기러 가기</a>
+<!--                                <a id="reviewButton"-->
+<!--                                   class="btn btn-outline-success"-->
+<!--                                   th:href="@{|/review/write/${reviewMember.id}|}">리뷰남기러 가기</a>-->
 
+                                <button class="btn btn-outline-success"
+                                        th:onclick="'location.href=\'' + @{/review/write/} + ${reviewMember.id} + '\''"
+                                        th:attr="disabled=${isDisabled}">
+                                    리뷰남기러 가기
+                                </button>
+
+
+<!--                                <script>-->
+<!--                                    document.getElementById("reviewButton").addEventListener("click", function() {-->
+<!--                                        this.classList.add("disabled");-->
+<!--                                        this.setAttribute("disabled", "true");-->
+<!--                                    });-->
+<!--                                </script>-->
                             </div>
                         </div>
                     </li>
                 </ul>
+
+
 
                 <a class="btn btn-outline-success"
                    th:href="@{|/|}">리뷰를 다 남겼어요.</a>>

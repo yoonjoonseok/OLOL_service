@@ -3,6 +3,7 @@ package com.ll.olol.boundedContext.recruitment.entity;
 import com.ll.olol.boundedContext.comment.entity.Comment;
 import com.ll.olol.boundedContext.member.entity.Member;
 import com.ll.olol.boundedContext.report.entity.ArticleReport;
+import com.ll.olol.boundedContext.review.entity.Review;
 import com.ll.olol.boundedContext.review.entity.ReviewMember;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -64,6 +65,9 @@ public class RecruitmentArticle {
 
     @OneToMany(mappedBy = "recruitmentArticle", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<LikeableRecruitmentArticle> likeableRecruitmentArticles;
+
+    @OneToMany(mappedBy = "recruitmentArticle", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    private List<Review> reviewList;
 
     @OneToMany(mappedBy = "recruitmentArticle", fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
     private List<ReviewMember> reviewMemberList;

@@ -7,8 +7,11 @@ import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentPeople;
 import com.ll.olol.boundedContext.recruitment.service.RecruitmentPeopleService;
 import com.ll.olol.boundedContext.recruitment.service.RecruitmentService;
+import com.ll.olol.boundedContext.review.entity.Review;
 import com.ll.olol.boundedContext.review.entity.ReviewMember;
 import com.ll.olol.boundedContext.review.service.ReviewService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -23,6 +26,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,6 +45,20 @@ public class ReviewController {
     //    @PreAuthorize("isAuthenticated()")
     @GetMapping("/write/{id}")
     public String showWrite(@PathVariable Long id, Model model) {
+
+        ReviewMember reviewMember = reviewService.reviewMemberFindById(id);
+        Long articleId = reviewMember.getRecruitmentArticle().getId();
+
+        Member reviewTarget = reviewMember.getReviewMember();
+
+        Member me = rq.getMember();
+
+        Review review = reviewService.findReviewWrite(reviewTarget, me, reviewMember.getRecruitmentArticle());
+
+        if (review != null) {
+            return rq.historyBack("이미 작성하셨습니다.");
+        }
+
 
         return "usr/review/reviewWrite";
     }
@@ -67,7 +85,7 @@ public class ReviewController {
     }
 
     @PostMapping("/write/{id}")
-    public String write(@Valid ReviewForm reviewForm, @PathVariable Long id, Model model) {
+    public String write(@Valid ReviewForm reviewForm, @PathVariable Long id, Model model, HttpServletRequest request) {
         ReviewMember reviewMember = reviewService.reviewMemberFindById(id);
         Long articleId = reviewMember.getRecruitmentArticle().getId();
 
@@ -75,9 +93,21 @@ public class ReviewController {
 
         Member me = rq.getMember();
 
-        reviewService.write(reviewForm.reviewTypeCode, reviewForm.appointmentTimeCode, reviewForm.mannerCode, me, reviewTarget);
+        reviewService.write(reviewForm.reviewTypeCode, reviewForm.appointmentTimeCode, reviewForm.mannerCode, me, reviewTarget, reviewMember.getRecruitmentArticle());
 
-        reviewService.updateReviewComplete(reviewMember, true);
+//        RsData<Review> canReviewWrite = reviewService.canReviewWrite(reviewTarget, me, reviewMember.getRecruitmentArticle());
+        Review review = reviewService.findReviewWrite(reviewTarget, me, reviewMember.getRecruitmentArticle());
+
+//        List<Review> wroteReviewList = new ArrayList<>();
+//
+        HttpSession session = request.getSession();
+
+//        if (canReviewWrite.isFail()) {
+//            session.setAttribute("ReviewData", canReviewWrite.getData());
+//        }
+        session.setAttribute("ReviewData", review);
+
+//        reviewService.updateReviewComplete(reviewMember, true);
 
         return "redirect:/review/participantList/" + articleId;
     }
@@ -124,7 +154,7 @@ public class ReviewController {
     }
 
     @GetMapping("/participantList/{id}")
-    public String showRealParticipantList(@PathVariable Long id, Model model) {
+    public String showRealParticipantList(@PathVariable Long id, Model model, HttpServletRequest request) {
         Member reviewer = rq.getMember();
 
         RecruitmentArticle recruitmentArticle = recruitmentService.findById(id).get();
@@ -142,6 +172,19 @@ public class ReviewController {
         model.addAttribute("me", reviewer);
 
         model.addAttribute("reviewMemberList", reviewMemberList);
+
+        List<Review> wroteReviewList = new ArrayList<>();
+
+        HttpSession session = request.getSession();
+
+        Review reviewIWroteToWho = (Review) session.getAttribute("ReviewData");
+
+        if (reviewIWroteToWho != null) {
+            wroteReviewList.add(reviewIWroteToWho);
+        }
+
+
+        model.addAttribute("wroteReviewList", wroteReviewList);
 
 //        return "usr/review/authorReviewerCheckList";
         return "/usr/review/realParticipantMemberList";
