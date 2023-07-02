@@ -36,18 +36,10 @@
 <!--                                   th:href="@{|/review/write/${reviewMember.id}|}">리뷰남기러 가기</a>-->
 
                                 <button class="btn btn-outline-success"
-                                        th:onclick="'location.href=\'' + @{/review/write/} + ${reviewMember.id} + '\''"
-                                        th:attr="disabled=${isDisabled}">
+                                        th:onclick="'location.href=\'' + @{/review/write/} + ${reviewMember.id} + '\''">
                                     리뷰남기러 가기
                                 </button>
 
-
-<!--                                <script>-->
-<!--                                    document.getElementById("reviewButton").addEventListener("click", function() {-->
-<!--                                        this.classList.add("disabled");-->
-<!--                                        this.setAttribute("disabled", "true");-->
-<!--                                    });-->
-<!--                                </script>-->
                             </div>
                         </div>
                     </li>

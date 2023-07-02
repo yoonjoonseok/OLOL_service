@@ -47,7 +47,6 @@ public class ReviewController {
     public String showWrite(@PathVariable Long id, Model model) {
 
         ReviewMember reviewMember = reviewService.reviewMemberFindById(id);
-        Long articleId = reviewMember.getRecruitmentArticle().getId();
 
         Member reviewTarget = reviewMember.getReviewMember();
 
@@ -107,7 +106,6 @@ public class ReviewController {
 //        }
         session.setAttribute("ReviewData", review);
 
-//        reviewService.updateReviewComplete(reviewMember, true);
 
         return "redirect:/review/participantList/" + articleId;
     }

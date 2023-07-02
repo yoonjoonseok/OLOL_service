@@ -34,13 +34,10 @@ public class ReviewMember {
     @OneToOne
     private RecruitmentPeople recruitmentPeople;
 
-    private boolean reviewComplete;
 
     public void updateRecruitmentPeople(RecruitmentPeople recruitmentPeople) {
         this.recruitmentPeople = recruitmentPeople;
     }
 
-    public void updateReviewComplete(boolean reviewComplete) {
-        this.reviewComplete = reviewComplete;
-    }
+
 }

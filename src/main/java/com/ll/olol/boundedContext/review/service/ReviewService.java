@@ -45,11 +45,6 @@ public class ReviewService {
         reviewRepository.save(review);
     }
 
-    @Transactional
-    public void updateReviewComplete(ReviewMember reviewMember, boolean complete) {
-        reviewMember.updateReviewComplete(complete);
-    }
-
 
     public Review findReviewWrite(Member reviewTarget, Member me, RecruitmentArticle recruitmentArticle) {
         Optional<Review> opReview = reviewRepository.findByRecruitmentArticleAndToMemberAndFromMember(recruitmentArticle, reviewTarget, me);
