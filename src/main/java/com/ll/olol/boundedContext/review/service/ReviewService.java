@@ -107,16 +107,6 @@ public class ReviewService {
             if (participant.isRealParticipant()) realParticipantList.add(participant);
         }
 
-        // Member용
-//        for (RecruitmentPeople participant : recruitmentPeopleList) {
-//            if (participant.isRealParticipant()) realParticipantMemberList.add(participant.getMember());
-//        }
-
-        // ReviewMember용
-//        for (RecruitmentPeople participant : recruitmentPeopleList) {
-//            if (participant.isRealParticipant()) realParticipantMemberList.add(participant.);
-//        }
-
         realParticipantMemberList
                 .stream()
                 .filter(e -> !e.equals(me))
@@ -124,5 +114,10 @@ public class ReviewService {
 
 
         return realParticipantList;
+    }
+
+    @Transactional
+    public void setCourseTimeEnd(RecruitmentArticle recruitmentArticle) {
+        recruitmentArticle.setCourseTimeEnd(true);
     }
 }

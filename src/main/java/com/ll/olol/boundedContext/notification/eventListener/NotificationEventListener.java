@@ -9,6 +9,7 @@ import com.ll.olol.boundedContext.notification.service.NotificationService;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentPeople;
 import com.ll.olol.boundedContext.recruitment.service.RecruitmentPeopleService;
+import com.ll.olol.boundedContext.recruitment.service.RecruitmentService;
 import com.ll.olol.boundedContext.review.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +27,8 @@ import java.util.List;
 public class NotificationEventListener {
     private final NotificationService notificationService;
     private final RecruitmentPeopleService recruitmentPeopleService;
+
+    private final RecruitmentService recruitmentService;
 
     private final ReviewService reviewService;
 
@@ -109,6 +112,7 @@ public class NotificationEventListener {
 
         RsData reviewMemberRsData = reviewService.createReviewMember(author, recruitmentArticle, null);
 
+        reviewService.setCourseTimeEnd(recruitmentArticle);
 
         // 공고자에게 산행 종료 알림 보냄
         notificationService.makeReviewNotification(author, 4, content, recruitmentArticle.getId(), true);
@@ -124,8 +128,10 @@ public class NotificationEventListener {
 
         // recruimentPeople 내부의 realParticipant 여부로 진짜 참여자를 판별
         RsData rsData = recruitmentPeopleService.checkedRealParticipant(recruitmentPeople, true);
+        
 
         RsData reviewMemberRsData = reviewService.createReviewMember(reviewer, recruitmentPeople.getRecruitmentArticle(), recruitmentPeople);
+
 
         notificationService.makeReviewWriteNotification(reviewer, 4, content, recruitmentPeople.getRecruitmentArticle().getId(), true);
     }

@@ -74,6 +74,8 @@ public class RecruitmentArticle {
 
     private boolean isEventTriggered;
 
+    private boolean isCourseTimeEnd;
+
     public String getTypeValueToString() {
         if (typeValue == 1) {
             return "정기";
@@ -98,6 +100,7 @@ public class RecruitmentArticle {
         return deadLineDate.format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm:ss"));
     }
 
+
     public void addComment(Comment c) {
         c.setRecruitmentArticle(this); // 넌 나랑 관련된 답변이야.
         comment.add(c); // 너는 나랑 관련되어 있는 답변들 중 하나야.
@@ -121,12 +124,5 @@ public class RecruitmentArticle {
         return dayOfWeek.getDisplayName(TextStyle.FULL, Locale.KOREA);
     }
 
-    public void updateEventTrigger(boolean eventTriggered) {
-        this.isEventTriggered = eventTriggered;
-    }
-
-//    public boolean isEventTrigger() {
-//        return eventTriggered;
-//    }
 
 }

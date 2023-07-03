@@ -26,7 +26,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -115,6 +114,9 @@ public class ReviewController {
         Member author = rq.getMember();
 
         RecruitmentArticle recruitmentArticle = recruitmentService.findById(id).get();
+        if (!recruitmentArticle.isCourseTimeEnd()) {
+            return rq.historyBack("아직 리뷰 작성시간이 아닙니다.");
+        }
 
         List<RecruitmentPeople> recruitmentPeopleList = recruitmentArticle.getRecruitmentPeople();
         List<RecruitmentPeople> attendPeopleList = recruitmentPeopleList
@@ -129,17 +131,14 @@ public class ReviewController {
     }
 
 
-//    @PostMapping("/publish-event-endpoint")
-//    public void publishEvent(@RequestBody RecruitmentPeople recruitmentPeople) {
-//        reviewService.realParticipant(recruitmentPeople);
-//        // eventData를 기반으로 이벤트를 발행하거나 처리하는 로직을 구현
-////        publisher.publishEvent(new EventAfterUpdateArticle(this, eventData.getRecruitmentPeople()));
-//    }
-
     @GetMapping("/realMember/{id}")
     public String checkedRealParticipant(@PathVariable Long id, Model model) {
         RecruitmentPeople recruitmentPeople = recruitmentPeopleService.findById(id);
         Long articleId = recruitmentPeople.getRecruitmentArticle().getId();
+
+        if (!recruitmentPeople.getRecruitmentArticle().isCourseTimeEnd()) {
+            return rq.historyBack("아직 리뷰 작성시간이 아닙니다.");
+        }
 
         RsData rsData = reviewService.realParticipant(recruitmentPeople);
 
@@ -147,7 +146,6 @@ public class ReviewController {
         rq.historyBack("성공띠");
 
 
-//        return "usr/review/authorReviewerCheckList";
         return "redirect:/review/reviewerList/" + articleId;
     }
 
@@ -171,20 +169,18 @@ public class ReviewController {
 
         model.addAttribute("reviewMemberList", reviewMemberList);
 
-        List<Review> wroteReviewList = new ArrayList<>();
+//        List<Review> wroteReviewList = new ArrayList<>();
+//
+//        HttpSession session = request.getSession();
+//
+//        Review reviewIWroteToWho = (Review) session.getAttribute("ReviewData");
+//
+//        if (reviewIWroteToWho != null) {
+//            wroteReviewList.add(reviewIWroteToWho);
+//        }
 
-        HttpSession session = request.getSession();
+//        model.addAttribute("wroteReviewList", wroteReviewList);
 
-        Review reviewIWroteToWho = (Review) session.getAttribute("ReviewData");
-
-        if (reviewIWroteToWho != null) {
-            wroteReviewList.add(reviewIWroteToWho);
-        }
-
-
-        model.addAttribute("wroteReviewList", wroteReviewList);
-
-//        return "usr/review/authorReviewerCheckList";
         return "/usr/review/realParticipantMemberList";
     }
 
