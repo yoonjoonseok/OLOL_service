@@ -32,6 +32,5 @@ public class LikeableRecruitmentArticle {
 
     @ManyToOne
     private Member fromMember;
-
-
+    
 }

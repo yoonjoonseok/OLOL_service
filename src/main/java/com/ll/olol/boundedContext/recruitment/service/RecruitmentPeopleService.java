@@ -97,4 +97,24 @@ public class RecruitmentPeopleService {
         return RsData.of("S-1", "추방 완료");
     }
 
+    public RecruitmentPeople findById(Long id) {
+        return recruitmentPeopleRepository.findById(id).get();
+    }
+
+    @Transactional
+    public RsData checkedRealParticipant(RecruitmentPeople recruitmentPeople, boolean checkedReal) {
+        recruitmentPeople.checkedParticipant(checkedReal);
+
+        return RsData.of("S-1", "실제 참여자로 체크했습니다.");
+    }
+
+    public RsData<RecruitmentPeople> findByRecruitmentArticleAndMember(RecruitmentArticle recruitmentArticle, Member reviewer) {
+        RecruitmentPeople recruitmentPeople = recruitmentPeopleRepository.findByRecruitmentArticleAndMember(recruitmentArticle, reviewer);
+
+        if (recruitmentPeople != null) {
+            return RsData.of("S-1", "신청이 확인되었습니다.", recruitmentPeople);
+        }
+
+        return RsData.of("F-1", "확인 안됐습니다.");
+    }
 }

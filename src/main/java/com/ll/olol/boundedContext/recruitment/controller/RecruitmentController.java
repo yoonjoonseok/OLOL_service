@@ -249,4 +249,5 @@ public class RecruitmentController {
         return rq.redirectWithMsg("/member/mypage", rsData);
 
     }
+
 }
