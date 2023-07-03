@@ -120,4 +120,6 @@ public class ReviewService {
     public void setCourseTimeEnd(RecruitmentArticle recruitmentArticle) {
         recruitmentArticle.setCourseTimeEnd(true);
     }
+
+
 }

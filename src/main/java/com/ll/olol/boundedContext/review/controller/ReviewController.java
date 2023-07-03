@@ -19,6 +19,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,17 +42,24 @@ public class ReviewController {
     private final ReviewService reviewService;
 
 
-    //    @PreAuthorize("isAuthenticated()")
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/write/{id}")
     public String showWrite(@PathVariable Long id, Model model) {
 
         ReviewMember reviewMember = reviewService.reviewMemberFindById(id);
+
 
         Member reviewTarget = reviewMember.getReviewMember();
 
         Member me = rq.getMember();
 
         Review review = reviewService.findReviewWrite(reviewTarget, me, reviewMember.getRecruitmentArticle());
+
+        RsData<RecruitmentPeople> checkRealParticipant = recruitmentPeopleService.findByRecruitmentArticleAndMember(reviewMember.getRecruitmentArticle(), me);
+
+        if (!checkRealParticipant.getData().isRealParticipant() || checkRealParticipant.isFail()) {
+            rq.historyBack("후기를 작성할 권한이 없습니다.");
+        }
 
         if (review != null) {
             return rq.historyBack("이미 작성하셨습니다.");
@@ -82,6 +90,7 @@ public class ReviewController {
 
     }
 
+    @PreAuthorize("isAuthenticated()")
     @PostMapping("/write/{id}")
     public String write(@Valid ReviewForm reviewForm, @PathVariable Long id, Model model, HttpServletRequest request) {
         ReviewMember reviewMember = reviewService.reviewMemberFindById(id);
@@ -109,6 +118,7 @@ public class ReviewController {
         return "redirect:/review/participantList/" + articleId;
     }
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/reviewerList/{id}")
     public String showReviewerList(@PathVariable Long id, Model model) {
         Member author = rq.getMember();
@@ -131,6 +141,7 @@ public class ReviewController {
     }
 
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/realMember/{id}")
     public String checkedRealParticipant(@PathVariable Long id, Model model) {
         RecruitmentPeople recruitmentPeople = recruitmentPeopleService.findById(id);
@@ -149,11 +160,20 @@ public class ReviewController {
         return "redirect:/review/reviewerList/" + articleId;
     }
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/participantList/{id}")
     public String showRealParticipantList(@PathVariable Long id, Model model, HttpServletRequest request) {
         Member reviewer = rq.getMember();
 
         RecruitmentArticle recruitmentArticle = recruitmentService.findById(id).get();
+
+        RsData<RecruitmentPeople> checkRealParticipant = recruitmentPeopleService.findByRecruitmentArticleAndMember(recruitmentArticle, reviewer);
+
+
+        if (!checkRealParticipant.getData().isRealParticipant() || checkRealParticipant.isFail()) {
+            return rq.historyBack("후기를 작성할 권한이 없습니다.");
+        }
+
 
         Member author = recruitmentArticle.getMember();
 
@@ -184,11 +204,5 @@ public class ReviewController {
         return "/usr/review/realParticipantMemberList";
     }
 
-
-    @GetMapping("/list")
-    public String showList() {
-
-        return "usr/review/reviewWrite";
-    }
 
 }

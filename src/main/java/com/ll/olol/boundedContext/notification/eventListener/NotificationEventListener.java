@@ -128,8 +128,8 @@ public class NotificationEventListener {
 
         // recruimentPeople 내부의 realParticipant 여부로 진짜 참여자를 판별
         RsData rsData = recruitmentPeopleService.checkedRealParticipant(recruitmentPeople, true);
-        
 
+        // recruimentPeople 내부의 realParticipant 여부로 진짜 참여자들을 리뷰 멤버에 추가
         RsData reviewMemberRsData = reviewService.createReviewMember(reviewer, recruitmentPeople.getRecruitmentArticle(), recruitmentPeople);
 
 
