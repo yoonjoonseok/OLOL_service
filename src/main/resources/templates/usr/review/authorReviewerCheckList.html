@@ -1,0 +1,53 @@
+<html layout:decorate="~{usr/layout/layout.html}">
+<link rel="stylesheet" href="common.css">
+<head>
+
+</head>
+<body>
+<main layout:fragment="main">
+    <div class="container mt-5">
+        <h2 class="my-4">참가자 목록</h2>
+        <div class="row">
+            <div class="col-md-8">
+                <div class="mr-3">
+                    <a th:href="@{|/recruitment/${recruitmentArticle.id}|}"
+                       th:text="${recruitmentArticle.articleName}"
+                       class="text-decoration-none">
+                        공고 제목
+                    </a>
+                </div>
+
+                <ul th:if="${!#lists.isEmpty(attendList)}" class="list-group">
+                    <li th:each="recruitmentPeople: ${attendList}" class="list-group-item">
+                        <div class="d-flex align-items-center">
+                            <div class="mr-3">
+                                <span th:text="${recruitmentPeople.getMember().getNickname()}">
+                                </span>
+                                <a th:unless="${!recruitmentPeople.isRealParticipant()}"
+                                   class="btn btn-outline-success disabled"
+                                   role="button"
+                                   aria-disabled="true">확인</a>
+
+                                <a th:if="${!recruitmentPeople.isRealParticipant()}"
+                                   class="btn btn-outline-success"
+                                   th:href="@{|/review/realMember/${recruitmentPeople.id}|}">확인</a>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+
+                <button class="btn btn-outline-success mt-5"
+                        th:onclick="'location.href=\'' + @{/review/participantList/} + ${recruitmentArticle.id} + '\''">
+                    리뷰 페이지로 이동
+                </button>
+
+
+                <!-- 신청한 공고 없을 때의 메시지 -->
+                <div th:if="${#lists.isEmpty(attendList)}" class="text-muted mt-4">
+                    신청한 공고가 없습니다.
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+</body>

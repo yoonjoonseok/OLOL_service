@@ -36,11 +36,23 @@ public class Notification {
 
     private Long articleId;
 
+    private boolean reviewed;
+
+    private boolean participant;
+
     public boolean isRead() {
         return readDate != null;
     }
 
     public void markAsRead() {
         readDate = LocalDateTime.now();
+    }
+
+    public boolean isReviewed() {
+        return reviewed;
+    }
+
+    public boolean isParticipant() {
+        return participant;
     }
 }

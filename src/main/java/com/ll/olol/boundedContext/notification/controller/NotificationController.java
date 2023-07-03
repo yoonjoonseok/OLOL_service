@@ -11,6 +11,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.util.Collections;
 import java.util.List;
@@ -43,5 +45,13 @@ public class NotificationController {
         model.addAttribute("notifications", notifications);
 
         return "usr/notification/list";
+    }
+
+    @ResponseBody
+    @GetMapping(value = "/subscribe", produces = "text/event-stream")
+    public SseEmitter subscribe() {
+        Member member = rq.getMember();
+        // 서비스를 통해 생성된 SseEmitter를 반환
+        return notificationService.connectNotification(member.getId());
     }
 }

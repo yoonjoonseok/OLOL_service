@@ -3,12 +3,16 @@ package com.ll.olol.base.rq;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ll.olol.base.rsData.RsData;
+import com.ll.olol.base.standard.util.Ut;
 import com.ll.olol.boundedContext.member.entity.Member;
 import com.ll.olol.boundedContext.member.service.MemberService;
 import com.ll.olol.boundedContext.notification.service.NotificationService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
+import java.util.Date;
+import java.util.Locale;
+import java.util.Map;
 import org.springframework.context.MessageSource;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,9 +21,6 @@ import org.springframework.security.web.savedrequest.SavedRequest;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.RequestScope;
 import org.springframework.web.servlet.LocaleResolver;
-
-import java.util.Locale;
-import java.util.Map;
 
 
 @Component
@@ -36,7 +37,8 @@ public class Rq {
     private final User user;
     private Member member = null; // 레이지 로딩, 처음부터 넣지 않고, 요청이 들어올 때 넣는다.
 
-    public Rq(MemberService memberService, MessageSource messageSource, NotificationService notificationService, LocaleResolver localeResolver,
+    public Rq(MemberService memberService, MessageSource messageSource, NotificationService notificationService,
+              LocaleResolver localeResolver,
               HttpServletRequest req, HttpServletResponse resp, HttpSession session) {
         this.memberService = memberService;
         this.messageSource = messageSource;
@@ -157,8 +159,31 @@ public class Rq {
     }
 
     public boolean hasUnreadNotifications() {
-        if (isLogout()) return false;
+        if (isLogout()) {
+            return false;
+        }
         Member actor = getMember();
         return notificationService.countUnreadNotificationsByMember(getMember());
     }
+
+    // 302 + 메세지
+    public String redirectWithMsg(String url, RsData rsData) {
+        return redirectWithMsg(url, rsData.getMsg());
+    }
+
+    // 302 + 메세지
+    public String redirectWithMsg(String url, String msg) {
+        return "redirect:" + urlWithMsg(url, msg);
+    }
+
+    private String urlWithMsg(String url, String msg) {
+        // 기존 URL에 혹시 msg 파라미터가 있다면 그것을 지우고 새로 넣는다.
+        return Ut.url.modifyQueryParam(url, "msg", msgWithTtl(msg));
+    }
+
+    // 메세지에 ttl 적용
+    private String msgWithTtl(String msg) {
+        return Ut.url.encode(msg) + ";ttl=" + new Date().getTime();
+    }
 }
+

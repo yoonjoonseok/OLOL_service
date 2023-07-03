@@ -6,14 +6,17 @@ import com.ll.olol.boundedContext.comment.entity.Comment;
 import com.ll.olol.boundedContext.comment.entity.CommentDto;
 import com.ll.olol.boundedContext.comment.service.CommentService;
 import jakarta.validation.Valid;
+import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
-
-import java.time.LocalDateTime;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequestMapping("/comment")
@@ -32,45 +35,45 @@ public class CommentController {
         }
 
         commentDto.setCreateDate(LocalDateTime.now());
-        commentService.commentSave(commentDto, id);
+        RsData rsData = commentService.commentSave(commentDto, id);
+        if (rsData.isFail()) {
+            return rq.historyBack(rsData);
+        }
 
-        return "redirect:/recruitment/" + id;
+        return rq.redirectWithMsg("/recruitment/" + id, rsData);
     }
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/{id}/delete")
     public String deleteComment(@PathVariable("id") Long id) {
-        RsData rsData = commentService.isEqualMemberById(id);
-        if (rsData.isFail()) {
-            return rq.historyBack(rsData.getMsg());
-        }
+
         Comment comment = commentService.findOne(id);
         Long articleId = comment.getRecruitmentArticle().getId();
-        commentService.commentDelete(id);
-        return "redirect:/recruitment/" + articleId;
+        RsData rsData1 = commentService.commentDelete(id);
+
+        return rq.redirectWithMsg("/recruitment/" + articleId, rsData1);
     }
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/{id}/edit")
     public String editCommentForm(@PathVariable("id") Long id, Model model) {
         Comment comment = commentService.findOne(id);
-        RsData rsData = commentService.isEqualMemberById(id);
-
-        if (rsData.isFail()) {
-            return rq.historyBack(rsData.getMsg());
-        }
 
         model.addAttribute("comment", comment);
         return "usr/comment/editComment";
+
     }
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/{id}/edit")
     public String editComment(@PathVariable("id") Long id, @ModelAttribute Comment comment) {
-        commentService.update(id, comment.getContent());
+        RsData update = commentService.update(id, comment.getContent());
+        if (update.isFail()) {
+            return rq.historyBack(update);
+        }
         Comment comment1 = commentService.findOne(id);
         Long articleId = comment1.getRecruitmentArticle().getId();
 
-        return "redirect:/recruitment/" + articleId;
+        return rq.redirectWithMsg("/recruitment/" + articleId, update);
     }
 }

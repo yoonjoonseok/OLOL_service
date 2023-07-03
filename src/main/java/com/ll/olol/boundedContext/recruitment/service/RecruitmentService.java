@@ -4,6 +4,7 @@ import com.ll.olol.base.rsData.RsData;
 import com.ll.olol.boundedContext.api.localCode.LocalCodeApiClient;
 import com.ll.olol.boundedContext.comment.entity.Comment;
 import com.ll.olol.boundedContext.member.entity.Member;
+import com.ll.olol.boundedContext.notification.event.EventAfterCourseTime;
 import com.ll.olol.boundedContext.notification.event.EventAfterUpdateArticle;
 import com.ll.olol.boundedContext.recruitment.entity.CreateForm;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
@@ -11,16 +12,7 @@ import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticleForm;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentPeople;
 import com.ll.olol.boundedContext.recruitment.repository.RecruitmentFormRepository;
 import com.ll.olol.boundedContext.recruitment.repository.RecruitmentRepository;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Join;
-import jakarta.persistence.criteria.JoinType;
-import jakarta.persistence.criteria.Predicate;
-import jakarta.persistence.criteria.Root;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import jakarta.persistence.criteria.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
@@ -28,8 +20,14 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -186,11 +184,12 @@ public class RecruitmentService {
     }
 
     @Transactional
-    public void update(RecruitmentArticle recruitmentArticle, CreateForm createForm) {
+    public RsData update(RecruitmentArticle recruitmentArticle, CreateForm createForm) {
         recruitmentArticle.update(createForm);
         recruitmentArticle.getRecruitmentArticleForm().update(createForm);
 
         publisher.publishEvent(new EventAfterUpdateArticle(this, recruitmentArticle));
+        return RsData.of("S-1", "수정 완료");
     }
 
     public RsData canUpdate(Optional<RecruitmentArticle> recruitmentArticle, Member member) {
@@ -204,12 +203,13 @@ public class RecruitmentService {
             return RsData.of("F-3", " 마감 후에는 수정이 불가능합니다");
         }
 
-        return RsData.of("S-1", "모임 공고 수정 가능");
+        return RsData.of("S-1", "모임 글 수정 가능합니다.");
     }
 
     @Transactional
-    public void deleteArticle(RecruitmentArticle recruitmentArticle) {
+    public RsData deleteArticle(RecruitmentArticle recruitmentArticle) {
         recruitmentRepository.delete(recruitmentArticle);
+        return RsData.of("S-1", "삭제 완료");
     }
 
     public RsData canDelete(Optional<RecruitmentArticle> recruitmentArticle, Member member) {
@@ -221,7 +221,7 @@ public class RecruitmentService {
             return RsData.of("F-2", "모집자만이 삭제 가능합니다");
         }
 
-        return RsData.of("S-1", "모임 공고 삭제 가능");
+        return RsData.of("S-1", "모임 삭제 가능합니다.");
     }
 
     @Transactional
@@ -233,5 +233,58 @@ public class RecruitmentService {
     public List<RecruitmentPeople> findByRecruitmentPeopleId(Long id) {
         Optional<RecruitmentArticle> article = findById(id);
         return article.get().getRecruitmentPeople();
+    }
+
+    @Transactional
+    public RsData deadLine(Member member, RecruitmentArticle article) {
+        if (member.getId() != article.getMember().getId()) {
+            return RsData.of("F-1", "만든 사람만 마감버튼을 누를 수 있어요.");
+        }
+        article.setDeadLineDate(LocalDateTime.now());
+        return RsData.of("S-1", "마감 성공");
+    }
+
+    @Scheduled(fixedRate = 60000)
+    @Transactional
+    public void checkTimeDeadLine() {
+        List<RecruitmentArticle> all = recruitmentRepository.findByDeadLineDateBeforeAndIsDeadLine(LocalDateTime.now(),
+                false);
+        for (RecruitmentArticle article : all) {
+            if (LocalDateTime.now().isAfter(article.getDeadLineDate())) {
+                article.setDeadLine(true);
+            }
+        }
+
+    }
+
+    @Transactional
+    @Scheduled(fixedDelay = 30 * 60 * 1000 + 59 * 1000) // 30분 59초마다 실행 (단위: 밀리초)
+    public void triggerEvent() {
+        //List<RecruitmentArticle> recruitmentArticleList = recruitmentService.findAll();
+
+        LocalDateTime currentTime = LocalDateTime.now();
+        List<RecruitmentArticle> recruitmentArticleList = recruitmentRepository.findByRecruitmentArticleForm_CourseTimeBeforeAndIsEventTriggered(currentTime, false);
+
+        for (RecruitmentArticle article : recruitmentArticleList) {
+//            if (article.getRecruitmentArticleForm().getCourseTime().plusSeconds(120L).isBefore(currentTime)) {
+//                article.setEventTriggered(true);
+//                sendNotificationAuthor(article);
+//            }
+            if (article.getRecruitmentArticleForm().getCourseTime().plusHours(2).isBefore(currentTime)) {
+                article.setEventTriggered(true);
+                sendNotificationAuthor(article);
+            }
+        }
+    }
+
+
+    @Transactional
+    public void sendNotificationAuthor(RecruitmentArticle recruitmentArticle) {
+        System.out.println(recruitmentArticle.isEventTriggered());
+        publisher.publishEvent(new EventAfterCourseTime(this, recruitmentArticle));
+    }
+
+    public List<RecruitmentArticle> findByRecruitmentArticleForm_CourseTimeBeforeAndIsEventTriggered(LocalDateTime currentTime, boolean isEventTriggered) {
+        return recruitmentRepository.findByRecruitmentArticleForm_CourseTimeBeforeAndIsEventTriggered(currentTime, isEventTriggered);
     }
 }
