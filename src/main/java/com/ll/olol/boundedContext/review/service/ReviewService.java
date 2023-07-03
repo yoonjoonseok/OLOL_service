@@ -122,4 +122,13 @@ public class ReviewService {
     }
 
 
+    public RsData findReviewMember(RecruitmentArticle recruitmentArticle, Member reviewer) {
+        ReviewMember reviewMember = reviewMemberRepository.findByRecruitmentArticleAndReviewMember(recruitmentArticle, reviewer);
+
+        if (reviewMember != null) {
+            return RsData.of("S-1", "리뷰 멤버입니다.");
+        }
+
+        return RsData.of("F-1", "리뷰 멤버가 아닙니다.");
+    }
 }

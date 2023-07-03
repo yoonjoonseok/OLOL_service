@@ -55,11 +55,6 @@ public class ReviewController {
 
         Review review = reviewService.findReviewWrite(reviewTarget, me, reviewMember.getRecruitmentArticle());
 
-        RsData<RecruitmentPeople> checkRealParticipant = recruitmentPeopleService.findByRecruitmentArticleAndMember(reviewMember.getRecruitmentArticle(), me);
-
-        if (!checkRealParticipant.getData().isRealParticipant() || checkRealParticipant.isFail()) {
-            rq.historyBack("후기를 작성할 권한이 없습니다.");
-        }
 
         if (review != null) {
             return rq.historyBack("이미 작성하셨습니다.");
@@ -167,10 +162,11 @@ public class ReviewController {
 
         RecruitmentArticle recruitmentArticle = recruitmentService.findById(id).get();
 
-        RsData<RecruitmentPeople> checkRealParticipant = recruitmentPeopleService.findByRecruitmentArticleAndMember(recruitmentArticle, reviewer);
+        RsData checkReviewRsData = reviewService.findReviewMember(recruitmentArticle, reviewer);
 
+//        RsData<RecruitmentPeople> checkRealParticipant = recruitmentPeopleService.findByRecruitmentArticleAndMember(recruitmentArticle, reviewer);
 
-        if (!checkRealParticipant.getData().isRealParticipant() || checkRealParticipant.isFail()) {
+        if (checkReviewRsData.isFail()) {
             return rq.historyBack("후기를 작성할 권한이 없습니다.");
         }
 

@@ -36,6 +36,11 @@
                     </li>
                 </ul>
 
+                <button class="btn btn-outline-success mt-5"
+                        th:onclick="'location.href=\'' + @{/review/participantList/} + ${recruitmentArticle.id} + '\''">
+                    리뷰 페이지로 이동
+                </button>
+
 
                 <!-- 신청한 공고 없을 때의 메시지 -->
                 <div th:if="${#lists.isEmpty(attendList)}" class="text-muted mt-4">

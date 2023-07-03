@@ -266,7 +266,10 @@ public class RecruitmentService {
         List<RecruitmentArticle> recruitmentArticleList = recruitmentRepository.findByRecruitmentArticleForm_CourseTimeBeforeAndIsEventTriggered(currentTime, false);
 
         for (RecruitmentArticle article : recruitmentArticleList) {
-
+//            if (article.getRecruitmentArticleForm().getCourseTime().plusSeconds(120L).isBefore(currentTime)) {
+//                article.setEventTriggered(true);
+//                sendNotificationAuthor(article);
+//            }
             if (article.getRecruitmentArticleForm().getCourseTime().plusHours(2).isBefore(currentTime)) {
                 article.setEventTriggered(true);
                 sendNotificationAuthor(article);
