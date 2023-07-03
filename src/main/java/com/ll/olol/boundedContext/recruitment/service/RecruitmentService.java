@@ -258,7 +258,7 @@ public class RecruitmentService {
     }
 
     @Transactional
-    @Scheduled(fixedDelay = 60 * 1000) // 1분마다 실행 (단위: 밀리초)
+    @Scheduled(fixedDelay = 30 * 60 * 1000 + 59 * 1000) // 30분 59초마다 실행 (단위: 밀리초)
     public void triggerEvent() {
         //List<RecruitmentArticle> recruitmentArticleList = recruitmentService.findAll();
 
@@ -266,16 +266,11 @@ public class RecruitmentService {
         List<RecruitmentArticle> recruitmentArticleList = recruitmentRepository.findByRecruitmentArticleForm_CourseTimeBeforeAndIsEventTriggered(currentTime, false);
 
         for (RecruitmentArticle article : recruitmentArticleList) {
-            if (article.getRecruitmentArticleForm().getCourseTime().plusSeconds(120L).isBefore(currentTime)) {
+
+            if (article.getRecruitmentArticleForm().getCourseTime().plusHours(2).isBefore(currentTime)) {
                 article.setEventTriggered(true);
                 sendNotificationAuthor(article);
             }
-//            if (article.getRecruitmentArticleForm().getCourseTime().plusHours(2).isBefore(currentTime)) {
-//                Member author = rq.getMember();
-//                recruitmentService.sendNotificationAuthor(article, author);
-//            }
-
-
         }
     }
 
