@@ -44,9 +44,63 @@ public class ReviewService {
 
         reviewRepository.save(review);
 
-        
+        // 리뷰 대상의 계산 전 후기 고도
+        int targetReviewScore = reviewTarget.getReviewScore();
+
+        // 리뷰 대상의 후기 점수 계산
+        int calculateReviewScore = calculateScore(reviewTypeCode, appointmentTimeCode, mannerCode);
+
+        // 반영
+        reviewTarget.setReviewScore(targetReviewScore + calculateReviewScore);
     }
 
+    public int calculateScore(int reviewTypeCode, int appointmentTimeCode, int mannerCode) {
+        int totalAddScore = 0;
+
+        switch (reviewTypeCode) {
+            case 1:
+                totalAddScore++;
+                break;
+
+            case 2:
+                break;
+
+            case 3:
+                totalAddScore--;
+                break;
+        }
+
+        switch (appointmentTimeCode) {
+            case 1:
+                totalAddScore += 2;
+                break;
+
+            case 2:
+                totalAddScore++;
+                break;
+
+            case 3:
+                totalAddScore -= 1;
+                break;
+        }
+
+        switch (mannerCode) {
+            case 1:
+                totalAddScore += 2;
+                break;
+
+            case 2:
+                totalAddScore++;
+                break;
+
+            case 3:
+                totalAddScore -= 1;
+                break;
+        }
+
+        return totalAddScore;
+
+    }
 
     public Review findReviewWrite(Member reviewTarget, Member me, RecruitmentArticle recruitmentArticle) {
         Optional<Review> opReview = reviewRepository.findByRecruitmentArticleAndToMemberAndFromMember(recruitmentArticle, reviewTarget, me);

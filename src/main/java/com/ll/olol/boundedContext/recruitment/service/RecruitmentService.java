@@ -12,16 +12,7 @@ import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticleForm;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentPeople;
 import com.ll.olol.boundedContext.recruitment.repository.RecruitmentFormRepository;
 import com.ll.olol.boundedContext.recruitment.repository.RecruitmentRepository;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Join;
-import jakarta.persistence.criteria.JoinType;
-import jakarta.persistence.criteria.Predicate;
-import jakarta.persistence.criteria.Root;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import jakarta.persistence.criteria.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
@@ -32,6 +23,11 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -281,7 +277,7 @@ public class RecruitmentService {
     }
 
     @Transactional
-    @Scheduled(fixedDelay = 30 * 60 * 1000 + 59 * 1000) // 30분 59초마다 실행 (단위: 밀리초)
+    @Scheduled(fixedDelay = 60 * 1000) // 30분 59초마다 실행 (단위: 밀리초)
     public void triggerEvent() {
         //List<RecruitmentArticle> recruitmentArticleList = recruitmentService.findAll();
 
@@ -290,14 +286,14 @@ public class RecruitmentService {
                 currentTime, false);
 
         for (RecruitmentArticle article : recruitmentArticleList) {
-//            if (article.getRecruitmentArticleForm().getCourseTime().plusSeconds(120L).isBefore(currentTime)) {
-//                article.setEventTriggered(true);
-//                sendNotificationAuthor(article);
-//            }
-            if (article.getRecruitmentArticleForm().getCourseTime().plusHours(2).isBefore(currentTime)) {
+            if (article.getRecruitmentArticleForm().getCourseTime().plusSeconds(120L).isBefore(currentTime)) {
                 article.setEventTriggered(true);
                 sendNotificationAuthor(article);
             }
+//            if (article.getRecruitmentArticleForm().getCourseTime().plusHours(2).isBefore(currentTime)) {
+//                article.setEventTriggered(true);
+//                sendNotificationAuthor(article);
+//            }
         }
     }
 

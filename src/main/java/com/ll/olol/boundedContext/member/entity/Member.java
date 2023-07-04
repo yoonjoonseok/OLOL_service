@@ -86,7 +86,7 @@ public class Member {
     @OneToMany(mappedBy = "member")
     private List<RecruitmentPeople> recruitmentPeople;
 
-    private double reviewScore;
+    private int reviewScore;
 
 
 //    @OneToMany(mappedBy = "fromMember", cascade = {CascadeType.ALL})
