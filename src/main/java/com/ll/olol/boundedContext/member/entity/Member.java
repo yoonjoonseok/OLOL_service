@@ -71,7 +71,6 @@ public class Member {
     // 소셜로그인 시 비밀번호는 없지만 그래도 변수 자체는 있어야 할 것 같다.
     private String password;
 
-
     @Column(unique = true)
     private String email;
 
@@ -86,6 +85,8 @@ public class Member {
 
     @OneToMany(mappedBy = "member")
     private List<RecruitmentPeople> recruitmentPeople;
+
+    private double reviewScore;
 
 
 //    @OneToMany(mappedBy = "fromMember", cascade = {CascadeType.ALL})

@@ -284,7 +284,7 @@ public class RecruitmentService {
         publisher.publishEvent(new EventAfterCourseTime(this, recruitmentArticle));
     }
 
-    public List<RecruitmentArticle> findByRecruitmentArticleForm_CourseTimeBeforeAndIsEventTriggered(LocalDateTime currentTime, boolean isEventTriggered) {
-        return recruitmentRepository.findByRecruitmentArticleForm_CourseTimeBeforeAndIsEventTriggered(currentTime, isEventTriggered);
-    }
+//    public List<RecruitmentArticle> findByRecruitmentArticleForm_CourseTimeBeforeAndIsEventTriggered(LocalDateTime currentTime, boolean isEventTriggered) {
+//        return recruitmentRepository.findByRecruitmentArticleForm_CourseTimeBeforeAndIsEventTriggered(currentTime, isEventTriggered);
+//    }
 }

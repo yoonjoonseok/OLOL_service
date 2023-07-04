@@ -1,18 +1,14 @@
 package com.ll.olol.boundedContext.recruitment.entity;
 
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.Size;
-import java.time.Duration;
-import java.time.LocalDateTime;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
+
+import java.time.Duration;
+import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @Getter
@@ -50,8 +46,10 @@ public class CreateForm {
 
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime startTime;
+
     @Positive(message = "올바른 시간을 입력해주세요.")
     private Long courseTime;
+
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     @NotNull(message = "마감일 지정은 필수항목입니다.")
     private LocalDateTime deadLineDate;
