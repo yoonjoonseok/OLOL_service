@@ -157,6 +157,9 @@ public class RecruitmentController {
         if (bindingResult.hasErrors()) {
             return "usr/recruitment/createRecruitment_form";
         }
+        if (createForm.getStartTime() != null && createForm.getStartTime().isBefore(createForm.getDeadLineDate())) {
+            return rq.historyBack("마감 시간과 출발 시간을 확인해주세요.");
+        }
 
         RecruitmentArticle recruitmentArticle = recruitmentService.createArticle(createForm.getArticleName(),
                 createForm.getContent(), rq.getMember(), createForm.getTypeValue(), createForm.getDeadLineDate());
@@ -194,6 +197,9 @@ public class RecruitmentController {
             return "usr/recruitment/createRecruitment_form";
         }
 
+        if (createForm.getStartTime() != null && createForm.getStartTime().isBefore(createForm.getDeadLineDate())) {
+            return rq.historyBack("마감 시간과 출발 시간을 확인해주세요.");
+        }
         Optional<RecruitmentArticle> recruitmentArticle = recruitmentService.findById(id);
 
         RsData canUpdateRsData = recruitmentService.canUpdate(recruitmentArticle, rq.getMember());
