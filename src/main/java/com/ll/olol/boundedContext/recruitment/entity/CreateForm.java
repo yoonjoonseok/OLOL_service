@@ -4,7 +4,9 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -48,8 +50,8 @@ public class CreateForm {
 
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime startTime;
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
-    private LocalDateTime courseTime;
+    @Positive(message = "올바른 시간을 입력해주세요.")
+    private Long courseTime;
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     @NotNull(message = "마감일 지정은 필수항목입니다.")
     private LocalDateTime deadLineDate;
@@ -70,7 +72,8 @@ public class CreateForm {
         this.mtAddress = recruitmentArticleForm.getMtAddress();
         this.recruitsNumber = recruitmentArticleForm.getRecruitsNumbers();
         this.startTime = recruitmentArticleForm.getStartTime();
-        this.courseTime = recruitmentArticleForm.getCourseTime();
+        this.courseTime = Duration.between(recruitmentArticleForm.getStartTime(),
+                recruitmentArticleForm.getCourseTime()).toHours();
         this.deadLineDate = recruitmentArticle.getDeadLineDate();
         this.ageRange = recruitmentArticleForm.getAgeRange();
         this.connectType = recruitmentArticleForm.getConnectType();
