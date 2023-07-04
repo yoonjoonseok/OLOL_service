@@ -227,9 +227,9 @@
             </div>
 
             <div class="col-md-6 mb-2">
-                <label for="courseTime" class="form-label">종료 예정 시간 (선택)</label>
-                <input type="datetime-local" class="form-control" th:field="*{courseTime}"
-                       th:min="${#dates.format(#dates.createNow(), 'yyyy-MM-dd HH:mm')}">
+                <label for="courseTime" class="form-label">산행 예정 시간 단위(시간) (선택)</label>
+                <input type="number" class="form-control" th:field="*{courseTime}"
+                       th:min="0">
             </div>
 
             <div class="col-md-6 mb-2">
