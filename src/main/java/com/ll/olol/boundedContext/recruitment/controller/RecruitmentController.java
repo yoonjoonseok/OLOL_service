@@ -157,13 +157,12 @@ public class RecruitmentController {
         if (bindingResult.hasErrors()) {
             return "usr/recruitment/createRecruitment_form";
         }
-
         RecruitmentArticle recruitmentArticle = recruitmentService.createArticle(createForm.getArticleName(),
                 createForm.getContent(), rq.getMember(), createForm.getTypeValue(), createForm.getDeadLineDate());
         recruitmentService.createArticleForm(recruitmentArticle, createForm.getDayNight(),
                 createForm.getRecruitsNumber(), createForm.getMountainName(), createForm.getMtAddress(),
                 createForm.getAgeRange(), createForm.getConnectType(), createForm.getStartTime(),
-                createForm.getStartTime().plusHours(createForm.getCourseTime()));
+                createForm.getDurationOfTime());
         RsData rsdata = RsData.of("S-1", "모임 글 작성 성공");
         return rq.redirectWithMsg("/recruitment/list", rsdata.getMsg());
     }
@@ -193,7 +192,6 @@ public class RecruitmentController {
         if (bindingResult.hasErrors()) {
             return "usr/recruitment/createRecruitment_form";
         }
-
         Optional<RecruitmentArticle> recruitmentArticle = recruitmentService.findById(id);
 
         RsData canUpdateRsData = recruitmentService.canUpdate(recruitmentArticle, rq.getMember());
