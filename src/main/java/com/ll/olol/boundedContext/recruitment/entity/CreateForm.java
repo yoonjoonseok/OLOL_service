@@ -1,5 +1,6 @@
 package com.ll.olol.boundedContext.recruitment.entity;
 
+import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -63,6 +64,14 @@ public class CreateForm {
 
     @NotBlank(message = "내용은 필수항목입니다.")
     private String connectType;
+
+    @AssertTrue(message = "시작 시간은 마감 시간보다 늦어야 합니다.")
+    public boolean isStartTimeAfterDeadLineDate() {
+        if (startTime == null || deadLineDate == null) {
+            return true;  // 필드 중 하나가 null이면 검증 통과
+        }
+        return startTime.isAfter(deadLineDate);
+    }
 
     public void set(RecruitmentArticle recruitmentArticle) {
         RecruitmentArticleForm recruitmentArticleForm = recruitmentArticle.getRecruitmentArticleForm();
