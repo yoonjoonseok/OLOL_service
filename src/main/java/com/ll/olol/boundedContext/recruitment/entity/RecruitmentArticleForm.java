@@ -47,6 +47,8 @@ public class RecruitmentArticleForm {
 
     private LocalDateTime courseTime;
 
+    private Long durationOfTime;
+
     private String connectType;
 
     public String getDayNightToString() {
@@ -74,13 +76,26 @@ public class RecruitmentArticleForm {
     }
 
     public void update(CreateForm createForm) {
+        Long durationOfTime = createForm.getDurationOfTime();
+        if (durationOfTime == null) {
+            durationOfTime = 5L;
+        }
+
+        if (createForm.getStartTime() == null) {
+            this.startTime = null;
+            this.courseTime = null;
+
+        } else {
+            this.startTime = createForm.getStartTime();
+            this.courseTime = createForm.getStartTime().plusHours(durationOfTime);
+        }
+
         this.dayNight = createForm.getDayNight();
         this.recruitsNumbers = createForm.getRecruitsNumber();
         this.mountainName = createForm.getMountainName();
         this.mtAddress = createForm.getMtAddress();
         this.ageRange = createForm.getAgeRange();
-        this.startTime = createForm.getStartTime();
-        this.courseTime = createForm.getStartTime().plusHours(createForm.getCourseTime());
         this.connectType = createForm.getConnectType();
+        this.durationOfTime = durationOfTime;
     }
 }
