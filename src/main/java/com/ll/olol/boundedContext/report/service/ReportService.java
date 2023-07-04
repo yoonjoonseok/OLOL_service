@@ -28,9 +28,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class ReportService {
     private final ReportRepository reportRepository;
 
-//    public List<ArticleReport> findByFromMember(Member actor) {
-//    }
-
     @Transactional
     public RsData report(RecruitmentArticle recruitmentArticle, Member actor, int reason) {
 

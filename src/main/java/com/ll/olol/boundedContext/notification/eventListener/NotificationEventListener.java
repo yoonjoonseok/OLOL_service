@@ -1,5 +1,6 @@
 package com.ll.olol.boundedContext.notification.eventListener;
 
+import com.ll.olol.base.rsData.RsData;
 import com.ll.olol.boundedContext.member.entity.Member;
 import com.ll.olol.boundedContext.notification.entity.Notification;
 import com.ll.olol.boundedContext.notification.entity.NotificationDTO;
@@ -8,6 +9,8 @@ import com.ll.olol.boundedContext.notification.service.NotificationService;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentPeople;
 import com.ll.olol.boundedContext.recruitment.service.RecruitmentPeopleService;
+import com.ll.olol.boundedContext.recruitment.service.RecruitmentService;
+import com.ll.olol.boundedContext.review.service.ReviewService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -24,6 +27,11 @@ import java.util.List;
 public class NotificationEventListener {
     private final NotificationService notificationService;
     private final RecruitmentPeopleService recruitmentPeopleService;
+
+    private final RecruitmentService recruitmentService;
+
+    private final ReviewService reviewService;
+
     @Value("${custom.site.baseUrl}")
     private String domain;
 
@@ -93,5 +101,38 @@ public class NotificationEventListener {
             NotificationDTO notificationDTO = NotificationDTO.builder().title(notification.getContent()).body("").link(domain + "recruitment/" + recruitmentArticle.getId()).build();
             notificationService.send(notification.getMember().getId(), notificationDTO);
         }
+    }
+
+    @EventListener
+    public void listen(EventAfterCourseTime event) {
+        RecruitmentArticle recruitmentArticle = event.getRecruitmentArticle();
+        Member author = recruitmentArticle.getMember();
+
+        String content = recruitmentArticle.getArticleName() + " 공고의 산행이 완료 됐습니다.";
+
+        RsData reviewMemberRsData = reviewService.createReviewMember(author, recruitmentArticle, null);
+
+        reviewService.setCourseTimeEnd(recruitmentArticle);
+
+        // 공고자에게 산행 종료 알림 보냄
+        notificationService.makeReviewNotification(author, 4, content, recruitmentArticle.getId(), true);
+    }
+
+    @EventListener
+    public void listen(EventAfterCheckedRealParticipant event) {
+        RecruitmentPeople recruitmentPeople = event.getRecruitmentPeople();
+
+        Member reviewer = recruitmentPeople.getMember();
+
+        String content = recruitmentPeople.getRecruitmentArticle().getArticleName() + " 공고의 산행이 완료 됐습니다. 참여했던 인원들에게 후기를 남겨주세요.";
+
+        // recruimentPeople 내부의 realParticipant 여부로 진짜 참여자를 판별
+        RsData rsData = recruitmentPeopleService.checkedRealParticipant(recruitmentPeople, true);
+
+        // recruimentPeople 내부의 realParticipant 여부로 진짜 참여자들을 리뷰 멤버에 추가
+        RsData reviewMemberRsData = reviewService.createReviewMember(reviewer, recruitmentPeople.getRecruitmentArticle(), recruitmentPeople);
+
+
+        notificationService.makeReviewWriteNotification(reviewer, 4, content, recruitmentPeople.getRecruitmentArticle().getId(), true);
     }
 }

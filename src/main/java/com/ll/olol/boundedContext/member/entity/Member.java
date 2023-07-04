@@ -2,12 +2,16 @@ package com.ll.olol.boundedContext.member.entity;
 
 import com.ll.olol.boundedContext.comment.entity.Comment;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentPeople;
+import com.ll.olol.boundedContext.review.entity.Review;
+import com.ll.olol.boundedContext.review.entity.ReviewMember;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.annotations.LazyCollection;
+import org.hibernate.annotations.LazyCollectionOption;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -42,6 +46,20 @@ public class Member {
     @OneToMany(mappedBy = "member")
     private List<Comment> comments;
 
+    @OneToMany(mappedBy = "reviewMember")
+    private List<ReviewMember> reviewMembers;
+
+    @OneToMany(mappedBy = "fromMember", cascade = CascadeType.REMOVE)
+    @OrderBy("id desc") // 정렬
+    @LazyCollection(LazyCollectionOption.EXTRA)
+    private List<Review> fromReviewList;
+
+    @OneToMany(mappedBy = "toMember", cascade = CascadeType.REMOVE)
+    @OrderBy("id desc") // 정렬
+    @LazyCollection(LazyCollectionOption.EXTRA)
+    private List<Review> toReviewList;
+
+
     // 일반회원인지, 카카오로 가입한 회원인지, 구글로 가입한 회원인지
     private String providerTypeCode;
 
@@ -68,6 +86,7 @@ public class Member {
 
     @OneToMany(mappedBy = "member")
     private List<RecruitmentPeople> recruitmentPeople;
+
 
 //    @OneToMany(mappedBy = "fromMember", cascade = {CascadeType.ALL})
 //    @OrderBy("id desc") // 정렬
