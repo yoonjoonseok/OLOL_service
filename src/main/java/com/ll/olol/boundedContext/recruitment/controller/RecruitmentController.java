@@ -12,6 +12,9 @@ import com.ll.olol.boundedContext.recruitment.entity.LikeableRecruitmentArticle;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
 import com.ll.olol.boundedContext.recruitment.service.LikeableRecruitmentArticleService;
 import com.ll.olol.boundedContext.recruitment.service.RecruitmentService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import java.security.Principal;
 import java.time.LocalDateTime;
@@ -76,14 +79,39 @@ public class RecruitmentController {
     }
 
     @GetMapping("/{id}")
-    public String showDetail(@PathVariable Long id, Model model) {
+    public String showDetail(@PathVariable Long id, Model model, HttpServletRequest request,
+                             HttpServletResponse response) {
         Optional<RecruitmentArticle> recruitmentArticle = recruitmentService.findById(id);
 
         if (recruitmentArticle.isEmpty()) {
             return rq.historyBack(RsData.of("F-1", "존재하지 않는 모임 공고입니다"));
         }
+        Cookie oldCookie = null;
 
-        recruitmentService.addView(recruitmentArticle.get());
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("ArticleView")) {
+                    oldCookie = cookie;
+                }
+            }
+        }
+
+        if (oldCookie != null) {
+            if (!oldCookie.getValue().contains("[" + id.toString() + "]")) {
+                recruitmentService.addView(recruitmentArticle.get());
+                oldCookie.setValue(oldCookie.getValue() + "_[" + id + "]");
+                oldCookie.setPath("/");
+                oldCookie.setMaxAge(60 * 60 * 24);
+                response.addCookie(oldCookie);
+            }
+        } else {
+            recruitmentService.addView(recruitmentArticle.get());
+            Cookie newCookie = new Cookie("ArticleView", "[" + id + "]");
+            newCookie.setPath("/");
+            newCookie.setMaxAge(60 * 60 * 24);
+            response.addCookie(newCookie);
+        }
 
         List<Comment> comments = commentService.findComments();
         List<Comment> commentList = new ArrayList<>();
