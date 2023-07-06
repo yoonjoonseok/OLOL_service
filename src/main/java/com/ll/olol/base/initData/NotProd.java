@@ -65,7 +65,7 @@ public class NotProd {
             em.persist(notification);
             em.persist(notification1);
 
-            Member member_jun = createMember(20, "남자", "KAKAO__2867045488", "1234", "test@test.com", "검성 장영실", LocalDateTime.now(), LocalDateTime.now());
+            Member member_jun = createMemberReviewScore(20, "남자", "KAKAO__2867045488", "1234", "test@test.com", "검성 장영실", LocalDateTime.now(), LocalDateTime.now());
             em.persist(member_jun);
 
             RecruitmentArticle recruitmentArticle1 = createRecruitmentArticle(LocalDateTime.now(),
@@ -206,6 +206,22 @@ public class NotProd {
             member.setModifyDate(modifyDate);
             member.setEmail(email);
             member.setUsername(username);
+            return member;
+        }
+
+        /*리뷰 점수 용*/
+        private static Member createMemberReviewScore(int age, String gender, String username, String password, String email,
+                                                      String nickname, LocalDateTime createDate, LocalDateTime modifyDate) {
+            Member member = new Member();
+            member.setAge(age);
+            member.setCreateDate(createDate);
+            member.setGender(gender);
+            member.setPassword(password);
+            member.setNickname(nickname);
+            member.setModifyDate(modifyDate);
+            member.setEmail(email);
+            member.setUsername(username);
+            member.setReviewScore(482);
             return member;
         }
 
