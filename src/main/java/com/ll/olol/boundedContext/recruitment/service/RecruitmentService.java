@@ -69,7 +69,7 @@ public class RecruitmentService {
     @Transactional
     public void createArticleForm(RecruitmentArticle recruitmentArticle, Integer dayNight, Long recruitsNumber,
                                   String mountainName, String mtAddress, Long ageRange, String connectType,
-                                  LocalDateTime startTime, LocalDateTime courseTime) {
+                                  LocalDateTime startTime, Long durationOfTime) {
         // 동만 붙은 부분만 가져옴
         RsData<String> checkMt = mtAddressChecked(mtAddress);
 
@@ -79,20 +79,39 @@ public class RecruitmentService {
             realMountainAddress = checkMt.getData();
         }
 
-        RecruitmentArticleForm recruitmentArticleForm = RecruitmentArticleForm
-                .builder()
-                .recruitmentArticle(recruitmentArticle)
-                .dayNight(dayNight)
-                .recruitsNumbers(recruitsNumber)
-                .mountainName(mountainName)
-                .mtAddress(mtAddress)
-                .ageRange(ageRange)
-                .connectType(connectType)
-                .startTime(startTime)
-                .courseTime(courseTime)
-                .localCode(localCodeApiClient.requestLocalCode(realMountainAddress))
-                .build();
-
+        if (durationOfTime == null) {
+            durationOfTime = 5L;
+        }
+        RecruitmentArticleForm recruitmentArticleForm;
+        if (startTime == null) {
+            recruitmentArticleForm = RecruitmentArticleForm
+                    .builder()
+                    .recruitmentArticle(recruitmentArticle)
+                    .dayNight(dayNight)
+                    .recruitsNumbers(recruitsNumber)
+                    .mountainName(mountainName)
+                    .mtAddress(mtAddress)
+                    .ageRange(ageRange)
+                    .connectType(connectType)
+                    .startTime(null)
+                    .courseTime(null)
+                    .localCode(localCodeApiClient.requestLocalCode(realMountainAddress))
+                    .build();
+        } else {
+            recruitmentArticleForm = RecruitmentArticleForm
+                    .builder()
+                    .recruitmentArticle(recruitmentArticle)
+                    .dayNight(dayNight)
+                    .recruitsNumbers(recruitsNumber)
+                    .mountainName(mountainName)
+                    .mtAddress(mtAddress)
+                    .ageRange(ageRange)
+                    .connectType(connectType)
+                    .startTime(startTime)
+                    .courseTime(startTime.plusHours(durationOfTime))
+                    .localCode(localCodeApiClient.requestLocalCode(realMountainAddress))
+                    .build();
+        }
         recruitmentFormRepository.save(recruitmentArticleForm);
     }
 
@@ -263,7 +282,8 @@ public class RecruitmentService {
         //List<RecruitmentArticle> recruitmentArticleList = recruitmentService.findAll();
 
         LocalDateTime currentTime = LocalDateTime.now();
-        List<RecruitmentArticle> recruitmentArticleList = recruitmentRepository.findByRecruitmentArticleForm_CourseTimeBeforeAndIsEventTriggered(currentTime, false);
+        List<RecruitmentArticle> recruitmentArticleList = recruitmentRepository.findByRecruitmentArticleForm_CourseTimeBeforeAndIsEventTriggered(
+                currentTime, false);
 
         for (RecruitmentArticle article : recruitmentArticleList) {
 //            if (article.getRecruitmentArticleForm().getCourseTime().plusSeconds(120L).isBefore(currentTime)) {
@@ -284,7 +304,9 @@ public class RecruitmentService {
         publisher.publishEvent(new EventAfterCourseTime(this, recruitmentArticle));
     }
 
-    public List<RecruitmentArticle> findByRecruitmentArticleForm_CourseTimeBeforeAndIsEventTriggered(LocalDateTime currentTime, boolean isEventTriggered) {
-        return recruitmentRepository.findByRecruitmentArticleForm_CourseTimeBeforeAndIsEventTriggered(currentTime, isEventTriggered);
+    public List<RecruitmentArticle> findByRecruitmentArticleForm_CourseTimeBeforeAndIsEventTriggered(
+            LocalDateTime currentTime, boolean isEventTriggered) {
+        return recruitmentRepository.findByRecruitmentArticleForm_CourseTimeBeforeAndIsEventTriggered(currentTime,
+                isEventTriggered);
     }
 }

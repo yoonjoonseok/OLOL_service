@@ -1,9 +1,11 @@
 package com.ll.olol.boundedContext.recruitment.entity;
 
+import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
@@ -48,8 +50,12 @@ public class CreateForm {
 
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime startTime;
+
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime courseTime;
+
+    @Positive(message = "올바른 시간을 입력해주세요.")
+    private Long durationOfTime;
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     @NotNull(message = "마감일 지정은 필수항목입니다.")
     private LocalDateTime deadLineDate;
@@ -58,6 +64,14 @@ public class CreateForm {
 
     @NotBlank(message = "내용은 필수항목입니다.")
     private String connectType;
+
+    @AssertTrue(message = "시작 시간은 마감 시간보다 늦어야 합니다.")
+    public boolean isStartTimeAfterDeadLineDate() {
+        if (startTime == null || deadLineDate == null) {
+            return true;  // 필드 중 하나가 null이면 검증 통과
+        }
+        return startTime.isAfter(deadLineDate);
+    }
 
     public void set(RecruitmentArticle recruitmentArticle) {
         RecruitmentArticleForm recruitmentArticleForm = recruitmentArticle.getRecruitmentArticleForm();
@@ -71,6 +85,7 @@ public class CreateForm {
         this.recruitsNumber = recruitmentArticleForm.getRecruitsNumbers();
         this.startTime = recruitmentArticleForm.getStartTime();
         this.courseTime = recruitmentArticleForm.getCourseTime();
+        this.durationOfTime = recruitmentArticleForm.getDurationOfTime();
         this.deadLineDate = recruitmentArticle.getDeadLineDate();
         this.ageRange = recruitmentArticleForm.getAgeRange();
         this.connectType = recruitmentArticleForm.getConnectType();
