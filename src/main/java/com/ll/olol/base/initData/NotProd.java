@@ -65,6 +65,9 @@ public class NotProd {
             em.persist(notification);
             em.persist(notification1);
 
+            Member member_jun = createMemberReviewScore(20, "남자", "KAKAO__2867045488", "1234", "test@test.com", "검성 장영실", LocalDateTime.now(), LocalDateTime.now());
+            em.persist(member_jun);
+
             RecruitmentArticle recruitmentArticle1 = createRecruitmentArticle(LocalDateTime.now(),
                     LocalDateTime.now().plusHours(100L),
                     1L, member1, 1, "테스트용1",
@@ -136,6 +139,19 @@ public class NotProd {
                 );
             }
 
+            /* 알림 체크를 위해 허준홍이 만듦 */
+            RecruitmentArticle recruitmentArticle_author = createRecruitmentArticle(LocalDateTime.now(),
+                    LocalDateTime.now().plusMinutes(1L),
+                    1L, member_jun, 1, "테스트용1",
+                    "테스트용 게시글 내용입니다1.");
+            em.persist(recruitmentArticle_author);
+
+            RecruitmentArticleForm recruitmentArticleForm_jun = createRecruitmentArticleForm(recruitmentArticle_author, 1, 2L,
+                    "한라산", "석수동", "48220370", 20L, LocalDateTime.now(), LocalDateTime.now().plusMinutes(2L), "카카오톡3");
+            em.persist(recruitmentArticleForm_jun);
+            /* 여기까지 */
+
+
             Comment comment1 = createComment(recruitmentArticle1, member1, "안녕하세요11", LocalDateTime.now(),
                     LocalDateTime.now());
             Comment comment2 = createComment(recruitmentArticle2, member2, "안녕하세요22", LocalDateTime.now(),
@@ -190,6 +206,22 @@ public class NotProd {
             member.setModifyDate(modifyDate);
             member.setEmail(email);
             member.setUsername(username);
+            return member;
+        }
+
+        /*리뷰 점수 용*/
+        private static Member createMemberReviewScore(int age, String gender, String username, String password, String email,
+                                                      String nickname, LocalDateTime createDate, LocalDateTime modifyDate) {
+            Member member = new Member();
+            member.setAge(age);
+            member.setCreateDate(createDate);
+            member.setGender(gender);
+            member.setPassword(password);
+            member.setNickname(nickname);
+            member.setModifyDate(modifyDate);
+            member.setEmail(email);
+            member.setUsername(username);
+            member.setReviewScore(482);
             return member;
         }
 

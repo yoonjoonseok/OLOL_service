@@ -22,7 +22,7 @@ public class FirebaseCloudMessageService {
 
     public void sendMessageTo(String targetToken, NotificationDTO notificationDTO) throws IOException {
         String message = makeMessage(targetToken, notificationDTO.getTitle(), notificationDTO.getBody(), notificationDTO.getLink());
-
+        System.out.println("와 " + message);
         OkHttpClient client = new OkHttpClient();
         RequestBody requestBody = RequestBody.create(message, MediaType.get("application/json; charset=utf-8"));
         Request request = new Request.Builder()

@@ -1,6 +1,7 @@
 package com.ll.olol.boundedContext.recruitment.entity;
 
 import com.ll.olol.boundedContext.member.entity.Member;
+import com.ll.olol.boundedContext.review.entity.ReviewMember;
 import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
@@ -28,5 +29,29 @@ public class RecruitmentPeople {
     @JoinColumn(name = "recruitmentArticle_id")
     private RecruitmentArticle recruitmentArticle;
 
+    @OneToOne
+    private ReviewMember reviewMember;
+
     private boolean isAttend;
+
+    private boolean realParticipant;
+
+    private boolean reviewComplete;
+
+    public void checkedParticipant(boolean participant) {
+        this.realParticipant = participant;
+    }
+
+    public boolean isRealParticipant() {
+        return realParticipant;
+    }
+
+    public void checkReviewComplete(boolean complete) {
+        this.reviewComplete = complete;
+    }
+
+    public boolean isReviewComplete() {
+        return reviewComplete;
+    }
+
 }

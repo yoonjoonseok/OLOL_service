@@ -52,6 +52,36 @@ public class NotificationService {
     }
 
     @Transactional
+    public Notification makeReviewNotification(Member member, int type, String content, Long articleId, boolean reviewed) {
+        Notification notification = Notification.builder()
+                .member(member)
+                .type(type)
+                .content(content)
+                .articleId(articleId)
+                .reviewed(reviewed)
+                .build();
+
+        notificationRepository.save(notification);
+
+        return notification;
+    }
+
+    @Transactional
+    public Notification makeReviewWriteNotification(Member reviewer, int type, String content, Long articleId, boolean participant) {
+        Notification notification = Notification.builder()
+                .member(reviewer)
+                .type(type)
+                .content(content)
+                .articleId(articleId)
+                .participant(participant)
+                .build();
+
+        notificationRepository.save(notification);
+
+        return notification;
+    }
+
+    @Transactional
     public RsData markAsRead(List<Notification> notifications) {
         notifications
                 .stream()
@@ -108,4 +138,5 @@ public class NotificationService {
     public void register(final Long userId, final String token) {
         tokenMap.put(userId, token);
     }
+
 }

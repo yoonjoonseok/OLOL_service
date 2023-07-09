@@ -47,6 +47,7 @@ public class MemberService {
                 .providerTypeCode(providerTypeCode)
                 .username(username)
                 .password(password)
+                .reviewScore(482)
                 .build();
 
         memberRepository.save(member);
