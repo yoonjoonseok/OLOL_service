@@ -46,21 +46,21 @@
         }
 
 
-        .form-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
+        /*.form-container {*/
+        /*    display: flex;*/
+        /*    flex-wrap: wrap;*/
+        /*    gap: 10px;*/
+        /*}*/
 
-        .form-container .form-control {
-            flex: 0 0 calc(25% - 10px);
-            width: 100%;
-            max-width: calc(25% - 10px);
-        }
+        /*.form-container .form-control {*/
+        /*    flex: 0 0 calc(25% - 10px);*/
+        /*    width: 100%;*/
+        /*    max-width: calc(25% - 10px);*/
+        /*}*/
 
-        .form-container .form-control:last-child {
-            flex-basis: 100%;
-        }
+        /*.form-container .form-control:last-child {*/
+        /*    flex-basis: 100%;*/
+        /*}*/
 
         /*검색창 사이즈*/
         /*.search-container {*/
@@ -80,30 +80,48 @@
             font-family: 'omyu_pretty', Arial, sans-serif;
         }
 
-        @media (max-width: 995px) {
-            .search-container .input-group {
-                max-width: none;
-            }
+        /*@media (max-width: 995px) {*/
+        /*    .search-container .input-group {*/
+        /*        max-width: none;*/
+        /*    }*/
 
-            .form-container .form-control {
-                flex: 0 1 100%;
-            }
+        /*    .form-container .form-control {*/
+        /*        flex: 0 1 100%;*/
+        /*    }*/
 
-            .search-container .form-control {
-                max-width: none;
-            }
+        /*    .search-container .form-control {*/
+        /*        max-width: none;*/
+        /*    }*/
 
-            .form-container .form-control {
-                flex: 0 0 50%;
-                max-width: 50%;
-            }
-        }
+        /*    .form-container .form-control {*/
+        /*        flex: 0 0 50%;*/
+        /*        max-width: 50%;*/
+        /*    }*/
+        /*}*/
 
         @media (max-width: 991px) {
             .carousel-container {
                 display: none;
             }
         }
+
+
+        /*.form-control {*/
+        /*    position: relative;*/
+        /*    display: inline-block;*/
+        /*}*/
+
+        /*.select {*/
+        /*    position: absolute;*/
+        /*    z-index: 1;*/
+        /*}*/
+
+        /*@media (max-width: 767px) {*/
+        /*    .select {*/
+        /*        position: static;*/
+        /*        z-index: initial;*/
+        /*    }*/
+        /*}*/
 
     </style>
 </head>
@@ -197,90 +215,101 @@
     <div class="container">
         <form th:action>
             <div class="form-container mb-2">
-                <div class="form-control">
-                    <label class="label">
+                <div class="row mb-1">
+                    <div class="col-lg-3">
+                        <div class="form-control">
+                            <label class="label">
                                 <span class="label-text">
                                     <i class="fa-solid fa-person-half-dress" style="color: #2E7D32"></i>
                                     나이대
                                 </span>
-                    </label>
-                    <select name="ageRange" class="select select-bordered w-full"
-                            onchange="$(this).closest('form').submit();">
-                        <option value="">전체</option>
-                        <option value="10">10대</option>
-                        <option value="20">20대</option>
-                        <option value="30">30대</option>
-                        <option value="40">40대</option>
-                        <option value="50">50대</option>
-                    </select>
-                    <script>
-                        if (params.ageRange) {
-                            $(`select[name="ageRange"]:last`).val(params.ageRange[0]);
-                        }
-                    </script>
-                </div>
+                            </label>
+                            <select name="ageRange" class="select select-bordered w-full"
+                                    onchange="$(this).closest('form').submit();">
+                                <option value="">전체</option>
+                                <option value="10">10대</option>
+                                <option value="20">20대</option>
+                                <option value="30">30대</option>
+                                <option value="40">40대</option>
+                                <option value="50">50대</option>
+                            </select>
+                            <script>
+                                if (params.ageRange) {
+                                    $(`select[name="ageRange"]:last`).val(params.ageRange[0]);
+                                }
+                            </script>
+                        </div>
+                    </div>
 
-                <div class="form-control">
-                    <label class="label">
+                    <div class="col-lg-3">
+                        <div class="form-control">
+                            <label class="label">
                                 <span class="label-text">
                                     <i class="fa-solid fa-check" style="color: #2E7D32"></i>
                                     주간/야간
                                 </span>
-                    </label>
-                    <select name="dayNight" class="select select-bordered w-full"
-                            onchange="$(this).closest('form').submit();">
-                        <option value="">전체</option>
-                        <option value="1">주간</option>
-                        <option value="2">야간</option>
-                    </select>
-                    <script>
-                        if (params.dayNight) {
-                            $(`select[name="dayNight"]:last`).val(params.dayNight[0]);
-                        }
-                    </script>
-                </div>
+                            </label>
+                            <select name="dayNight" class="select select-bordered w-full"
+                                    onchange="$(this).closest('form').submit();">
+                                <option value="">전체</option>
+                                <option value="1">주간</option>
+                                <option value="2">야간</option>
+                            </select>
+                            <script>
+                                if (params.dayNight) {
+                                    $(`select[name="dayNight"]:last`).val(params.dayNight[0]);
+                                }
+                            </script>
+                        </div>
+                    </div>
 
-                <div class="form-control">
-                    <label class="label">
+                    <div class="col-lg-3">
+                        <div class="form-control">
+                            <label class="label">
                                 <span class="label-text">
                                     <i class="fa-solid fa-check" style="color: #2E7D32"></i>
                                     번개/정기
                                 </span>
-                    </label>
-                    <select name="typeValue" class="select select-bordered w-full"
-                            onchange="$(this).closest('form').submit();">
-                        <option value="">전체</option>
-                        <option value="1">정기</option>
-                        <option value="2">번개</option>
-                    </select>
-                    <script>
-                        if (params.typeValue) {
-                            $(`select[name="typeValue"]:last`).val(params.typeValue[0]);
-                        }
-                    </script>
-                </div>
+                            </label>
+                            <select name="typeValue" class="select select-bordered w-full"
+                                    onchange="$(this).closest('form').submit();">
+                                <option value="">전체</option>
+                                <option value="1">정기</option>
+                                <option value="2">번개</option>
+                            </select>
+                            <script>
+                                if (params.typeValue) {
+                                    $(`select[name="typeValue"]:last`).val(params.typeValue[0]);
+                                }
+                            </script>
+                        </div>
+                    </div>
 
-                <div class="form-control">
-                    <label class="label">
+                    <div class="col-lg-3">
+                        <div class="form-control">
+                            <label class="label">
                                 <span class="label-text">
                                     <i class="fa-solid fa-arrow-up-z-a"></i>
                                     정렬
                                 </span>
-                    </label>
-                    <select name="sortCode" class="select select-bordered w-full"
-                            onchange="$(this).closest('form').submit();">
-                        <option value="1">최신순</option>
-                        <option value="2">날짜순</option>
-                        <option value="3">조회순</option>
-                        <option value="4">인기 적은 순</option>
-                        <option value="5">성별순</option>
-                        <option value="6">호감사유순</option>
-                    </select>
-                    <script>
-                        if (params.sortCode) {
-                            $(`select[name="sortCode"]:last`).val(params.sortCode[0]);
-                        }
-                    </script>
+                            </label>
+                            <select name="sortCode" class="select select-bordered w-full"
+                                    onchange="$(this).closest('form').submit();">
+                                <option value="1">최신순</option>
+                                <option value="2">날짜순</option>
+                                <option value="3">조회순</option>
+                                <option value="4">인기 적은 순</option>
+                                <option value="5">성별순</option>
+                                <option value="6">호감사유순</option>
+                            </select>
+                            <script>
+                                if (params.sortCode) {
+                                    $(`select[name="sortCode"]:last`).val(params.sortCode[0]);
+                                }
+                            </script>
+                        </div>
+                    </div>
+
                 </div>
             </div>
             <div class="search-container">
@@ -295,8 +324,9 @@
     <br>
 
     <div class="container">
-        <div class="row row-cols-1 row-cols-md-4">
-            <div class="col mb-4" th:each="recruitmentArticle, loop : ${paging}">
+        <div class="row">
+<!--        <div class="row row-cols-1 row-cols-md-4">-->
+            <div class="col mb-4 col-xl-3 col-md-6 col-12" th:each="recruitmentArticle, loop : ${paging}">
                 <a class="card mb-4 text-dark"
                    style="width: 100%; height: 18rem; text-decoration: none;"
                    th:href="@{|/recruitment/${recruitmentArticle.id}|}">
