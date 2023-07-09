@@ -4,6 +4,7 @@ import com.ll.olol.boundedContext.member.entity.Member;
 import com.ll.olol.boundedContext.notification.entity.Notification;
 import com.ll.olol.boundedContext.notification.entity.NotificationDTO;
 import com.ll.olol.boundedContext.notification.event.*;
+import com.ll.olol.boundedContext.notification.service.FirebaseCloudMessageService;
 import com.ll.olol.boundedContext.notification.service.NotificationService;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentPeople;
@@ -15,6 +16,7 @@ import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.IOException;
 import java.util.List;
 
 @Component
@@ -24,22 +26,24 @@ import java.util.List;
 public class NotificationEventListener {
     private final NotificationService notificationService;
     private final RecruitmentPeopleService recruitmentPeopleService;
+    private final FirebaseCloudMessageService firebaseCloudMessageService;
     @Value("${custom.site.baseUrl}")
     private String domain;
 
     @EventListener
-    public void listen(EventAfterComment event) {
+    public void listen(EventAfterComment event) throws IOException {
         RecruitmentArticle recruitmentArticle = event.getRecruitmentArticle();
         String content = recruitmentArticle.getArticleName() + " 공고에 댓글이 달렸습니다";
         Notification notification = notificationService.make(recruitmentArticle.getMember(), 1, content,
                 recruitmentArticle.getId());
 
         NotificationDTO notificationDTO = NotificationDTO.builder().title(notification.getContent()).body(event.getComment().getContent()).link(domain + "recruitment/" + recruitmentArticle.getId()).build();
-        notificationService.send(notification.getMember().getId(), notificationDTO);
+        //notificationService.send(notification.getMember().getId(), notificationDTO);
+        firebaseCloudMessageService.sendMessageTo(notificationService.getTokenMap().get(notification.getMember().getId()), notificationDTO);
     }
 
     @EventListener
-    public void listen(EventAfterRecruitmentPeople event) {
+    public void listen(EventAfterRecruitmentPeople event) throws IOException {
         RecruitmentPeople recruitmentPeople = event.getRecruitmentPeople();
         Member member = recruitmentPeople.getRecruitmentArticle().getMember();
         String content =
@@ -48,11 +52,12 @@ public class NotificationEventListener {
         Notification notification = notificationService.make(member, 2, content, recruitmentPeople.getRecruitmentArticle().getId());
 
         NotificationDTO notificationDTO = NotificationDTO.builder().title(notification.getContent()).body("").link(domain + "recruitment/fromList").build();
-        notificationService.send(notification.getMember().getId(), notificationDTO);
+        //notificationService.send(notification.getMember().getId(), notificationDTO);
+        firebaseCloudMessageService.sendMessageTo(notificationService.getTokenMap().get(notification.getMember().getId()), notificationDTO);
     }
 
     @EventListener
-    public void listen(EventAfterRecruitmentAttend event) {
+    public void listen(EventAfterRecruitmentAttend event) throws IOException {
         RecruitmentPeople recruitmentPeople = event.getRecruitmentPeople();
         Member member = recruitmentPeople.getMember();
         String content = recruitmentPeople.getRecruitmentArticle().getArticleName() + " 공고의 " + recruitmentPeople.getRecruitmentArticle().getMember().getNickname();
@@ -66,11 +71,12 @@ public class NotificationEventListener {
         Notification notification = notificationService.make(member, 3, content, recruitmentPeople.getRecruitmentArticle().getId());
 
         NotificationDTO notificationDTO = NotificationDTO.builder().title(notification.getContent()).body("").link(domain + "member/mypage").build();
-        notificationService.send(notification.getMember().getId(), notificationDTO);
+        //notificationService.send(notification.getMember().getId(), notificationDTO);
+        firebaseCloudMessageService.sendMessageTo(notificationService.getTokenMap().get(notification.getMember().getId()), notificationDTO);
     }
 
     @EventListener
-    public void listen(EventAfterDeportPeople event) {
+    public void listen(EventAfterDeportPeople event) throws IOException {
         RecruitmentPeople recruitmentPeople = event.getRecruitmentPeople();
         Member member = recruitmentPeople.getMember();
         String content =
@@ -79,11 +85,12 @@ public class NotificationEventListener {
         Notification notification = notificationService.make(member, 4, content, recruitmentPeople.getRecruitmentArticle().getId());
 
         NotificationDTO notificationDTO = NotificationDTO.builder().title(notification.getContent()).body("").link(domain + "member/mypage").build();
-        notificationService.send(notification.getMember().getId(), notificationDTO);
+        //notificationService.send(notification.getMember().getId(), notificationDTO);
+        firebaseCloudMessageService.sendMessageTo(notificationService.getTokenMap().get(notification.getMember().getId()), notificationDTO);
     }
 
     @EventListener
-    public void listen(EventAfterUpdateArticle event) {
+    public void listen(EventAfterUpdateArticle event) throws IOException {
         RecruitmentArticle recruitmentArticle = event.getRecruitmentArticle();
         List<RecruitmentPeople> list = recruitmentPeopleService.findByRecruitmentArticle(recruitmentArticle);
         for (RecruitmentPeople r : list) {
@@ -91,7 +98,8 @@ public class NotificationEventListener {
             Notification notification = notificationService.make(r.getMember(), 5, content, recruitmentArticle.getId());
 
             NotificationDTO notificationDTO = NotificationDTO.builder().title(notification.getContent()).body("").link(domain + "recruitment/" + recruitmentArticle.getId()).build();
-            notificationService.send(notification.getMember().getId(), notificationDTO);
+            //notificationService.send(notification.getMember().getId(), notificationDTO);
+            firebaseCloudMessageService.sendMessageTo(notificationService.getTokenMap().get(notification.getMember().getId()), notificationDTO);
         }
     }
 }

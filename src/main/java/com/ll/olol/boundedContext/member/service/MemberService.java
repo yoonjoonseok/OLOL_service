@@ -3,6 +3,7 @@ package com.ll.olol.boundedContext.member.service;
 import com.ll.olol.base.rsData.RsData;
 import com.ll.olol.boundedContext.member.entity.Member;
 import com.ll.olol.boundedContext.member.repository.MemberRepository;
+import com.ll.olol.boundedContext.notification.service.FirebaseCloudMessageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,8 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder;
 
     private final MemberRepository memberRepository;
+
+    private final FirebaseCloudMessageService firebaseCloudMessageService;
 
     public Optional<Member> findByUsername(String username) {
         return memberRepository.findByUsername(username);
