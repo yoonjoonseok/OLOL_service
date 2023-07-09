@@ -18,41 +18,34 @@
                            th:if="${@rq.admin}">신고된 공고 목록</a>
                     </li>
                     <li class="nav-item active mr-4">
-                        <a th:href="@{/recruitment/create}" class="nav-link" style="margin-top:  -7px">
-                            <i class="bi bi-file-earmark-plus fa-2xl"></i>
-
+                        <a th:href="@{/recruitment/create}" class="nav-link">
+                            <i class="bi bi-file-earmark-plus fa-2x"></i>
                         </a>
                     </li>
                     <li class="nav-item active mr-4">
-                        <a th:href="@{/recruitment/fromList}" class="nav-link" style="margin-top: 7px">
-                            <i class="fa-solid fa-users fa-2xl"></i>
+                        <a th:href="@{/recruitment/fromList}" class="nav-link">
+                            <i class="bi bi-person-lines-fill fa-2x"></i>
                         </a>
                     </li>
 
                     <li class="nav-item active mr-4">
-
-                        <a th:href="@{/notification/list}" class="btn btn-ghost normal-case text-xl"
-                           style="margin-top: 5px">
-                            <i th:unless="${@rq.hasUnreadNotifications}" class="fa-regular fa-bell fa-2xl"></i>
-                            <i th:if="${@rq.hasUnreadNotifications}" class="fa-regular fa-bell fa-2xl"
+                        <a th:href="@{/notification/list}" class="nav-link">
+                            <i th:unless="${@rq.hasUnreadNotifications}" class="bi bi-bell fa-2x"></i>
+                            <i th:if="${@rq.hasUnreadNotifications}" class="bi bi-bell fa-2x "
                                style="color: red;"></i>
                         </a>
-
                     </li>
-                    <li class="nav-item">
 
+                    <li class="nav-item active">
                         <a sec:authorize="isAnonymous()" data-toggle="modal"
-                           data-target="#exampleModalCenter" class="btn btn-ghost normal-case text-xl"
-                           style="margin-top: 5px;">
-
-                            <i class="fa-solid fa-right-to-bracket fa-2xl"></i>
+                           data-target="#exampleModalCenter" class="nav-link">
+                            <i class="bi bi-box-arrow-right fa-2x"></i>
                         </a>
 
-                        <div class="dropdown" sec:authorize="isAuthenticated()">
+                        <div class="dropdown nav-link" sec:authorize="isAuthenticated()">
                             <a type="button" id="dropdownMenuButton"
-                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
-                               style="margin-top: 15px">
-                                <i class="fa-regular fa-square-caret-down fa-2xl"></i>
+                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="bi bi-caret-down-square fa-2x"></i>
                             </a>
 
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
