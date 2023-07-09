@@ -2,9 +2,11 @@ package com.ll.olol.boundedContext.notification.eventListener;
 
 import com.ll.olol.base.rsData.RsData;
 import com.ll.olol.boundedContext.member.entity.Member;
+import com.ll.olol.boundedContext.notification.entity.EmailMessage;
 import com.ll.olol.boundedContext.notification.entity.Notification;
 import com.ll.olol.boundedContext.notification.entity.NotificationDTO;
 import com.ll.olol.boundedContext.notification.event.*;
+import com.ll.olol.boundedContext.notification.service.EmailService;
 import com.ll.olol.boundedContext.notification.service.FirebaseCloudMessageService;
 import com.ll.olol.boundedContext.notification.service.NotificationService;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
@@ -29,10 +31,19 @@ public class NotificationEventListener {
     private final NotificationService notificationService;
     private final RecruitmentPeopleService recruitmentPeopleService;
     private final FirebaseCloudMessageService firebaseCloudMessageService;
+    private final EmailService emailService;
     private final ReviewService reviewService;
 
     @Value("${custom.site.baseUrl}")
     private String domain;
+
+    private void sendNotifications(Notification notification, NotificationDTO notificationDTO) throws IOException {
+        //notificationService.send(notification.getMember().getId(), notificationDTO); //sse
+        firebaseCloudMessageService.sendMessageTo(notificationService.getTokenMap().get(notification.getMember().getId()), notificationDTO);
+
+        EmailMessage emailMessage = EmailMessage.builder().to(notification.getMember().getEmail()).subject(notification.getContent()).message(notificationDTO.getLink()).build();
+        emailService.sendMail(emailMessage);
+    }
 
     @EventListener
     public void listen(EventAfterComment event) throws IOException {
@@ -42,8 +53,8 @@ public class NotificationEventListener {
                 recruitmentArticle.getId());
 
         NotificationDTO notificationDTO = NotificationDTO.builder().title(notification.getContent()).body(event.getComment().getContent()).link(domain + "recruitment/" + recruitmentArticle.getId()).build();
-        //notificationService.send(notification.getMember().getId(), notificationDTO);
-        firebaseCloudMessageService.sendMessageTo(notificationService.getTokenMap().get(notification.getMember().getId()), notificationDTO);
+
+        sendNotifications(notification, notificationDTO);
     }
 
     @EventListener
@@ -56,8 +67,8 @@ public class NotificationEventListener {
         Notification notification = notificationService.make(member, 2, content, recruitmentPeople.getRecruitmentArticle().getId());
 
         NotificationDTO notificationDTO = NotificationDTO.builder().title(notification.getContent()).body("").link(domain + "recruitment/fromList").build();
-        //notificationService.send(notification.getMember().getId(), notificationDTO);
-        firebaseCloudMessageService.sendMessageTo(notificationService.getTokenMap().get(notification.getMember().getId()), notificationDTO);
+
+        sendNotifications(notification, notificationDTO);
     }
 
     @EventListener
@@ -66,8 +77,7 @@ public class NotificationEventListener {
         Member member = recruitmentPeople.getMember();
         String content = recruitmentPeople.getRecruitmentArticle().getArticleName() + " 공고의 " + recruitmentPeople.getRecruitmentArticle().getMember().getNickname();
         if (recruitmentPeople.isAttend()) {
-            content += "님이 참가 수락을 했습니다.\n"
-                    + "링크: " + recruitmentPeople.getRecruitmentArticle().getRecruitmentArticleForm().getConnectType();
+            content += "님이 참가 수락을 했습니다.";
         } else {
             content += "님이 참가 거절을 했습니다.";
         }
@@ -75,8 +85,8 @@ public class NotificationEventListener {
         Notification notification = notificationService.make(member, 3, content, recruitmentPeople.getRecruitmentArticle().getId());
 
         NotificationDTO notificationDTO = NotificationDTO.builder().title(notification.getContent()).body("").link(domain + "member/mypage").build();
-        //notificationService.send(notification.getMember().getId(), notificationDTO);
-        firebaseCloudMessageService.sendMessageTo(notificationService.getTokenMap().get(notification.getMember().getId()), notificationDTO);
+
+        sendNotifications(notification, notificationDTO);
     }
 
     @EventListener
@@ -89,8 +99,8 @@ public class NotificationEventListener {
         Notification notification = notificationService.make(member, 4, content, recruitmentPeople.getRecruitmentArticle().getId());
 
         NotificationDTO notificationDTO = NotificationDTO.builder().title(notification.getContent()).body("").link(domain + "member/mypage").build();
-        //notificationService.send(notification.getMember().getId(), notificationDTO);
-        firebaseCloudMessageService.sendMessageTo(notificationService.getTokenMap().get(notification.getMember().getId()), notificationDTO);
+
+        sendNotifications(notification, notificationDTO);
     }
 
     @EventListener
@@ -102,8 +112,8 @@ public class NotificationEventListener {
             Notification notification = notificationService.make(r.getMember(), 5, content, recruitmentArticle.getId());
 
             NotificationDTO notificationDTO = NotificationDTO.builder().title(notification.getContent()).body("").link(domain + "recruitment/" + recruitmentArticle.getId()).build();
-            //notificationService.send(notification.getMember().getId(), notificationDTO);
-            firebaseCloudMessageService.sendMessageTo(notificationService.getTokenMap().get(notification.getMember().getId()), notificationDTO);
+
+            sendNotifications(notification, notificationDTO);
         }
     }
 
@@ -119,7 +129,7 @@ public class NotificationEventListener {
         reviewService.setCourseTimeEnd(recruitmentArticle);
 
         // 공고자에게 산행 종료 알림 보냄
-        notificationService.makeReviewNotification(author, 4, content, recruitmentArticle.getId(), true);
+        notificationService.makeReviewNotification(author, 6, content, recruitmentArticle.getId(), true);
     }
 
     @EventListener
@@ -137,6 +147,6 @@ public class NotificationEventListener {
         RsData reviewMemberRsData = reviewService.createReviewMember(reviewer, recruitmentPeople.getRecruitmentArticle(), recruitmentPeople);
 
 
-        notificationService.makeReviewWriteNotification(reviewer, 4, content, recruitmentPeople.getRecruitmentArticle().getId(), true);
+        notificationService.makeReviewWriteNotification(reviewer, 7, content, recruitmentPeople.getRecruitmentArticle().getId(), true);
     }
 }

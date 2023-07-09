@@ -44,6 +44,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-admin:9.1.1' // firebase sdk
 
     implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '4.2.2' // okhttp
+
+    implementation 'org.springframework.boot:spring-boot-starter-mail' //메일 발송
 }
 
 tasks.named('test') {
