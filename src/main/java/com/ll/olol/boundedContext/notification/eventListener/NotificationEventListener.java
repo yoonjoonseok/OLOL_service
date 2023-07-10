@@ -41,7 +41,7 @@ public class NotificationEventListener {
         //notificationService.send(notification.getMember().getId(), notificationDTO); //sse
         firebaseCloudMessageService.sendMessageTo(notificationService.getTokenMap().get(notification.getMember().getId()), notificationDTO);
 
-        if (3 <= notification.getType() && notification.getType() <= 5) {
+        if (2 <= notification.getType() && notification.getType() <= 7) {
             EmailMessage emailMessage = EmailMessage.builder().to(notification.getMember().getEmail()).subject(notification.getContent()).message(notificationDTO.getLink()).build();
             emailService.sendMail(emailMessage);
         }
