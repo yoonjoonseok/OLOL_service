@@ -74,7 +74,10 @@ public class MemberController {
     public String editInfo(@Valid EditForm editForm) {
         RsData result = memberService.modifyMemberInfo(rq.getMember(), editForm.getNickname(), editForm.getAgeRange(),
                 editForm.getGender(), editForm.getEmail());
-
+        if (result.isFail()) {
+            return rq.historyBack("추가정보를 입력해주세요");
+        }
+//        memberService.modifyUser(rq.getMember());
         return rq.redirectWithMsg("/recruitment/list", result.getMsg());
     }
 
