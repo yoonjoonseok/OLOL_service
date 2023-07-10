@@ -4,18 +4,17 @@
 
 <header layout:fragment="header">
 
-    <nav class="navbar navbar-expand-lg" style="background-color: rgb(156, 185, 97);">
+    <nav class="navbar navbar-expand-lg bg-light" style="background-color: rgb(156, 185, 97);">
         <div class="container">
-
             <a class="navbar-brand" href="/">오름 오름</a>
 
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                     aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ml-auto">
+            <div class="collapse navbar-collapse " id="navbarNav">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item active mr-4">
                         <a th:href="@{/recruitment/report/list}" class="btn btn-outline-secondary"
                            th:if="${@rq.admin}">신고된 공고 목록</a>
@@ -40,14 +39,14 @@
                     </li>
 
                     <li class="nav-item active">
-                        <a sec:authorize="isAnonymous()" data-toggle="modal"
-                           data-target="#exampleModalCenter" class="nav-link">
+                        <a sec:authorize="isAnonymous()" data-bs-toggle="modal"
+                           data-bs-target="#exampleModalCenter" class="nav-link">
                             <i class="bi bi-box-arrow-right fa-2x"></i>
                         </a>
 
-                        <div class="dropdown nav-link" sec:authorize="isAuthenticated()">
-                            <a type="button" id="dropdownMenuButton"
-                               data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <div class="dropdown nav-link " sec:authorize="isAuthenticated()">
+                            <a type="button" id="dropdownMenuButton" class="text-body"
+                               data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="bi bi-caret-down-square fa-2x"></i>
                             </a>
 
@@ -63,5 +62,6 @@
         </div>
     </nav>
 </header>
+
 </body>
 </html>
