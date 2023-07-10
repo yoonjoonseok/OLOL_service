@@ -56,6 +56,7 @@ public class RecruitmentController {
                        @RequestParam(defaultValue = "1") int sortCode,
                        @RequestParam(defaultValue = "0") int page,
                        String kw) {
+
         List<Sort.Order> sorts = new ArrayList<>();
         sorts.add(Sort.Order.asc("isDeadLine"));
         if (sortCode == 1) {
@@ -140,7 +141,7 @@ public class RecruitmentController {
     public String questionCreate2(CreateForm createForm) {
 
         Member loginedMember = rq.getMember();
-        if (!memberService.hasAdditionalInfo(loginedMember)) {
+        if (memberService.additionalInfo(loginedMember).isFail()) {
             return rq.historyBack("마이페이지에서 추가정보를 입력해주세요.");
         }
 
