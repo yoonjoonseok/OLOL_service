@@ -3,7 +3,8 @@ self.addEventListener("push", (event) => {
     event.waitUntil(
         registration.showNotification(payload.notification.title, {
             body: payload.notification.body,
-            image: payload.notification.image
+            image: payload.notification.image,
+            icon: "/resource/common/icon/olol.png"
         })
     );
 });
