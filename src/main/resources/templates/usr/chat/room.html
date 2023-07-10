@@ -1,5 +1,48 @@
 <!DOCTYPE html>
 <html layout:decorate="~{usr/layout/layout.html}" xmlns:layout="http://www.w3.org/1999/xhtml">
+<head>
+    <style>
+        /* 대화 내용 창 스타일 */
+        .chat-history {
+            width: 70%; /* 화면 너비의 70%로 설정 */
+            margin: 0 auto; /* 가운데 정렬을 위해 margin을 auto로 설정 */
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            background-color: #EAF5E3; /* 옅은 초록색 배경색 */
+            padding: 10px;
+            overflow-y: scroll;
+            height: 400px;
+        }
+
+        .my-message {
+            align-self: flex-end;
+            margin-left: auto;
+            text-align: right;
+        }
+
+        .other-message {
+            align-self: flex-start;
+            margin-right: auto;
+            text-align: left;
+        }
+
+        .chat-message {
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+        }
+
+        .chat-message input {
+            flex: 1;
+        }
+
+        .chat-message button {
+            margin-left: 10px;
+        }
+    </style>
+
+</head>
 
 <main layout:fragment="main">
     <th:block th:fragment="content">
@@ -10,42 +53,51 @@
                 <div class="row">
                     <div class="col-lg-6">
                         <div class="chat-about">
-                            <span id="myId" class="m-b-0" th:text="${room.name}"></span>
+                            <span id="myId" class="m-b-0" th:text="${room.roomName}"></span>
                         </div>
                     </div>
                 </div>
             </div>
+            <button id="button-exit" type="button" class="input-group-text" data-toggle="tooltip"
+                    data-placement="top" title="Exit chat">
+                <i class="fas fa-arrow-right-from-bracket"></i>
+            </button>
+
+            <!-- 수정된 HTML -->
             <div id="msgArea" class="chat-history">
-                <div style="list-style: none" th:each="message : ${messages}">
+                <div style="list-style: none" th:each="message : ${room.chatMessageList}">
                     <div th:if="${message.sender} == null" class="chat-message admin-message">
                         <div class="message-content alert alert-secondary">
                             <b th:text="관리자 + ' : ' + ${message.message}"></b>
                         </div>
                     </div>
-                    <div th:if="${message.sender != null and message.sender.username == member.username}"
+                    <div th:if="${message.sender != null and message.sender.id != member.id}"
                          class="chat-message my-message">
                         <div class="message-content alert alert-secondary">
                             <b th:text="${message.sender.nickname} + ' : ' + ${message.message}"
-                               style="word-break: break-all;"></b>
+                               style="word-break: break-all; text-align: right;"></b>
                         </div>
                     </div>
-                    <div th:if="${message.sender != null and message.sender.username != member.username}"
+                    <div th:if="${message.sender != null and message.sender.id == member.id}"
                          class="chat-message other-message">
                         <div class="message-content alert alert-warning">
                             <b th:text="${message.sender.nickname} + ' : ' + ${message.message}"
-                               style="word-break: break-all;"></b>
+                               style="word-break: break-all; text-align: left;"></b>
                         </div>
                     </div>
                 </div>
             </div>
+
+
             <div class="chat-message clearfix">
                 <input id="msg" type="text" class="form-control" placeholder="Enter text here...">
                 <button id="button-send" type="button" class="input-group-text" data-toggle="tooltip"
                         data-placement="top" title="Send a message">
-                    <i id="plane" class="fas fa-paper-plane"></i>
+                    <i id="plane" class="fas fa-paper-plane" style="font-size: inherit;"></i>
                 </button>
             </div>
         </div>
+
 
         <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/5.5.0/js/bootstrap.bundle.min.js"
                 integrity="sha512-ALQXHnkwBzk0bNf4yMn+4xUoZyYm9GclpgSpdF+Q3f6oUqQVXrLk9I07FGSNT+3Q4kZq/n9JvazW2f/8P6X0sg=="
@@ -62,9 +114,6 @@
                 var roomId = [[${room.roomId}]];
                 var roomName = [[${room.name}]];
                 var username = [[${member.nickname}]];
-                console.log("헬로우");
-
-                console.log(roomName + ", " + roomId + ", " + username);
 
                 var sockJs = new SockJS("/ws/chat");
                 //1. SockJS를 내부에 들고있는 stomp를 내어줌
@@ -72,7 +121,6 @@
 
                 //2. connection이 맺어지면 실행
                 stomp.connect({}, function () {
-                    console.log("STOMP Connection")
 
                     //4. subscribe(path, callback)으로 메세지를 받을 수 있음
                     stomp.subscribe("/sub/chat/room/" + roomId, function (chat) {
@@ -117,7 +165,6 @@
                 $("#button-send").on("click", function (e) {
                     var msg = document.getElementById("msg");
 
-                    console.log(username + ":" + msg.value);
                     stomp.send('/pub/chat/message', {}, JSON.stringify({
                         roomId: roomId,
                         message: msg.value,
@@ -128,7 +175,6 @@
                     // 스크롤 아래로 내리기
                     var chatHistory = document.getElementById("msgArea");
                     chatHistory.scrollTop = chatHistory.scrollHeight;
-
                 });
             });
 
