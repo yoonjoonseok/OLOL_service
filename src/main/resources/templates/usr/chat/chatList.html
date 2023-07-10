@@ -1,19 +1,58 @@
 <html layout:decorate="~{usr/layout/layout.html}" xmlns:layout="http://www.w3.org/1999/xhtml"
       xmlns="http://www.w3.org/1999/html">
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/2.1.2/sweetalert.min.js"
+            crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        window.createRoom = function () {
+            swal({
+                text: "채팅방의 이름을 입력해주세요",
+                content: "input",
+                buttons: ["취소", "확인"],
+                closeOnClickOutside: false
+            }).then(function (roomName) {
+                if (roomName) {
+                    const data = {
+                        roomName: roomName, // 사용자가 입력한 채팅방의 이름으로 설정
+                    };
+                    $.ajax({
+                        url: "/chat/create",
+                        type: "POST",
+                        data: data,
+                    }).then(function (result) {
+                        swal({
+                            title: "채팅 생성 완료",         // Alert 제목
+                            icon: 'success',                         // Alert 타입
+                            closeOnClickOutside: true,
+                        }).then(function () {
+                            location.reload(); // 페이지 새로고침
+                        });
+                    }).fail(function () {
+                        alert("에러가 발생했습니다");
+                    });
+                }
+            });
+        }
+
+    </script>
+</head>
 <body>
 <main layout:fragment="main" class="d-flex justify-content-center">
     <div>
         <h1>대화 목록</h1>
+
+        <button onclick="createRoom()">대화방만들기</button>
+
         <table class="table">
             <thead>
-            <tr>
-                <th th:text="${myNickname}"></th>
-            </tr>
+
             </thead>
             <tbody>
             <tr th:each="conversation : ${roomList}">
                 <td>
-                    <a class="chat-name" th:text="${conversation.roomId}"
+                    <a class="chat-name" th:text="${conversation.roomName}"
                        th:href="@{/chat/room/{roomId}(roomId=${conversation.roomId})}"></a>
                 </td>
             </tr>
