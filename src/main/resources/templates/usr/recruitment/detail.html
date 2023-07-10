@@ -123,21 +123,25 @@
                             <i class="bi bi-eye"></i>
                             <span th:text="${recruitmentArticle.views}">조회수</span>
                         </div>
-                        <div class="ml-auto">
-                            <i class="fa-solid fa-trash-can" href="javascript:"
-                               onclick="if ( confirm('삭제하시겠습니까?') ) $(this).next().submit();"></i>
-                            <form hidden th:action="@{|/recruitment/${recruitmentArticle.id}/delete|}" method="POST">
-                                <input type="hidden" name="_method" value="delete">
-                            </form>
+                        <div class="d-flex align-items-center ms-auto">
+                            <div>
+                                <i class="fa-solid fa-trash-can" href="javascript:"
+                                   onclick="if ( confirm('삭제하시겠습니까?') ) $(this).next().submit();"></i>
+                                <form hidden th:action="@{|/recruitment/${recruitmentArticle.id}/delete|}"
+                                      method="POST">
+                                    <input type="hidden" name="_method" value="delete">
+                                </form>
+                            </div>
+                            <div class="ms-2">
+                                <i class="fa-solid fa-triangle-exclamation" type="button" data-toggle="modal"
+                                   data-target="#reportingArticleModal"></i>
+                                <!--                        <button type="button" data-toggle="modal"-->
+                                <!--                                data-target="#reportingArticleModal" >-->
+                                <!--                            신고-->
+                                <!--                        </button>-->
+                            </div>
                         </div>
-                        <div class="ml-2">
-                            <i class="fa-solid fa-triangle-exclamation" type="button" data-toggle="modal"
-                               data-target="#reportingArticleModal"></i>
-                            <!--                        <button type="button" data-toggle="modal"-->
-                            <!--                                data-target="#reportingArticleModal" >-->
-                            <!--                            신고-->
-                            <!--                        </button>-->
-                        </div>
+
                     </div>
                 </div>
 
@@ -228,7 +232,7 @@
                                       th:action="@{/recruitment/{id}/deadLine (id=${recruitmentArticle.id})}"
                                       method="post">
                                     <button type="submit"
-                                            class="btn btn-outline-success btn-sm ml-3">
+                                            class="btn btn-outline-success btn-sm ms-3">
                                         마감
                                     </button>
                                 </form>
@@ -261,7 +265,7 @@
                     </form>
 
                     <i th:if="${@likeableRecruitmentArticleService.canAdd(recruitmentArticle,me).isSuccess()}"
-                       class="fa-solid fa-heart fa-xl ml-3" style="color: #d71d1d;" href="javascript:"
+                       class="fa-solid fa-heart fa-xl ms-2" style="color: #d71d1d;" href="javascript:"
                        onclick="if ( confirm('찜하시겠습니까?') ) $(this).next().submit();"></i>
                     <form hidden th:action="@{|/recruitment/${recruitmentArticle.id}/bookmark|}" method="POST">
                     </form>
