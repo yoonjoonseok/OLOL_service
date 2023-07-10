@@ -74,10 +74,7 @@ public class MemberController {
     public String editInfo(@Valid EditForm editForm) {
         RsData result = memberService.modifyMemberInfo(rq.getMember(), editForm.getNickname(), editForm.getAgeRange(),
                 editForm.getGender(), editForm.getEmail());
-        if (result.isFail()) {
-            return "redirect:/mypage";
-        }
-//        memberService.modifyUser(rq.getMember());
+
         return rq.redirectWithMsg("/recruitment/list", result.getMsg());
     }
 
