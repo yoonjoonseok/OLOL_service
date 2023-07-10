@@ -56,6 +56,7 @@ public class RecruitmentController {
                        @RequestParam(defaultValue = "1") int sortCode,
                        @RequestParam(defaultValue = "0") int page,
                        String kw) {
+
         List<Sort.Order> sorts = new ArrayList<>();
         sorts.add(Sort.Order.asc("isDeadLine"));
         if (sortCode == 1) {

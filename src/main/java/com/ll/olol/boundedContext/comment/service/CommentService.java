@@ -6,6 +6,7 @@ import com.ll.olol.boundedContext.comment.entity.Comment;
 import com.ll.olol.boundedContext.comment.entity.CommentDto;
 import com.ll.olol.boundedContext.comment.repository.CommentRepository;
 import com.ll.olol.boundedContext.member.entity.Member;
+import com.ll.olol.boundedContext.member.service.MemberService;
 import com.ll.olol.boundedContext.notification.event.EventAfterComment;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
 import com.ll.olol.boundedContext.recruitment.repository.RecruitmentRepository;
@@ -25,6 +26,7 @@ public class CommentService {
     private final RecruitmentRepository recruitmentRepository;
     private final Rq rq;
     private final ApplicationEventPublisher publisher;
+    private final MemberService memberService;
 
     @Transactional
     public RsData commentSave(CommentDto commentDto, Long articleId) {
@@ -33,6 +35,9 @@ public class CommentService {
         Optional<RecruitmentArticle> article = recruitmentRepository.findById(articleId);
         if (article.isEmpty()) {
             return RsData.of("F-1", "게시물이 없습니다.");
+        }
+        if (memberService.hasAdditionalInfoTest(rq.getMember()).isFail()) {
+            return RsData.of("F-2", "마이페이지에서 추가정보를 입력해주세요");
         }
         Comment savedComment = new Comment();
         savedComment.setContent(commentDto.getContent());

@@ -1,8 +1,10 @@
 package com.ll.olol.boundedContext.recruitment.service;
 
+import com.ll.olol.base.rq.Rq;
 import com.ll.olol.base.rsData.RsData;
 import com.ll.olol.boundedContext.member.entity.Member;
 import com.ll.olol.boundedContext.member.repository.MemberRepository;
+import com.ll.olol.boundedContext.member.service.MemberService;
 import com.ll.olol.boundedContext.notification.event.EventAfterDeportPeople;
 import com.ll.olol.boundedContext.notification.event.EventAfterRecruitmentAttend;
 import com.ll.olol.boundedContext.notification.event.EventAfterRecruitmentPeople;
@@ -10,13 +12,12 @@ import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentPeople;
 import com.ll.olol.boundedContext.recruitment.repository.RecruitmentPeopleRepository;
 import com.ll.olol.boundedContext.recruitment.repository.RecruitmentRepository;
+import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.Optional;
 
 
 @Service
@@ -28,6 +29,8 @@ public class RecruitmentPeopleService {
     private final MemberRepository memberRepository;
     private final RecruitmentRepository recruitmentRepository;
     private final ApplicationEventPublisher publisher;
+    private final MemberService memberService;
+    private final Rq rq;
     private final int limitPeople = 0;
 
     @Transactional
@@ -41,6 +44,9 @@ public class RecruitmentPeopleService {
         Optional<RecruitmentPeople> first = article.get().getRecruitmentPeople().stream()
                 .filter(t -> t.getMember().getId() == member.getId())
                 .findFirst();
+        if (memberService.hasAdditionalInfoTest(rq.getMember()).isFail()) {
+            return RsData.of("F-2", "마이페이지에서 추가정보를 입력해주세요");
+        }
 
         if (first.isPresent()) {
             return RsData.of("F-1", "이미 신청한 공고입니다.");
@@ -108,8 +114,10 @@ public class RecruitmentPeopleService {
         return RsData.of("S-1", "실제 참여자로 체크했습니다.");
     }
 
-    public RsData<RecruitmentPeople> findByRecruitmentArticleAndMember(RecruitmentArticle recruitmentArticle, Member reviewer) {
-        RecruitmentPeople recruitmentPeople = recruitmentPeopleRepository.findByRecruitmentArticleAndMember(recruitmentArticle, reviewer);
+    public RsData<RecruitmentPeople> findByRecruitmentArticleAndMember(RecruitmentArticle recruitmentArticle,
+                                                                       Member reviewer) {
+        RecruitmentPeople recruitmentPeople = recruitmentPeopleRepository.findByRecruitmentArticleAndMember(
+                recruitmentArticle, reviewer);
 
         if (recruitmentPeople != null) {
             return RsData.of("S-1", "신청이 확인되었습니다.", recruitmentPeople);

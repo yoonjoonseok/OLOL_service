@@ -124,7 +124,8 @@ public class RecruitmentPeopleController {
     @PostMapping("/{id}/attend")
     public String attend(@PathVariable Long id, @ModelAttribute RecruitmentArticle recruitmentArticle) {
         RsData rsData = recruitmentPeopleService.saveRecruitmentPeople(rq.getMember(), id);
-        if (rsData.isFail()) {
+        Member loginedMember = rq.getMember();
+        if (rsData.isFail() || memberService.hasAdditionalInfoTest(loginedMember).isFail()) {
             return rq.historyBack(rsData);
         }
 
