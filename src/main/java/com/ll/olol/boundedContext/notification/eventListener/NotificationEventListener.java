@@ -81,10 +81,21 @@ public class NotificationEventListener {
             content += "님이 참가 거절을 했습니다.";
         }
 
-        Notification notification = notificationService.make(member, 3, content, recruitmentPeople.getRecruitmentArticle().getId());
+        Notification notification = notificationService.make(member, recruitmentPeople.isAttend() ? 3 : 4, content, recruitmentPeople.getRecruitmentArticle().getId());
         NotificationDTO notificationDTO = NotificationDTO.builder().title(notification.getContent()).body("").link(domain + "member/mypage").build();
 
         sendNotifications(notification, notificationDTO);
+
+        content = "'%s 공고에 '%s' 님이 참가하였습니다".formatted(recruitmentPeople.getRecruitmentArticle().getArticleName(), member.getNickname());
+
+        for (RecruitmentPeople r : recruitmentPeople.getRecruitmentArticle().getRecruitmentPeople()) {
+            if (r.getMember().getId() != member.getId()) {
+                notification = notificationService.make(r.getMember(), 5, content, recruitmentPeople.getRecruitmentArticle().getId());
+                notificationDTO = NotificationDTO.builder().title(notification.getContent()).body("").link(domain + "member/mypage").build();
+
+                sendNotifications(notification, notificationDTO);
+            }
+        }
     }
 
     @EventListener
@@ -93,7 +104,7 @@ public class NotificationEventListener {
         Member member = recruitmentPeople.getMember();
         String content = "'%s' 공고의 '%s' 님께 추방되었습니다.".formatted(recruitmentPeople.getRecruitmentArticle().getArticleName(), recruitmentPeople.getRecruitmentArticle().getMember().getNickname());
 
-        Notification notification = notificationService.make(member, 4, content, recruitmentPeople.getRecruitmentArticle().getId());
+        Notification notification = notificationService.make(member, 6, content, recruitmentPeople.getRecruitmentArticle().getId());
         NotificationDTO notificationDTO = NotificationDTO.builder().title(notification.getContent()).body("").link(domain + "member/mypage").build();
 
         sendNotifications(notification, notificationDTO);
@@ -103,10 +114,10 @@ public class NotificationEventListener {
     public void listen(EventAfterUpdateArticle event) throws IOException {
         RecruitmentArticle recruitmentArticle = event.getRecruitmentArticle();
         List<RecruitmentPeople> list = recruitmentPeopleService.findByRecruitmentArticle(recruitmentArticle);
-        for (RecruitmentPeople r : list) {
-            String content = "'%s' 공고의 내용이 변경되었습니다".formatted(recruitmentArticle.getArticleName());
+        String content = "'%s' 공고의 내용이 변경되었습니다".formatted(recruitmentArticle.getArticleName());
 
-            Notification notification = notificationService.make(r.getMember(), 5, content, recruitmentArticle.getId());
+        for (RecruitmentPeople r : list) {
+            Notification notification = notificationService.make(r.getMember(), 7, content, recruitmentArticle.getId());
             NotificationDTO notificationDTO = NotificationDTO.builder().title(notification.getContent()).body("").link(domain + "recruitment/" + recruitmentArticle.getId()).build();
 
             sendNotifications(notification, notificationDTO);
@@ -118,13 +129,13 @@ public class NotificationEventListener {
         RecruitmentArticle recruitmentArticle = event.getRecruitmentArticle();
         Member author = recruitmentArticle.getMember();
         String content = "'%s' 공고의 산행이 완료 됐습니다.".formatted(recruitmentArticle.getArticleName());
-        
+
         RsData reviewMemberRsData = reviewService.createReviewMember(author, recruitmentArticle, null);
 
         reviewService.setCourseTimeEnd(recruitmentArticle);
 
         // 공고자에게 산행 종료 알림 보냄
-        Notification notification = notificationService.makeReviewNotification(author, 6, content, recruitmentArticle.getId(), true);
+        Notification notification = notificationService.makeReviewNotification(author, 8, content, recruitmentArticle.getId(), true);
         NotificationDTO notificationDTO = NotificationDTO.builder().title(notification.getContent()).body("").link("").build();
 
         sendNotifications(notification, notificationDTO);
@@ -142,7 +153,7 @@ public class NotificationEventListener {
         // recruimentPeople 내부의 realParticipant 여부로 진짜 참여자들을 리뷰 멤버에 추가
         RsData reviewMemberRsData = reviewService.createReviewMember(reviewer, recruitmentPeople.getRecruitmentArticle(), recruitmentPeople);
 
-        Notification notification = notificationService.makeReviewWriteNotification(reviewer, 7, content, recruitmentPeople.getRecruitmentArticle().getId(), true);
+        Notification notification = notificationService.makeReviewWriteNotification(reviewer, 9, content, recruitmentPeople.getRecruitmentArticle().getId(), true);
         NotificationDTO notificationDTO = NotificationDTO.builder().title(notification.getContent()).body("").link("").build();
 
         sendNotifications(notification, notificationDTO);
