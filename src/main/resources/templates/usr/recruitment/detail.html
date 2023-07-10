@@ -7,6 +7,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
             integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
             crossorigin="anonymous"></script>
+    <!--    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet"-->
+    <!--          integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">-->
     <!--    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">-->
     <link rel="stylesheet" href="${pageContext.request.contextPath}/assets/admin/libs/ckeditor5/sample/styles.css"/>
 
@@ -140,36 +142,38 @@
                 </div>
 
                 <hr>
+
                 <div class="bg-success p-2 text-dark bg-opacity-10">
-                    <div class="d-flex justify-content-start mb-3">
-                        <div style="width: 22rem;">
+                    <div class="row">
+                        <div class="col-lg-6 mb-2">
                             <span class="font-weight-bold fs-5 text-secondary">모임 구분</span>
                             <div class="vr"></div>
                             <span class="fs-5 fw-bold"
                                   th:text="${recruitmentArticle.getTypeValueToString()}">모임 구분</span>
                         </div>
-                        <div>
+
+                        <div class="col-lg-6 mb-2">
                             <span class="font-weight-bold fs-5 text-secondary">모집 인원</span>
                             <div class="vr"></div>
                             <span class="fs-5 fw-bold"
                                   th:text="|${recruitmentArticle.getAttend()}/${recruitmentArticle.recruitmentArticleForm.recruitsNumbers}|">모집 인원</span>
                         </div>
-                    </div>
-                    <div class="d-flex justify-content-start mb-3">
-                        <div style="width: 22rem;">
+
+                        <div class="col-lg-6 mb-2">
                             <span class="font-weight-bold fs-5 text-secondary">연락 방법</span>
                             <div class="vr"></div>
                             <span class="fs-5 fw-bold"
                                   th:text="${recruitmentArticle.recruitmentArticleForm.connectType}">연락 방법</span>
                         </div>
 
-                        <div>
+                        <div class="col-lg-6 mb-2">
                             <div>
                                 <span class="font-weight-bold fs-5 text-secondary">산 이름</span>
                                 <div class="vr"></div>
                                 <span class="fs-5 fw-bold"
                                       th:text="${recruitmentArticle.recruitmentArticleForm.mountainName}">산 이름</span>
-                                <div class="btn-group btn-group-sm " role="group" aria-label="Basic outlined example">
+                                <div class="btn-group btn-group-sm " role="group"
+                                     aria-label="Basic outlined example">
                                     <button type="button" data-toggle="modal"
                                             data-target="#hikingTrailModal" class="btn btn-outline-success"> 등산로
                                     </button>
@@ -182,32 +186,28 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
 
-                    <div class="d-flex justify-content-start mb-3">
-                        <div style="width: 22rem;">
+                        <div class="col-lg-6 mb-2">
                             <span class="font-weight-bold fs-5 text-secondary">등산 시작 시각</span>
                             <div class="vr"></div>
                             <span class="fs-5 fw-bold"
                                   th:text="${#temporals.format(recruitmentArticle.recruitmentArticleForm.startTime, 'yyyy-MM-dd HH:mm')}">등산 시작 시각</span>
                         </div>
 
-                        <div>
+                        <div class="col-lg-6 mb-2">
                             <span class="font-weight-bold fs-5 text-secondary">예상 도착 시각</span>
                             <div class="vr"></div>
                             <span class="fs-5 fw-bold"
                                   th:text="${#temporals.format(recruitmentArticle.recruitmentArticleForm.courseTime, 'yyyy-MM-dd HH:mm')}">예상 도착 시각</span>
                         </div>
-                    </div>
 
-                    <div class="d-flex justify-content-start mb-3">
-                        <div style="width: 22rem;">
+                        <div class="col-lg-6 mb-2">
                             <span class="font-weight-bold fs-5 text-secondary">모집 연령대</span>
                             <div class="vr"></div>
                             <span class="fs-5 fw-bold"
                                   th:text="|${recruitmentArticle.recruitmentArticleForm.ageRange} 대|">모집 연령대</span>
                         </div>
-                        <div>
+                        <div class="col-lg-6 mb-2">
                             <span class="font-weight-bold fs-5 text-secondary">마감일</span>
                             <div class="vr"></div>
                             <span class="fs-5 fw-bold"
@@ -246,9 +246,13 @@
 
                     </div>
                 </div>
+
                 <hr>
+
                 <div class="card-text" th:utext="${@commonUtil.markdown(recruitmentArticle.content)}"></div>
+
                 <hr>
+
                 <div class="d-flex justify-content-end mb-5">
 
                     <i class="fa-solid fa-pen-to-square fa-xl" href="javascript:"

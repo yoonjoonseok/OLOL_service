@@ -3,6 +3,7 @@ package com.ll.olol.boundedContext.member.service;
 import com.ll.olol.base.rsData.RsData;
 import com.ll.olol.boundedContext.member.entity.Member;
 import com.ll.olol.boundedContext.member.repository.MemberRepository;
+import com.ll.olol.boundedContext.notification.service.FirebaseCloudMessageService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,8 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder;
 
     private final MemberRepository memberRepository;
+
+    private final FirebaseCloudMessageService firebaseCloudMessageService;
 
     public Optional<Member> findByUsername(String username) {
         return memberRepository.findByUsername(username);
@@ -37,7 +40,9 @@ public class MemberService {
             return RsData.of("F-1", "해당 아이디(%s)는 이미 사용중입니다.".formatted(username));
         }
 
-        if (StringUtils.hasText(password)) password = passwordEncoder.encode(password);
+        if (StringUtils.hasText(password)) {
+            password = passwordEncoder.encode(password);
+        }
 
         Member member = Member
                 .builder()
@@ -57,7 +62,9 @@ public class MemberService {
     public RsData<Member> whenSocialLogin(String providerTypeCode, String username) {
         Optional<Member> opMember = findByUsername(username);
 
-        if (opMember.isPresent()) return RsData.of("S-1", "로그인 되었습니다.", opMember.get());
+        if (opMember.isPresent()) {
+            return RsData.of("S-1", "로그인 되었습니다.", opMember.get());
+        }
 
         return join(providerTypeCode, username, "");
     }
@@ -69,11 +76,17 @@ public class MemberService {
         resultMember.setAge(ageRange);
         resultMember.setGender(gender);
         resultMember.setEmail(email);
+
         memberRepository.save(resultMember);
+
         return RsData.of("S-1", "닉네임 수정 성공");
     }
 
-    public boolean hasAdditionalInfo(Member loginedMember) {
-        return loginedMember.getEmail() != null || loginedMember.getNickname() != null;
+    public RsData additionalInfo(Member loginedMember) {
+        Optional<Member> member = memberRepository.findById(loginedMember.getId());
+        if (member.get().getEmail() == null || member.get().getNickname() == null) {
+            return RsData.of("F-1", "추가 정보를 입력해주세요");
+        }
+        return RsData.of("S-1", "success!");
     }
 }

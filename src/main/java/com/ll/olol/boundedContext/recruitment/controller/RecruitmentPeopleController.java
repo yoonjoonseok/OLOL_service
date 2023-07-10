@@ -39,7 +39,7 @@ public class RecruitmentPeopleController {
 
         Member loginedMember = rq.getMember();
 
-        if (!memberService.hasAdditionalInfo(loginedMember)) {
+        if (memberService.additionalInfo(loginedMember).isFail()) {
             return rq.historyBack("마이페이지에서 추가정보를 입력해주세요.");
         }
 
@@ -124,7 +124,8 @@ public class RecruitmentPeopleController {
     @PostMapping("/{id}/attend")
     public String attend(@PathVariable Long id, @ModelAttribute RecruitmentArticle recruitmentArticle) {
         RsData rsData = recruitmentPeopleService.saveRecruitmentPeople(rq.getMember(), id);
-        if (rsData.isFail()) {
+        Member loginedMember = rq.getMember();
+        if (rsData.isFail() || memberService.additionalInfo(loginedMember).isFail()) {
             return rq.historyBack(rsData);
         }
 
