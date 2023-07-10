@@ -41,8 +41,10 @@ public class NotificationEventListener {
         //notificationService.send(notification.getMember().getId(), notificationDTO); //sse
         firebaseCloudMessageService.sendMessageTo(notificationService.getTokenMap().get(notification.getMember().getId()), notificationDTO);
 
-        EmailMessage emailMessage = EmailMessage.builder().to(notification.getMember().getEmail()).subject(notification.getContent()).message(notificationDTO.getLink()).build();
-        emailService.sendMail(emailMessage);
+        if (notification.getType() >= 3 && notification.getType() <= 5) {
+            EmailMessage emailMessage = EmailMessage.builder().to(notification.getMember().getEmail()).subject(notification.getContent()).message(notificationDTO.getLink()).build();
+            emailService.sendMail(emailMessage);
+        }
     }
 
     @EventListener
@@ -118,7 +120,7 @@ public class NotificationEventListener {
     }
 
     @EventListener
-    public void listen(EventAfterCourseTime event) {
+    public void listen(EventAfterCourseTime event) throws IOException {
         RecruitmentArticle recruitmentArticle = event.getRecruitmentArticle();
         Member author = recruitmentArticle.getMember();
 
@@ -129,11 +131,14 @@ public class NotificationEventListener {
         reviewService.setCourseTimeEnd(recruitmentArticle);
 
         // 공고자에게 산행 종료 알림 보냄
-        notificationService.makeReviewNotification(author, 6, content, recruitmentArticle.getId(), true);
+        Notification notification = notificationService.makeReviewNotification(author, 6, content, recruitmentArticle.getId(), true);
+        NotificationDTO notificationDTO = NotificationDTO.builder().title(notification.getContent()).body("").link("").build();
+
+        sendNotifications(notification, notificationDTO);
     }
 
     @EventListener
-    public void listen(EventAfterCheckedRealParticipant event) {
+    public void listen(EventAfterCheckedRealParticipant event) throws IOException {
         RecruitmentPeople recruitmentPeople = event.getRecruitmentPeople();
 
         Member reviewer = recruitmentPeople.getMember();
@@ -146,7 +151,9 @@ public class NotificationEventListener {
         // recruimentPeople 내부의 realParticipant 여부로 진짜 참여자들을 리뷰 멤버에 추가
         RsData reviewMemberRsData = reviewService.createReviewMember(reviewer, recruitmentPeople.getRecruitmentArticle(), recruitmentPeople);
 
+        Notification notification = notificationService.makeReviewWriteNotification(reviewer, 7, content, recruitmentPeople.getRecruitmentArticle().getId(), true);
+        NotificationDTO notificationDTO = NotificationDTO.builder().title(notification.getContent()).body("").link("").build();
 
-        notificationService.makeReviewWriteNotification(reviewer, 7, content, recruitmentPeople.getRecruitmentArticle().getId(), true);
+        sendNotifications(notification, notificationDTO);
     }
 }

@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import okhttp3.*;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.http.HttpHeaders;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
@@ -20,6 +21,7 @@ public class FirebaseCloudMessageService {
     private final String API_URL = "https://fcm.googleapis.com/v1/projects/olol-3ccc5/messages:send";
     private final ObjectMapper objectMapper;
 
+    @Async
     public void sendMessageTo(String targetToken, NotificationDTO notificationDTO) throws IOException {
         String message = makeMessage(targetToken, notificationDTO.getTitle(), notificationDTO.getBody(), notificationDTO.getLink());
         System.out.println("와 " + message);
