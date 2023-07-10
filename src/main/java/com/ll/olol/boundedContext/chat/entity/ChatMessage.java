@@ -2,10 +2,7 @@ package com.ll.olol.boundedContext.chat.entity;
 
 import com.ll.olol.base.entity.BaseEntity;
 import com.ll.olol.boundedContext.member.entity.Member;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
@@ -26,7 +23,9 @@ public class ChatMessage extends BaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "chat_room_id")
+    @OrderBy("createDate ASC") // 정렬 기준을 CREATE_DATE 칼럼의 오름차순으로 설정
     private ChatRoom chatRoom;
+
 
     public static ChatMessage create(String message, Member sender, ChatRoom chatRoom) {
         return ChatMessage.builder()
@@ -35,5 +34,5 @@ public class ChatMessage extends BaseEntity {
                 .chatRoom(chatRoom)
                 .build();
     }
-    
+
 }

@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface ChatMessageRepository extends JpaRepository<ChatMessage, Long> {
 
-    @Query("SELECT cm FROM ChatMessage cm JOIN FETCH cm.chatRoom cr JOIN FETCH cr.sender JOIN FETCH cr.receiver WHERE cr.roomId = :roomId")
+    @Query("SELECT cm FROM ChatMessage cm JOIN FETCH cm.sender WHERE cm.chatRoom.roomId = :roomId")
     List<ChatMessage> findByChatRoom_RoomId(@Param("roomId") String roomId);
 
 }

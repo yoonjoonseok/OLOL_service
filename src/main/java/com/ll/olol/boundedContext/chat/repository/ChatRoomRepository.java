@@ -10,20 +10,18 @@ import java.util.Optional;
 
 public interface ChatRoomRepository extends JpaRepository<ChatRoom, Long> {
 
-    @Query("SELECT cr FROM ChatRoom cr JOIN FETCH cr.sender JOIN FETCH cr.receiver")
+    @Query("SELECT cr FROM ChatRoom cr JOIN FETCH cr.roomHost")
     List<ChatRoom> findAll();
 
-    @Query("SELECT cr FROM ChatRoom cr JOIN FETCH cr.sender crs JOIN FETCH cr.receiver crr")
+    @Query("SELECT cr FROM ChatRoom cr JOIN FETCH cr.chatMembers cm JOIN FETCH cr.roomHost WHERE cm.username = :username")
     List<ChatRoom> findByChatRoom_Username(@Param("username") String username);
 
-    @Query("SELECT cr FROM ChatRoom cr WHERE cr.roomId = :roomId")
-    Optional<ChatRoom> findByRoomId(@Param("roomId") String roomId);
+    Optional<ChatRoom> findByRoomId(String roomId);
 
-    @Query("SELECT cr FROM ChatRoom cr WHERE cr.sender.id = :senderId AND cr.receiver.id = :receiverId")
-    Optional<ChatRoom> findExistChatRoom(@Param("senderId") Long senderId, @Param("receiverId") Long receiverId);
-
-
-    @Query("SELECT cr FROM ChatRoom cr  WHERE cr.roomHost.id = :memberId")
+    @Query("SELECT cr FROM ChatRoom cr WHERE cr.roomHost.id = :memberId")
     List<ChatRoom> findByRoomHostId(@Param("memberId") Long memberId);
 
+    @Query("SELECT cr FROM ChatRoom cr JOIN cr.chatMembers cm WHERE cm.id = :userId")
+    List<ChatRoom> findChatRoomsByMemberId(@Param("userId") Long userId);
+    
 }

@@ -30,17 +30,15 @@ public class ChatService {
 
 
     @Transactional
-    public ChatRoomDetailDTO createChatRoomDetailDTO(Member sender, Member receiver, Member roomHost) {
-
-        ChatRoom chatRoom = createChatRoom(sender, receiver, roomHost);
-
+    public ChatRoomDetailDTO createChatRoomDetailDTO(Member roomHost, String roomName) {
+        ChatRoom chatRoom = createChatRoom(roomHost, roomName);
         ChatRoomDetailDTO chatRoomDetailDTO = ChatRoomDetailDTO.toChatRoomDetailDTO(chatRoom);
-
         return chatRoomDetailDTO;
     }
 
-    private ChatRoom createChatRoom(Member sender, Member receiver, Member roomHost) {
-        ChatRoom chatRoom = ChatRoom.create(sender, receiver, roomHost);
+    private ChatRoom createChatRoom(Member roomHost, String roomName) {
+        ChatRoom chatRoom = ChatRoom.create(roomHost, roomName);
+        chatRoom.getChatMembers().add(roomHost);
         chatRoomRepository.save(chatRoom);
         return chatRoom;
     }
@@ -53,30 +51,31 @@ public class ChatService {
 
     @Transactional
     public void createChatMessage(ChatMessageDTO chatMessageDTO) {
-
         String message = chatMessageDTO.getMessage();
         String roomId = chatMessageDTO.getRoomId();
         String writer = chatMessageDTO.getWriter();
-        //필요한거 : message, Member sender, ChatRoom 객체
-        //임시로 repository에 해놧음 service 구현되면 수정할 것
+
         ChatRoom chatRoom = chatRoomRepository.findByRoomId(roomId).orElse(null);
         Member sender = memberService.findByNickname(writer).orElse(null);
 
-        ChatMessage chatMessage = ChatMessage.create(message, sender, chatRoom);
-        chatRoom.addMessage(chatMessage);
-        chatMessageRepository.save(chatMessage);
+        if (chatRoom != null && sender != null) {
+            ChatMessage chatMessage = ChatMessage.create(message, sender, chatRoom);
+            chatRoom.addMessage(chatMessage);
+            chatMessageRepository.save(chatMessage);
+        }
     }
 
-    public List<ChatMessage> findByRoomId(String roomId) {
+
+    public List<ChatMessage> findMessagesByRoomId(String roomId) {
         return chatMessageRepository.findByChatRoom_RoomId(roomId);
     }
 
+
     public List<ChatRoomDetailDTO> findByNickname(String nickname) {
         Member hostMember = memberService.findByNickname(nickname).get();
-        long hostId = rq.getMember().getId();
+        long hostId = hostMember.getId();
 
         List<ChatRoom> chatRooms = chatRoomRepository.findByRoomHostId(hostId);
-
         List<ChatRoomDetailDTO> chatRoomDetailDTOS = new ArrayList<>();
 
         for (ChatRoom chatRoom : chatRooms) {
@@ -98,12 +97,15 @@ public class ChatService {
         return chatRoomDetailDTOS;
     }
 
-    public ChatRoom findExistChatRoom(Long senderId, Long receiverId) {
-        return chatRoomRepository.findExistChatRoom(senderId, receiverId).orElse(null);
-    }
+    public List<ChatRoomDetailDTO> findChatRoomsByMemberId(Long id) {
+        List<ChatRoom> chatRooms = chatRoomRepository.findChatRoomsByMemberId(id);
+        List<ChatRoomDetailDTO> chatRoomDetailDTOS = new ArrayList<>();
 
-    public Boolean isExistChatRoom(Long senderId, Long receiverId) {
-        return findExistChatRoom(senderId, receiverId) != null;
+        for (ChatRoom chatRoom : chatRooms) {
+            chatRoomDetailDTOS.add(ChatRoomDetailDTO.toChatRoomDetailDTO(chatRoom));
+        }
+
+        return chatRoomDetailDTOS;
     }
 
 }

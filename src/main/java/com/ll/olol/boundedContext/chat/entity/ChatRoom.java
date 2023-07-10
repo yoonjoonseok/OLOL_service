@@ -20,44 +20,38 @@ import java.util.UUID;
 @ToString(callSuper = true)
 public class ChatRoom extends BaseEntity {
 
+    private String roomName;
+
+    @Column(unique = true)
     private String roomId;
 
     @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL)
     @Builder.Default
     private List<ChatMessage> chatList = new ArrayList<>();
-//
-//    @OneToMany(fetch = FetchType.LAZY, mappedBy = "chatRoom", cascade = CascadeType.ALL)
-//    @Builder.Default
-//    private List<ChatMember> chatMembers = new ArrayList<>();
-
-    private String roomName;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "sender_id")
-    private Member sender;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "receiver_id")
-    private Member receiver;
 
     @ManyToOne
-    @JoinColumn(name = "room_host")
+    @JoinColumn(name = "room_host_id")
     private Member roomHost;
 
+    @ManyToMany
+    @JoinTable(name = "chat_room_member",
+            joinColumns = @JoinColumn(name = "chat_room_id"),
+            inverseJoinColumns = @JoinColumn(name = "member_id"))
+    private List<Member> chatMembers = new ArrayList<>();
 
-    public static ChatRoom create(Member sender, Member receiver, Member roomHost) {
+
+    public static ChatRoom create(Member roomHost, String roomName) {
+
         return ChatRoom.builder()
+                .roomName(roomName)
                 .roomId(UUID.randomUUID().toString())
-                .sender(sender)
-                .receiver(receiver)
-                .chatList(new ArrayList<>())
                 .roomHost(roomHost)
+                .chatList(new ArrayList<>())
+                .chatMembers(new ArrayList<>())
                 .build();
     }
 
     public void addMessage(ChatMessage chatMessage) {
         chatList.add(chatMessage);
-
-//        chatMessage.getChatRoom().addMessage(chatMessage);
     }
 }
