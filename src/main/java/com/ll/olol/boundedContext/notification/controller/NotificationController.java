@@ -8,12 +8,11 @@ import com.ll.olol.boundedContext.notification.service.NotificationService;
 import java.util.Collections;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 @Controller
@@ -52,5 +51,11 @@ public class NotificationController {
         Member member = rq.getMember();
         // 서비스를 통해 생성된 SseEmitter를 반환
         return notificationService.connectNotification(member.getId());
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity register(@RequestBody String token) {
+        notificationService.register(rq.getMember().getId(), token);
+        return ResponseEntity.ok().build();
     }
 }
