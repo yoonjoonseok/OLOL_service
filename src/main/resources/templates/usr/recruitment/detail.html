@@ -58,6 +58,22 @@
                 margin-left: 1rem;
             }
         }
+
+        .brown {
+            color: rgba(73, 33, 25, 0.97);
+        }
+
+        .skyblue {
+            color: skyblue;
+        }
+
+        .limegreen {
+            color: limegreen;
+        }
+
+        .darkgreen {
+            color: #01712b;
+        }
     </style>
 
 </head>
@@ -75,6 +91,31 @@
                         <div>
                             <span th:text="${recruitmentArticle.member.nickname}">닉네임</span>
                             <div class="vr"></div>
+                            <span class="ml-1 fw-bold" data-bs-toggle="tooltip" data-bs-placement="top"
+                                  title="이 숫자는 후기 고도 입니다. "
+                                  th:text="${recruitmentArticle.member.getReviewScore()} + 'M'"
+                                  th:style="${recruitmentArticle.member.getReviewScore() >= 0 && recruitmentArticle.member.getReviewScore() < 450 ? 'color: brown' :
+                 (recruitmentArticle.member.getReviewScore() >= 450 && recruitmentArticle.member.getReviewScore() < 500 ? 'color: skyblue' :
+                  (recruitmentArticle.member.getReviewScore() >= 500 && recruitmentArticle.member.getReviewScore() < 1000 ? 'color: limegreen' : 'color: darkgreen'))}">
+    후기 고도 (점수)
+</span>
+                            <i class="bi bi-exclamation-circle" data-bs-toggle="tooltip"
+                               data-bs-placement="top"
+                               title="대한민국 평균 고도는 482M이며 작성받은 후기를 통해 고도가 이용자의 고도는 높아집니다."></i>
+
+                            <script>
+                                // 툴팁 활성화
+                                // const exampleEl = document.getElementById('example')
+                                // const tooltip = new bootstrap.Tooltip(exampleEl, options)
+                                const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+                                const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                                    return new bootstrap.Tooltip(tooltipTriggerEl)
+                                })
+                            </script>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-center mt-2">
+                        <div>
                             <span th:text="${recruitmentArticle.getCreateDateToString()}">게시글 날짜</span>
                             <div class="vr"></div>
                             <i class="bi bi-eye"></i>
