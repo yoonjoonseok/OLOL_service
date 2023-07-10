@@ -92,6 +92,7 @@
 
 </script>
 <script>
+    //sse 방식의 푸시 알림
     // function getNotificationPermission() {
     //     // 브라우저 지원 여부 체크
     //     if (!("Notification" in window)) {
@@ -110,7 +111,7 @@
     // const registerServiceWorker = async () => {
     //     if ("serviceWorker" in navigator) {
     //         try {
-    //             const registration = await navigator.serviceWorker.register("/service-worker.js");
+    //             const registration = await navigator.serviceWorker.register("/sse-messaging-sw.js");
     //             if (registration.installing) {
     //                 console.log("Service worker installing");
     //             } else if (registration.waiting) {
@@ -123,7 +124,7 @@
     //         }
     //     }
     // };
-
+    //
     // const removeServiceWorker = async () => {
     //     if ("serviceWorker" in navigator) {
     //         navigator.serviceWorker.getRegistration().then(function (registration) {
@@ -139,16 +140,17 @@
     //         });
     //     }
     // };
-
+    //
     // getNotificationPermission();
     // registerServiceWorker();
-
+    //
     // if (isLogin == 'false') {
     //     console.log("서비스워커 삭제");
     //     removeServiceWorker();
     // }
 </script>
 <script>
+    //fcm 방식의 푸시 알림
     const firebaseModule = (function () {
         async function init() {
             // Your web app's Firebase configuration
