@@ -79,16 +79,12 @@ public class MemberService {
         return RsData.of("S-1", "닉네임 수정 성공");
     }
 
-    public boolean hasAdditionalInfo(Member loginedMember) {
-        return loginedMember.getEmail() != null || loginedMember.getNickname() != null;
-    }
-
-    public RsData hasAdditionalInfoTest(Member loginedMember) {
+    public RsData additionalInfo(Member loginedMember) {
         Optional<Member> member = memberRepository.findById(loginedMember.getId());
         if (member.get().getEmail() == null || member.get().getNickname() == null) {
             return RsData.of("F-1", "추가 정보를 입력해주세요");
         }
-        return RsData.of("S-1", "가능합니다");
+        return RsData.of("S-1", "success!");
     }
 
 //    @Transactional

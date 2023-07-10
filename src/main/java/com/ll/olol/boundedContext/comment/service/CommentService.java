@@ -36,7 +36,7 @@ public class CommentService {
         if (article.isEmpty()) {
             return RsData.of("F-1", "게시물이 없습니다.");
         }
-        if (memberService.hasAdditionalInfoTest(rq.getMember()).isFail()) {
+        if (memberService.additionalInfo(rq.getMember()).isFail()) {
             return RsData.of("F-2", "마이페이지에서 추가정보를 입력해주세요");
         }
         Comment savedComment = new Comment();

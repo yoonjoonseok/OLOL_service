@@ -141,7 +141,7 @@ public class RecruitmentController {
     public String questionCreate2(CreateForm createForm) {
 
         Member loginedMember = rq.getMember();
-        if (!memberService.hasAdditionalInfo(loginedMember)) {
+        if (memberService.additionalInfo(loginedMember).isFail()) {
             return rq.historyBack("마이페이지에서 추가정보를 입력해주세요.");
         }
 

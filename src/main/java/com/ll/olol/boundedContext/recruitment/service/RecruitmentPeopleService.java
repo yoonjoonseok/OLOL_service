@@ -44,7 +44,7 @@ public class RecruitmentPeopleService {
         Optional<RecruitmentPeople> first = article.get().getRecruitmentPeople().stream()
                 .filter(t -> t.getMember().getId() == member.getId())
                 .findFirst();
-        if (memberService.hasAdditionalInfoTest(rq.getMember()).isFail()) {
+        if (memberService.additionalInfo(rq.getMember()).isFail()) {
             return RsData.of("F-2", "마이페이지에서 추가정보를 입력해주세요");
         }
 
