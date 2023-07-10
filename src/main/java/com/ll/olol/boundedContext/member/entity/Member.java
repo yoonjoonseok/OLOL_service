@@ -43,18 +43,14 @@ public class Member {
     @OneToMany(mappedBy = "member")
     private List<Comment> comments;
 
-    // 일반회원인지, 카카오로 가입한 회원인지, 구글로 가입한 회원인지
     private String providerTypeCode;
 
 
     @Column(unique = true)
     private String username;
 
-
-    // 소셜로그인 시 비밀번호는 없지만 그래도 변수 자체는 있어야 할 것 같다.
     private String password;
-
-
+    
     @Column(unique = true)
     private String email;
 
@@ -70,13 +66,7 @@ public class Member {
     @OneToMany(mappedBy = "member")
     private List<RecruitmentPeople> recruitmentPeople;
 
-//    @OneToMany(mappedBy = "fromMember", cascade = {CascadeType.ALL})
-//    @OrderBy("id desc") // 정렬
-//    @LazyCollection(LazyCollectionOption.EXTRA)
-//    @Builder.Default // @Builder 가 있으면 ` = new ArrayList<>();` 가 작동하지 않는다. 그래서 이걸 붙여야 한다.
-//    private List<LikeableRecruitmentArticle> fromLikeableArticle = new ArrayList<>();
-
-    @OneToMany(mappedBy = "roomHost")
+    @ManyToMany(mappedBy = "chatMembers")
     private List<ChatRoom> chatRooms = new ArrayList<>();
 
 
