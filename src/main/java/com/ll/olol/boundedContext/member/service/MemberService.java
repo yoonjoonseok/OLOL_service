@@ -46,7 +46,6 @@ public class MemberService {
                 .username(username)
                 .password(password)
                 .reviewScore(482)
-//                .role(Role.GUEST)
                 .build();
 
         memberRepository.save(member);
@@ -86,10 +85,4 @@ public class MemberService {
         }
         return RsData.of("S-1", "success!");
     }
-
-//    @Transactional
-//    public void modifyUser(Member member) {
-//        Member resultMember = memberRepository.findById(member.getId()).get();
-//        resultMember.setRole(Role.USER);
-//    }
 }
