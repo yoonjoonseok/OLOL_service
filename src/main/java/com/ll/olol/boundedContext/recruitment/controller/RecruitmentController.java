@@ -12,6 +12,9 @@ import com.ll.olol.boundedContext.recruitment.entity.LikeableRecruitmentArticle;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
 import com.ll.olol.boundedContext.recruitment.service.LikeableRecruitmentArticleService;
 import com.ll.olol.boundedContext.recruitment.service.RecruitmentService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import java.security.Principal;
 import java.time.LocalDateTime;
@@ -76,14 +79,39 @@ public class RecruitmentController {
     }
 
     @GetMapping("/{id}")
-    public String showDetail(@PathVariable Long id, Model model) {
+    public String showDetail(@PathVariable Long id, Model model, HttpServletRequest request,
+                             HttpServletResponse response) {
         Optional<RecruitmentArticle> recruitmentArticle = recruitmentService.findById(id);
 
         if (recruitmentArticle.isEmpty()) {
             return rq.historyBack(RsData.of("F-1", "존재하지 않는 모임 공고입니다"));
         }
+        Cookie oldCookie = null;
 
-        recruitmentService.addView(recruitmentArticle.get());
+        Cookie[] cookies = request.getCookies();
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("ArticleView")) {
+                    oldCookie = cookie;
+                }
+            }
+        }
+
+        if (oldCookie != null) {
+            if (!oldCookie.getValue().contains("[" + id.toString() + "]")) {
+                recruitmentService.addView(recruitmentArticle.get());
+                oldCookie.setValue(oldCookie.getValue() + "_[" + id + "]");
+                oldCookie.setPath("/");
+                oldCookie.setMaxAge(60 * 60 * 24);
+                response.addCookie(oldCookie);
+            }
+        } else {
+            recruitmentService.addView(recruitmentArticle.get());
+            Cookie newCookie = new Cookie("ArticleView", "[" + id + "]");
+            newCookie.setPath("/");
+            newCookie.setMaxAge(60 * 60 * 24);
+            response.addCookie(newCookie);
+        }
 
         List<Comment> comments = commentService.findComments();
         List<Comment> commentList = new ArrayList<>();
@@ -129,13 +157,12 @@ public class RecruitmentController {
         if (bindingResult.hasErrors()) {
             return "usr/recruitment/createRecruitment_form";
         }
-
         RecruitmentArticle recruitmentArticle = recruitmentService.createArticle(createForm.getArticleName(),
                 createForm.getContent(), rq.getMember(), createForm.getTypeValue(), createForm.getDeadLineDate());
         recruitmentService.createArticleForm(recruitmentArticle, createForm.getDayNight(),
                 createForm.getRecruitsNumber(), createForm.getMountainName(), createForm.getMtAddress(),
                 createForm.getAgeRange(), createForm.getConnectType(), createForm.getStartTime(),
-                createForm.getCourseTime());
+                createForm.getDurationOfTime());
         RsData rsdata = RsData.of("S-1", "모임 글 작성 성공");
         return rq.redirectWithMsg("/recruitment/list", rsdata.getMsg());
     }
@@ -165,7 +192,6 @@ public class RecruitmentController {
         if (bindingResult.hasErrors()) {
             return "usr/recruitment/createRecruitment_form";
         }
-
         Optional<RecruitmentArticle> recruitmentArticle = recruitmentService.findById(id);
 
         RsData canUpdateRsData = recruitmentService.canUpdate(recruitmentArticle, rq.getMember());
@@ -249,4 +275,5 @@ public class RecruitmentController {
         return rq.redirectWithMsg("/member/mypage", rsData);
 
     }
+
 }

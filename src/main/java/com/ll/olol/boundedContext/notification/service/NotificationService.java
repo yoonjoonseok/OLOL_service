@@ -8,6 +8,7 @@ import com.ll.olol.boundedContext.notification.entity.Notification;
 import com.ll.olol.boundedContext.notification.entity.NotificationDTO;
 import com.ll.olol.boundedContext.notification.repository.EmitterRepository;
 import com.ll.olol.boundedContext.notification.repository.NotificationRepository;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -15,7 +16,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Service
@@ -27,6 +30,8 @@ public class NotificationService {
     private final ObjectMapper mapper = new ObjectMapper();
     private final static Long DEFAULT_TIMEOUT = 3600000L;
     private final static String NOTIFICATION_NAME = "notify";
+    @Getter
+    private final Map<Long, String> tokenMap = new HashMap<>();
 
     public List<Notification> findByToInstaMember(Member member) {
         return notificationRepository.findByMember(member);
@@ -39,6 +44,36 @@ public class NotificationService {
                 .type(type)
                 .content(content)
                 .articleId(articleId)
+                .build();
+
+        notificationRepository.save(notification);
+
+        return notification;
+    }
+
+    @Transactional
+    public Notification makeReviewNotification(Member member, int type, String content, Long articleId, boolean reviewed) {
+        Notification notification = Notification.builder()
+                .member(member)
+                .type(type)
+                .content(content)
+                .articleId(articleId)
+                .reviewed(reviewed)
+                .build();
+
+        notificationRepository.save(notification);
+
+        return notification;
+    }
+
+    @Transactional
+    public Notification makeReviewWriteNotification(Member reviewer, int type, String content, Long articleId, boolean participant) {
+        Notification notification = Notification.builder()
+                .member(reviewer)
+                .type(type)
+                .content(content)
+                .articleId(articleId)
+                .participant(participant)
                 .build();
 
         notificationRepository.save(notification);
@@ -98,6 +133,10 @@ public class NotificationService {
                 //throw new ApplicationException(ErrorCode.NOTIFICATION_CONNECTION_ERROR);
             }
         }, () -> log.info("No emitter found"));
+    }
+
+    public void register(final Long userId, final String token) {
+        tokenMap.put(userId, token);
     }
 
 }

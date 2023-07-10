@@ -11,7 +11,7 @@ eventSource.onmessage = function (event) {
         }
     };
 
-    event.waitUntil(self.registration.showNotification(title, options));
+    self.registration.showNotification(title, options);
 
     console.log("성공");
 };
@@ -20,6 +20,9 @@ eventSource.onerror = function (event) {
     // 에러 처리 로직
     console.log("실패");
 };
+
+self.addEventListener('fetch', event => {
+});
 
 self.addEventListener('notificationclick', function (event) {
     event.notification.close(); // 알림 닫기

@@ -58,12 +58,18 @@ public class NotProd {
             em.persist(member4);
             em.persist(member5);
 
-            Member member = createMember(10, "남자", "KAKAO__2815239024", "1234", "1111@1211", "KAKAO", LocalDateTime.now(), LocalDateTime.now());
-            Notification notification = Notification.builder().content("하이").type(1).member(member).build();
-            Notification notification1 = Notification.builder().content("하이").type(1).member(member).build();
-            em.persist(member);
+            Member memberk = createMember(10, "남자", "KAKAO__2815239024", "1234", "yjsygm@naver.com", "KAKAO", LocalDateTime.now(), LocalDateTime.now());
+            Member memberg = createMember(10, "남자", "GOOGLE__114181339834665453705", "1234", "yjsygm321@gmail.com", "Google", LocalDateTime.now(), LocalDateTime.now());
+
+            Notification notification = Notification.builder().content("하이").type(1).member(memberk).build();
+            Notification notification1 = Notification.builder().content("하이").type(1).member(memberk).build();
+            em.persist(memberk);
+            em.persist(memberg);
             em.persist(notification);
             em.persist(notification1);
+
+            Member member_jun = createMemberReviewScore(20, "남자", "KAKAO__2867045488", "1234", "test@test.com", "검성 장영실", LocalDateTime.now(), LocalDateTime.now());
+            em.persist(member_jun);
 
             RecruitmentArticle recruitmentArticle1 = createRecruitmentArticle(LocalDateTime.now(),
                     LocalDateTime.now().plusHours(100L),
@@ -129,12 +135,25 @@ public class NotProd {
             for (int i = 70; i < 100; i++) {
                 em.persist(createRecruitmentArticleForm(
                         createRecruitmentArticle(LocalDateTime.now(),
-                                LocalDateTime.now().plusDays(1), 20L, member, 2, String.format("테스트 데이터[%03d]", i),
+                                LocalDateTime.now().plusDays(1), 20L, memberk, 2, String.format("테스트 데이터[%03d]", i),
                                 "테스트용 게시글 내용입니다."),
                         1, 1L,
                         "삼성산", "석수동", "41171102", 40L, LocalDateTime.now(), LocalDateTime.now().plusDays(1), "카카오톡1")
                 );
             }
+
+            /* 알림 체크를 위해 허준홍이 만듦 */
+            RecruitmentArticle recruitmentArticle_author = createRecruitmentArticle(LocalDateTime.now(),
+                    LocalDateTime.now().plusMinutes(1L),
+                    1L, member_jun, 1, "테스트용1",
+                    "테스트용 게시글 내용입니다1.");
+            em.persist(recruitmentArticle_author);
+
+            RecruitmentArticleForm recruitmentArticleForm_jun = createRecruitmentArticleForm(recruitmentArticle_author, 1, 2L,
+                    "한라산", "석수동", "48220370", 20L, LocalDateTime.now(), LocalDateTime.now().plusMinutes(2L), "카카오톡3");
+            em.persist(recruitmentArticleForm_jun);
+            /* 여기까지 */
+
 
             Comment comment1 = createComment(recruitmentArticle1, member1, "안녕하세요11", LocalDateTime.now(),
                     LocalDateTime.now());
@@ -190,6 +209,22 @@ public class NotProd {
             member.setModifyDate(modifyDate);
             member.setEmail(email);
             member.setUsername(username);
+            return member;
+        }
+
+        /*리뷰 점수 용*/
+        private static Member createMemberReviewScore(int age, String gender, String username, String password, String email,
+                                                      String nickname, LocalDateTime createDate, LocalDateTime modifyDate) {
+            Member member = new Member();
+            member.setAge(age);
+            member.setCreateDate(createDate);
+            member.setGender(gender);
+            member.setPassword(password);
+            member.setNickname(nickname);
+            member.setModifyDate(modifyDate);
+            member.setEmail(email);
+            member.setUsername(username);
+            member.setReviewScore(482);
             return member;
         }
 
