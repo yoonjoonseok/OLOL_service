@@ -188,19 +188,7 @@
                                         return messaging.getToken();
                                     })
                                     .then(async function (token) {
-
                                         await fetch('/notification/register', {method: 'post', body: token})
-                                        messaging.onMessage(payload => {
-                                            const title = payload.notification.title
-                                            const options = {
-                                                body: payload.notification.body,
-                                                image: payload.notification.image
-                                            }
-                                            navigator.serviceWorker.ready.then(registration => {
-                                                registration.showNotification(title, options);
-                                            })
-                                        })
-
                                     })
                                     .catch(function (err) {
                                         console.log("Error Occured");
