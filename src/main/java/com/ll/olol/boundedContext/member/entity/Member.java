@@ -83,6 +83,8 @@ public class Member {
 
     private String imageLink;
 
+    private String fcmToken;
+
     @OneToMany(mappedBy = "member")
     private List<RecruitmentPeople> recruitmentPeople;
 

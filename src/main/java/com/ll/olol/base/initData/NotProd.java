@@ -58,10 +58,13 @@ public class NotProd {
             em.persist(member4);
             em.persist(member5);
 
-            Member member = createMember(10, "남자", "KAKAO__2815239024", "1234", "1111@1211", "KAKAO", LocalDateTime.now(), LocalDateTime.now());
-            Notification notification = Notification.builder().content("하이").type(1).member(member).build();
-            Notification notification1 = Notification.builder().content("하이").type(1).member(member).build();
-            em.persist(member);
+            Member memberk = createMember(10, "남자", "KAKAO__2815239024", "1234", "yjsygm@naver.com", "KAKAO", LocalDateTime.now(), LocalDateTime.now());
+            Member memberg = createMember(10, "남자", "GOOGLE__114181339834665453705", "1234", "yjsygm321@gmail.com", "Google", LocalDateTime.now(), LocalDateTime.now());
+
+            Notification notification = Notification.builder().content("하이").type(1).member(memberk).build();
+            Notification notification1 = Notification.builder().content("하이").type(1).member(memberk).build();
+            em.persist(memberk);
+            em.persist(memberg);
             em.persist(notification);
             em.persist(notification1);
 
@@ -132,7 +135,7 @@ public class NotProd {
             for (int i = 70; i < 100; i++) {
                 em.persist(createRecruitmentArticleForm(
                         createRecruitmentArticle(LocalDateTime.now(),
-                                LocalDateTime.now().plusDays(1), 20L, member, 2, String.format("테스트 데이터[%03d]", i),
+                                LocalDateTime.now().plusDays(1), 20L, memberk, 2, String.format("테스트 데이터[%03d]", i),
                                 "테스트용 게시글 내용입니다."),
                         1, 1L,
                         "삼성산", "석수동", "41171102", 40L, LocalDateTime.now(), LocalDateTime.now().plusDays(1), "카카오톡1")
