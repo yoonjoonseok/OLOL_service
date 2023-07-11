@@ -15,6 +15,12 @@
             height: 400px;
         }
 
+        .chat-box {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
         .my-message {
             align-self: flex-end;
             margin-left: auto;
@@ -65,27 +71,27 @@
 
             <!-- 수정된 HTML -->
             <div id="msgArea" class="chat-history">
-                <div style="list-style: none" th:each="message : ${room.chatMessageList}">
+                <th:block style="list-style: none" th:each="message : ${room.chatMessageList}">
                     <div th:if="${message.sender} == null" class="chat-message admin-message">
                         <div class="message-content alert alert-secondary">
                             <b th:text="관리자 + ' : ' + ${message.message}"></b>
                         </div>
                     </div>
-                    <div th:if="${message.sender != null and message.sender.id != member.id}"
+                    <div th:if="${message.sender != null and message.sender.id == member.id}"
                          class="chat-message my-message">
                         <div class="message-content alert alert-secondary">
                             <b th:text="${message.sender.nickname} + ' : ' + ${message.message}"
                                style="word-break: break-all; text-align: right;"></b>
                         </div>
                     </div>
-                    <div th:if="${message.sender != null and message.sender.id == member.id}"
+                    <div th:if="${message.sender != null and message.sender.id != member.id}"
                          class="chat-message other-message">
                         <div class="message-content alert alert-warning">
                             <b th:text="${message.sender.nickname} + ' : ' + ${message.message}"
                                style="word-break: break-all; text-align: left;"></b>
                         </div>
                     </div>
-                </div>
+                </th:block>
             </div>
 
 
