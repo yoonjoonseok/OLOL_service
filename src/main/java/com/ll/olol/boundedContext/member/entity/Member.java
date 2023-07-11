@@ -1,14 +1,23 @@
 package com.ll.olol.boundedContext.member.entity;
 
-import com.ll.olol.boundedContext.chat.entity.ChatRoom;
 import static jakarta.persistence.GenerationType.IDENTITY;
 
+import com.ll.olol.boundedContext.chat.entity.ChatRoom;
 import com.ll.olol.boundedContext.comment.entity.Comment;
+import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentPeople;
+import com.ll.olol.boundedContext.report.entity.ArticleReport;
 import com.ll.olol.boundedContext.review.entity.Review;
 import com.ll.olol.boundedContext.review.entity.ReviewMember;
-import jakarta.persistence.*;
-
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToMany;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.OrderBy;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -91,9 +100,15 @@ public class Member {
     @OneToMany(mappedBy = "member")
     private List<RecruitmentPeople> recruitmentPeople;
 
+    @OneToMany(mappedBy = "member")
+    private List<RecruitmentArticle> recruitmentArticle;
+
+    @OneToMany(mappedBy = "fromMember")
+    private List<ArticleReport> articleReport;
+
     private int reviewScore;
 
-//    @OneToMany(mappedBy = "fromMember", cascade = {CascadeType.ALL})
+    //    @OneToMany(mappedBy = "fromMember", cascade = {CascadeType.ALL})
 //    @OrderBy("id desc") // 정렬
 //    @LazyCollection(LazyCollectionOption.EXTRA)
 //    @Builder.Default // @Builder 가 있으면 ` = new ArrayList<>();` 가 작동하지 않는다. 그래서 이걸 붙여야 한다.

@@ -22,6 +22,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -85,5 +86,17 @@ public class MemberController {
     @GetMapping("/login") // 로그인 폼, 로그인 폼 처리는 스프링 시큐리티가 구현, 폼 처리시에 CustomUserDetailsService 가 사용됨
     public String showLogin() {
         return "usr/member/login";
+    }
+
+    @GetMapping("/{id}/info")
+    public String showInfo(@PathVariable Long id, Model model) {
+        Optional<Member> member = memberService.findById(id);
+        if (!member.isPresent()) {
+            return rq.historyBack("회원 정보가 없습니다.");
+        }
+
+        model.addAttribute("member", member.get());
+
+        return "usr/member/information";
     }
 }
