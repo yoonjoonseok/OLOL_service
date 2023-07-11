@@ -5,6 +5,8 @@ import com.ll.olol.boundedContext.member.entity.Member;
 import com.ll.olol.boundedContext.member.service.MemberService;
 import com.ll.olol.boundedContext.notification.entity.Notification;
 import com.ll.olol.boundedContext.notification.service.NotificationService;
+import java.util.Collections;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -12,9 +14,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
-
-import java.util.Collections;
-import java.util.List;
 
 @Controller
 @RequestMapping("/notification")
@@ -29,7 +28,7 @@ public class NotificationController {
     public String showList(Model model) {
 
         Member loginedMember = rq.getMember();
-        if (!memberService.hasAdditionalInfo(loginedMember)) {
+        if (memberService.additionalInfo(loginedMember).isFail()) {
             return rq.historyBack("마이페이지에서 추가정보를 입력해주세요.");
         }
 

@@ -1,11 +1,17 @@
 package com.ll.olol.boundedContext.member.entity;
 
 import com.ll.olol.boundedContext.chat.entity.ChatRoom;
+import static jakarta.persistence.GenerationType.IDENTITY;
+
 import com.ll.olol.boundedContext.comment.entity.Comment;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentPeople;
 import com.ll.olol.boundedContext.review.entity.Review;
 import com.ll.olol.boundedContext.review.entity.ReviewMember;
 import jakarta.persistence.*;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,12 +24,6 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-
-import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Getter
@@ -60,6 +60,9 @@ public class Member {
     @LazyCollection(LazyCollectionOption.EXTRA)
     private List<Review> toReviewList;
 
+//    @Enumerated(EnumType.STRING)
+//    @Column(nullable = false)
+//    private Role role;
 
     // 일반회원인지, 카카오로 가입한 회원인지, 구글로 가입한 회원인지
     private String providerTypeCode;
@@ -89,7 +92,6 @@ public class Member {
     private List<RecruitmentPeople> recruitmentPeople;
 
     private int reviewScore;
-
 
 //    @OneToMany(mappedBy = "fromMember", cascade = {CascadeType.ALL})
 //    @OrderBy("id desc") // 정렬

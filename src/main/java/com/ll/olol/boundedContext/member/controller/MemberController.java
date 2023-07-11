@@ -75,9 +75,9 @@ public class MemberController {
         RsData result = memberService.modifyMemberInfo(rq.getMember(), editForm.getNickname(), editForm.getAgeRange(),
                 editForm.getGender(), editForm.getEmail());
         if (result.isFail()) {
-            rq.historyBack("다시 시도해주세요");
+            return rq.historyBack("추가정보를 입력해주세요");
         }
-
+//        memberService.modifyUser(rq.getMember());
         return rq.redirectWithMsg("/recruitment/list", result.getMsg());
     }
 
