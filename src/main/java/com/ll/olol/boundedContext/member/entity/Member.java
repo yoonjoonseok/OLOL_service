@@ -5,6 +5,7 @@ import static jakarta.persistence.GenerationType.IDENTITY;
 
 import com.ll.olol.boundedContext.comment.entity.Comment;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentPeople;
+import com.ll.olol.boundedContext.report.entity.ArticleReport;
 import com.ll.olol.boundedContext.review.entity.Review;
 import com.ll.olol.boundedContext.review.entity.ReviewMember;
 import jakarta.persistence.*;
@@ -90,6 +91,9 @@ public class Member {
 
     @OneToMany(mappedBy = "member")
     private List<RecruitmentPeople> recruitmentPeople;
+
+    @OneToMany(mappedBy = "fromMember")
+    private List<ArticleReport> articleReport;
 
     private int reviewScore;
 
