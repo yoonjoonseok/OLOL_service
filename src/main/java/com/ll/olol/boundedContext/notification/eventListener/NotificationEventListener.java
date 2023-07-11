@@ -54,7 +54,7 @@ public class NotificationEventListener {
         String content = "'%s' 공고에 댓글이 달렸습니다".formatted(recruitmentArticle.getArticleName());
 
         Notification notification = notificationService.make(recruitmentArticle.getMember(), 1, content, recruitmentArticle.getId());
-        NotificationDTO notificationDTO = NotificationDTO.builder().title(notification.getContent()).body(event.getComment().getContent()).link(domain + "recruitment/" + recruitmentArticle.getId()).build();
+        NotificationDTO notificationDTO = NotificationDTO.builder().title(event.getComment().getContent()).body(notification.getContent()).link(domain + "recruitment/" + recruitmentArticle.getId()).build();
 
         sendNotifications(notification, notificationDTO);
     }
@@ -169,7 +169,7 @@ public class NotificationEventListener {
         for (Member member : chatMessage.getChatRoom().getChatMembers()) {
             if (member != chatMessage.getSender()) {
                 Notification notification = notificationService.make(member, 10, content, null);
-                NotificationDTO notificationDTO = NotificationDTO.builder().title(notification.getContent()).body(message).link(domain + "chat/room/" + chatMessage.getChatRoom().getId()).build();
+                NotificationDTO notificationDTO = NotificationDTO.builder().title(message).body(notification.getContent()).link(domain + "chat/room/" + chatMessage.getChatRoom().getId()).build();
 
                 sendNotifications(notification, notificationDTO);
             }
