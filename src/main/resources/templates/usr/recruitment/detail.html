@@ -91,7 +91,9 @@
                         th:text="${recruitmentArticle.articleName}">제목</h2>
                     <div class="d-flex align-items-center">
                         <div>
-                            <span th:text="${recruitmentArticle.member.nickname}">닉네임</span>
+                            <span class="btn btn-mini" style="border-color: #388E3C"
+                                  th:onclick="|location.href='@{/member/{id}/info(id=${recruitmentArticle.member.id})}'|"
+                                  th:text="${recruitmentArticle.member.nickname}">닉네임</span>
                             <div class="vr"></div>
                             <span class="ml-1 fw-bold" data-bs-toggle="tooltip" data-bs-placement="top"
                                   title="이 숫자는 후기 고도 입니다. "
@@ -283,10 +285,17 @@
                         <li class="list-group-item mt-1" th:each="comment : ${comments}">
                             <td>
                                 <th:block th:switch="${comment.getMember().id}">
-                                    <span th:case="${writer}" style="font-size: x-large" th:text="작성자"></span>
-                                    <span th:case="${me}" style="font-size: x-large" th:text="'나'"></span>
-                                    <span th:case="*" style="font-size: x-large"
-                                          th:text="${comment.member.nickname}"></span>
+                                    <span class="btn btn-mini" th:case="${writer}"
+                                          style="font-size: x-large; border-color: #388E3C"
+                                          th:text="작성자"
+                                          th:onclick="|location.href='@{/member/{id}/info(id=${comment.member.id})}'|"></span>
+                                    <span class="btn btn-mini" th:case="${me}"
+                                          style="font-size: x-large; border-color: #388E3C" th:text="'나'"
+                                          th:onclick="|location.href='@{/member/{id}/info(id=${comment.member.id})}'|"></span>
+                                    <span class="btn btn-mini" th:case="*"
+                                          style="font-size: x-large; border-color: #388E3C"
+                                          th:text="${comment.member.nickname}"
+                                          th:onclick="|location.href='@{/member/{id}/info(id=${comment.member.id})}'|"></span>
                                 </th:block>
                             </td>
                             <span style="font-size: small"
