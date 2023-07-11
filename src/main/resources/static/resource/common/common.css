@@ -147,10 +147,10 @@ body {
     flex-wrap: wrap;
 }
 
-.containerIn {
-    display: flex;
-    justify-content: start;
-}
+/*.containerIn {*/
+/*    display: flex;*/
+/*    justify-content: start;*/
+/*}*/
 
 .container1 {
     display: flex;

@@ -214,36 +214,46 @@
                             <div class="vr"></div>
                             <span class="fs-5 fw-bold"
                                   th:text="${recruitmentArticle.getDeadLineDateToString()}">마감일</span>
-                            <div class="containerIn">
-                                <form th:if="${nowDate.isBefore(recruitmentArticle.getDeadLineDate())} and ${recruitmentArticle.getAttend() != recruitmentArticle.getRecruitmentArticleForm().recruitsNumbers}"
-                                      th:action="@{/recruitment/{id}/attend (id=${recruitmentArticle.id})}"
-                                      method="post">
-                                    <button class="btn btn-outline-success btn-sm"
+
+                            <div class="mt-2 row row-cols-auto">
+                                <div class="col">
+                                    <button th:if="${nowDate.isBefore(recruitmentArticle.getDeadLineDate())} and ${recruitmentArticle.getAttend() != recruitmentArticle.getRecruitmentArticleForm().recruitsNumbers}"
+                                            class="btn btn-outline-success btn-sm"
                                             type="button"
                                             href="javascript:"
-                                            onclick="if ( confirm('신청하시겠습니까?') ) $(this).closest('form').submit();">
+                                            onclick="if ( confirm('신청하시겠습니까?') ) $(this).next().submit();">
                                         신청
                                     </button>
+                                    <form hidden
+                                          th:if="${nowDate.isBefore(recruitmentArticle.getDeadLineDate())} and ${recruitmentArticle.getAttend() != recruitmentArticle.getRecruitmentArticleForm().recruitsNumbers}"
+                                          th:action="@{/recruitment/{id}/attend (id=${recruitmentArticle.id})}"
+                                          method="post">
+                                    </form>
+                                </div>
 
-                                </form>
-                                <form th:if="${nowDate.isBefore(recruitmentArticle.getDeadLineDate())} and ${recruitmentArticle.getAttend() != recruitmentArticle.getRecruitmentArticleForm().recruitsNumbers}"
-                                      th:action="@{/recruitment/{id}/deadLine (id=${recruitmentArticle.id})}"
-                                      method="post">
-                                    <button type="submit"
-                                            class="btn btn-outline-success btn-sm ms-3">
+                                <div class="col">
+                                    <button th:if="${nowDate.isBefore(recruitmentArticle.getDeadLineDate())} and ${recruitmentArticle.getAttend() != recruitmentArticle.getRecruitmentArticleForm().recruitsNumbers}"
+                                            type="submit"
+                                            class="btn btn-outline-success btn-sm "
+                                            onclick=" $(this).next().submit();">
                                         마감
                                     </button>
-                                </form>
-
-                                <span class="font-weight-bold"
-                                      th:if="${nowDate.isAfter(recruitmentArticle.getDeadLineDate())} or ${recruitmentArticle.getAttend() == recruitmentArticle.getRecruitmentArticleForm().recruitsNumbers}"
-                                >
-                                    마감 시간이 지났어요. 다음에 신청해주세요!
-
-                                </span>
-
-
+                                    <form hidden
+                                          th:if="${nowDate.isBefore(recruitmentArticle.getDeadLineDate())} and ${recruitmentArticle.getAttend() != recruitmentArticle.getRecruitmentArticleForm().recruitsNumbers}"
+                                          th:action="@{/recruitment/{id}/deadLine (id=${recruitmentArticle.id})}"
+                                          method="post">
+                                    </form>
+                                </div>
                             </div>
+
+
+                            <span class="font-weight-bold"
+                                  th:if="${nowDate.isAfter(recruitmentArticle.getDeadLineDate())} or ${recruitmentArticle.getAttend() == recruitmentArticle.getRecruitmentArticleForm().recruitsNumbers}"
+                            >
+                                    마감 시간이 지났어요. 다음에 신청해주세요!
+                            </span>
+
+
                         </div>
 
                     </div>
