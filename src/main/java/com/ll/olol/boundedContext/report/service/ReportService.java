@@ -111,4 +111,16 @@ public class ReportService {
 
         return reportRepository.findAll(spec, pageable);
     }
+
+    public int countReport(Member member) {
+        List<RecruitmentArticle> recruitmentArticle = member.getRecruitmentArticle();
+        int count = 0;
+        for (RecruitmentArticle data : recruitmentArticle) {
+            ArticleReport byRecruitmentArticle = reportRepository.findByRecruitmentArticle(data);
+            if (byRecruitmentArticle != null) {
+                count++;
+            }
+        }
+        return count;
+    }
 }

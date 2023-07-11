@@ -88,7 +88,7 @@
                     신고 당한 횟수
                 </div>
                 <div class="mt-2">
-                    <span class="badge text-bg-success" th:text="|${member.getArticleReport().size()}번|"></span>
+                    <span class="badge text-bg-success" th:text="|${@reportService.countReport(member)}번|"></span>
                 </div>
             </div>
 
