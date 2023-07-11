@@ -55,7 +55,7 @@
 
 
     <form onsubmit="MyPageForm__submit(this);" th:action method="POST">
-        <div th:if="${member.getEmail() == null} or ${member.getAge() == null} or ${member.getGender() == null}">
+        <div th:if="${member.getEmail() == null}  or ${member.getGender() == null}">
             <h2>회원정보 수정(최초 1회만 수정 가능합니다!)</h2>
             <div class="row">
                 <div class="col-md-6 mb-2">
@@ -102,7 +102,94 @@
             </div>
         </div>
     </form>
-    <div class="row">
+
+    <div class="flex-grow flex items-center justify-center"
+         th:if="${member.getEmail() != null}  or ${member.getGender() != null}">
+        <div class="profile">
+            <div class="card-body">
+                <h2 class="card-title">
+                    <i class="fa-solid fa-user"></i>
+                    사용자 정보
+                </h2>
+
+                <div class="mt-4">
+                    <div>
+                        <i class="fa-solid fa-heart"></i>
+                        닉네임
+                    </div>
+                    <div class="mt-2">
+                        <span class="badge text-bg-success" th:text="${member.getNickname()}"></span>
+                    </div>
+                </div>
+
+                <div class="mt-4">
+                    <div>
+                        <i class="fa-solid fa-mountain"></i>
+                        고도
+                    </div>
+                    <div class="mt-2">
+                        <span class="badge text-bg-success" th:text="|${member.getReviewScore()}M|"></span>
+                    </div>
+                </div>
+
+                <div class="mt-4">
+                    <div>
+                        <i class="bi bi-person-fill"></i>
+                        나이
+                    </div>
+                    <div class="mt-2">
+                        <span class="badge text-bg-success" th:text="|${member.getAge()}0대|"></span>
+                    </div>
+                </div>
+
+                <div class="mt-4">
+                    <div>
+                        <i class="fa-solid fa-person-half-dress"></i>
+                        성별
+                    </div>
+                    <div class="mt-2">
+                        <span class="badge text-bg-success" th:if="${member.getGender().equals('female')}"
+                              th:text="|여자|"></span>
+                        <span class="badge text-bg-success" th:if="${member.getGender().equals('male')}"
+                              th:text="|남자|"></span>
+                    </div>
+                </div>
+
+                <div class="mt-4">
+                    <div>
+                        <i class="fa-solid fa-envelope"></i>
+                        이메일
+                    </div>
+                    <div class="mt-2">
+                        <span class="badge text-bg-success" th:text="${member.getEmail()}"></span>
+                    </div>
+                </div>
+
+                <div class="mt-4">
+                    <div>
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                        신고 당한 횟수
+                    </div>
+                    <div class="mt-2">
+                        <span class="badge text-bg-success" th:text="|${member.getArticleReport().size()}번|"></span>
+                    </div>
+                </div>
+
+
+                <div class="mt-4">
+                    <div>
+                        <i class="fa-regular fa-clock"></i>
+                        가입
+                    </div>
+                    <div class="mt-2">
+                            <span class="badge text-bg-success"
+                                  th:text="${#temporals.format(member.createDate, 'yy년.MM월.dd일')}"></span>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
         <div class="col-md-6">
             <th:block th:replace="~{usr/member/attendList}"></th:block>
         </div>
