@@ -89,4 +89,12 @@ public class MemberService {
         }
         return RsData.of("S-1", "success!");
     }
+
+    public Optional<Member> findByNickname(String writer) {
+        return memberRepository.findByNickname(writer);
+    }
+
+//    public Optional<Member> findByUsername(String username) {
+//        return memberRepository.findByUsername(username);
+//    }
 }
