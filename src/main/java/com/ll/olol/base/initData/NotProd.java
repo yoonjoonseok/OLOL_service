@@ -152,6 +152,16 @@ public class NotProd {
             RecruitmentArticleForm recruitmentArticleForm_jun = createRecruitmentArticleForm(recruitmentArticle_author, 1, 2L,
                     "한라산", "석수동", "48220370", 20L, LocalDateTime.now(), LocalDateTime.now().plusMinutes(2L), "카카오톡3");
             em.persist(recruitmentArticleForm_jun);
+
+            RecruitmentArticle recruitmentArticle_author2 = createRecruitmentArticle(LocalDateTime.now(),
+                    LocalDateTime.now().plusMinutes(1L),
+                    1L, member_jun, 1, "테스트용2nd",
+                    "테스트용 게시글 내용입니다2.");
+            em.persist(recruitmentArticle_author2);
+
+            RecruitmentArticleForm recruitmentArticleForm_2 = createRecruitmentArticleForm(recruitmentArticle_author2, 1, 2L,
+                    "한라산", "석수동", "48220370", 20L, LocalDateTime.now(), LocalDateTime.now().plusMinutes(2L), "카카오톡3");
+            em.persist(recruitmentArticleForm_2);
             /* 여기까지 */
 
 

@@ -157,10 +157,10 @@ body {
     flex-direction: row-reverse;
 }
 
-.container2 {
-    display: flex;
-    justify-content: space-between;
-}
+/*.container2 {*/
+/*    display: flex;*/
+/*    justify-content: space-between;*/
+/*}*/
 
 /*.viewr1 {*/
 /*    display: flex;*/
