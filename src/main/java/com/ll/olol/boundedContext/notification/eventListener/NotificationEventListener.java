@@ -169,7 +169,7 @@ public class NotificationEventListener {
         for (Member member : chatMessage.getChatRoom().getChatMembers()) {
             if (member != chatMessage.getSender()) {
                 Notification notification = notificationService.make(member, 10, content, null);
-                NotificationDTO notificationDTO = NotificationDTO.builder().title(message).body(notification.getContent()).link(domain + "chat/room/" + chatMessage.getChatRoom().getId()).build();
+                NotificationDTO notificationDTO = NotificationDTO.builder().title(message).body(notification.getContent()).link(domain + "chat/room/" + chatMessage.getChatRoom().getRoomId()).build();
 
                 sendNotifications(notification, notificationDTO);
             }
