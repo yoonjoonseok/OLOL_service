@@ -309,4 +309,8 @@ public class RecruitmentService {
         return recruitmentRepository.findByRecruitmentArticleForm_CourseTimeBeforeAndIsEventTriggered(currentTime,
                 isEventTriggered);
     }
+
+    public List<RecruitmentArticle> findByMemberOrderByIdDesc(Member loginedMember) {
+        return recruitmentRepository.findByMemberOrderByIdDesc(loginedMember);
+    }
 }
