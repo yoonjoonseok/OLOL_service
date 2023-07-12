@@ -9,8 +9,10 @@ import com.ll.olol.boundedContext.chat.repository.ChatMessageRepository;
 import com.ll.olol.boundedContext.chat.repository.ChatRoomRepository;
 import com.ll.olol.boundedContext.member.entity.Member;
 import com.ll.olol.boundedContext.member.service.MemberService;
+import com.ll.olol.boundedContext.notification.event.EventAfterChatting;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,7 +29,7 @@ public class ChatService {
     private final ChatRoomRepository chatRoomRepository;
     private final ChatMessageRepository chatMessageRepository;
     private final MemberService memberService;
-
+    private final ApplicationEventPublisher publisher;
 
     @Transactional
     public ChatRoomDetailDTO createChatRoomDetailDTO(Member roomHost, String roomName) {
@@ -62,6 +64,8 @@ public class ChatService {
             ChatMessage chatMessage = ChatMessage.create(message, sender, chatRoom);
             chatRoom.addMessage(chatMessage);
             chatMessageRepository.save(chatMessage);
+
+            publisher.publishEvent(new EventAfterChatting(this, chatMessage));
         }
     }
 

@@ -1,6 +1,7 @@
 package com.ll.olol.boundedContext.notification.eventListener;
 
 import com.ll.olol.base.rsData.RsData;
+import com.ll.olol.boundedContext.chat.entity.ChatMessage;
 import com.ll.olol.boundedContext.member.entity.Member;
 import com.ll.olol.boundedContext.notification.entity.EmailMessage;
 import com.ll.olol.boundedContext.notification.entity.Notification;
@@ -53,7 +54,7 @@ public class NotificationEventListener {
         String content = "'%s' 공고에 댓글이 달렸습니다".formatted(recruitmentArticle.getArticleName());
 
         Notification notification = notificationService.make(recruitmentArticle.getMember(), 1, content, recruitmentArticle.getId());
-        NotificationDTO notificationDTO = NotificationDTO.builder().title(notification.getContent()).body(event.getComment().getContent()).link(domain + "recruitment/" + recruitmentArticle.getId()).build();
+        NotificationDTO notificationDTO = NotificationDTO.builder().title(event.getComment().getContent()).body(notification.getContent()).link(domain + "recruitment/" + recruitmentArticle.getId()).build();
 
         sendNotifications(notification, notificationDTO);
     }
@@ -157,5 +158,21 @@ public class NotificationEventListener {
         NotificationDTO notificationDTO = NotificationDTO.builder().title(notification.getContent()).body("").link("").build();
 
         sendNotifications(notification, notificationDTO);
+    }
+
+    @EventListener
+    public void listen(EventAfterChatting event) throws IOException {
+        ChatMessage chatMessage = event.getChatMessage();
+        String content = "%s님이 채팅을 보냈습니다.".formatted(chatMessage.getSender().getNickname());
+        String message = chatMessage.getMessage();
+
+        for (Member member : chatMessage.getChatRoom().getChatMembers()) {
+            if (member != chatMessage.getSender()) {
+                Notification notification = notificationService.make(member, 10, content, null);
+                NotificationDTO notificationDTO = NotificationDTO.builder().title(message).body(notification.getContent()).link(domain + "chat/room/" + chatMessage.getChatRoom().getRoomId()).build();
+
+                sendNotifications(notification, notificationDTO);
+            }
+        }
     }
 }

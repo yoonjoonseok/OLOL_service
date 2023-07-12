@@ -80,7 +80,6 @@ public class ChatController {
             }
         }
 
-
         model.addAttribute("room", chatService.findRoomById(roomId));
         model.addAttribute("member", member);
 
