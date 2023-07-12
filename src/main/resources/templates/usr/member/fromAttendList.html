@@ -1,101 +1,179 @@
 <html layout:decorate="~{usr/layout/layout.html}">
 <link rel="stylesheet" href="common.css">
 <head>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4"
+            crossorigin="anonymous"></script>
 </head>
 <style>
+    .bi-person-check:hover {
+        transform: scale(1.2); /* 호버 시에 크기를 1.2배로 확대 */
+    }
+
+    .bi-person-fill-slash:hover {
+        transform: scale(1.2); /* 호버 시에 크기를 1.2배로 확대 */
+    }
+
+    .custom-link {
+        color: #000; /* 텍스트 원래 색상 */
+    }
+
+    .custom-link:hover {
+        color: #333; /* 마우스 올렸을 때 색상 (약간 짙어진 색) */
+    }
 </style>
 
 <body>
 <main layout:fragment="main">
     <div class="container">
         <div class="row">
-            <div class="col-md-8">
+            <div class="col">
                 <section>
-                    <h2>참가자 목록</h2>
+                    <h2 class="mt-5 mb-3">참가자 목록</h2>
 
-
-                    <li class="list-group-item" th:each="myArticleList : ${myArticle}">
-                        <div class="container2">
-                            <a th:href="@{|/recruitment/${myArticleList.id}|}"
-                               th:text="${myArticleList.articleName} "></a>
-
-
-                            </form>
-                            <span th:if="${myArticleList.recruitmentPeople.isEmpty()}">
-                            <i class="fa-regular fa-face-frown-open"> 아직 신청한 사람이 없습니다</i>
-                            <i class="fa-regular fa-face-frown-open"></i>
-
-                        </span>
-                            <details
-                                    th:if="${!@recruitmentService.findByRecruitmentPeopleId(myArticleList.id).isEmpty()}">
-                                <summary>참가 인원 보기</summary>
-                                <span th:each="recruitmentPeople : ${@recruitmentService.findByRecruitmentPeopleId(myArticleList.id)}"
-                                      th:if="${recruitmentPeople.isAttend()}">
-
-                                    <span th:text="${recruitmentPeople.member.nickname}"></span>
-                                    <div class="vr"></div>
-
-                                    <span th:if="${recruitmentPeople.member.gender.equals('female')}"
-                                          th:text="여자"></span>
-                                    <span th:if="${recruitmentPeople.member.gender.equals('male')}" th:text="남자"></span>
-                                    <div class="vr"></div>
-                                    <span th:text="${recruitmentPeople.member.email}"></span>
-                                    <div class="vr"></div>
-                                    <span th:text="${recruitmentPeople.member.age}"></span>
-                                    <button href="javascript:"
-                                            onclick="if ( confirm('추방하시겠습니까?') ) $(this).next().submit();">
-                                        추방
-                                    </button>
-                                    <form hidden th:action="@{|/recruitment/${recruitmentPeople.id}/attend/delete|}"
-                                          method="post">
-                                        <input type="hidden" name="_method" value="delete">
-
-                                    </form>
-                                    <br>
-                                </span>
-
-                            </details>
-                        </div>
-
-
-                        <ul th:if="${!@recruitmentService.findByRecruitmentPeopleId(myArticleList.id).isEmpty()}" class="list-group">
-                            <li th:each="attendLists : ${@recruitmentService.findByRecruitmentPeopleId(myArticleList.id)}"
-                                th:if="${attendLists.isAttend() == false}"
-                                class="list-group-item">
-
-
-                                <span th:text="${attendLists.member.nickname}">
-                                </span>
-                                <div class="vr"></div>
-                                <span th:if="${attendLists.member.gender.equals('female')}"
-                                      th:text="여자">
-                                </span>
-                                <span th:if="${attendLists.member.gender.equals('male')}"
-                                      th:text="남자">
-                                </span>
-                                <div class="vr"></div>
-                                <span th:text="${attendLists.member.email}"></span>
-                                <div class="vr"></div>
-                                <span th:text="${attendLists.member.age}"></span>
-                                <div class="vr"></div>
-                                <div class="containerIn">
-                                    <form th:action="@{|/recruitment/${attendLists.id}/attend/create|}"
-                                          method="POST">
-                                        <button class="btn btn-primary" type="submit">수락
-                                        </button>
-                                    </form>
-
-                                    <form th:action="@{|/recruitment/${attendLists.id}/attend/delete|}"
-                                          method="post">
-                                        <button
-                                                class="btn btn-primary" type="submit">거절
-                                        </button>
-                                    </form>
+                    <div class="container bg-light p-3 border border-dark rounded-4">
+                        <li class="list-group-item mb-3" th:each="myArticleList : ${myArticle}">
+                            <div class="container2">
+                                <div class="col mb-2 bg-success p-2 bg-opacity-50">
+                                    <span class="">
+                                        <a class="text-dark fw-bolder" style="text-decoration: none;"
+                                           th:href="@{|/recruitment/${myArticleList.id}|}"
+                                           th:text="${myArticleList.articleName} ">
+                                        </a>
+                                    </span>
                                 </div>
-                            </li>
 
-                        </ul>
-                    </li>
+                                <div class="col">
+                                <span th:if="${myArticleList.recruitmentPeople.isEmpty()}">
+                                    <i class="fa-regular fa-face-frown-open"> 아직 신청한 사람이 없습니다</i>
+                                    <i class="fa-regular fa-face-frown-open"></i>
+                                </span>
+
+                                    <details
+                                            th:if="${!@recruitmentService.findByRecruitmentPeopleId(myArticleList.id).isEmpty()}">
+                                        <summary>참가 인원 보기</summary>
+                                        <div class="list-group-item list-group-item-action">
+                                            <div class="row">
+                                                <div class="mb-2"
+                                                     th:each="recruitmentPeople : ${@recruitmentService.findByRecruitmentPeopleId(myArticleList.id)}"
+                                                     th:if="${recruitmentPeople.isAttend()}">
+
+                                                    <!--                                                    <div th:onclick="|location.href='@{/member/{id}/info(id=${recruitmentPeople.member.id})}'|"-->
+
+                                                    <!--                                                    <a th:href="@{|/member/${recruitmentPeople.member.id}/info|}"-->
+                                                    <!--                                                       th:text="${recruitmentPeople.member.nickname}"-->
+                                                    <!--                                                       style="text-decoration: none;"-->
+                                                    <!--                                                       class="fw-bold fs-5 custom-link">-->
+                                                    <!--                                                    </a>-->
+                                                    <a th:href="@{|/member/${recruitmentPeople.member.id}/info|}"
+                                                       th:text="${recruitmentPeople.member.nickname}"
+                                                       style="text-decoration: none; color: black;"
+                                                       class="fw-bold fs-5">
+                                                    </a>
+
+                                                    <span class="ml-1 fw-bold" data-bs-toggle="tooltip"
+                                                          data-bs-placement="top"
+                                                          title="이 숫자는 후기 고도 입니다. "
+                                                          th:text="${recruitmentPeople.member.getReviewScore()} + 'M'"
+                                                          th:style="${recruitmentPeople.member.getReviewScore() >= 0 && recruitmentPeople.member.getReviewScore() < 450 ? 'color: brown' :
+                 (recruitmentPeople.member.getReviewScore() >= 450 && recruitmentPeople.member.getReviewScore() < 500 ? 'color: skyblue' :
+                  (recruitmentPeople.member.getReviewScore() >= 500 && recruitmentPeople.member.getReviewScore() < 1000 ? 'color: limegreen' : 'color: darkgreen'))}">
+    후기 고도 (점수)
+</span>
+                                                    <i class="bi bi-exclamation-circle" data-bs-toggle="tooltip"
+                                                       data-bs-placement="top"
+                                                       title="대한민국 평균 고도는 482M이며 작성받은 후기를 통해 고도가 이용자의 고도는 높아집니다."></i>
+
+
+                                                    <div class="vr"></div>
+
+                                                    <!--                                    <span th:if="${recruitmentPeople.member.gender.equals('female')}"-->
+                                                    <!--                                          th:text="여자"></span>-->
+                                                    <!--                                    <span th:if="${recruitmentPeople.member.gender.equals('male')}" th:text="남자"></span>-->
+                                                    <!--                                    <div class="vr"></div>-->
+                                                    <!--                                    <span th:text="${recruitmentPeople.member.email}"></span>-->
+                                                    <!--                                    <div class="vr"></div>-->
+                                                    <!--                                    <span th:text="${recruitmentPeople.member.age}"></span>-->
+
+                                                    <button type="button" class="btn btn-success btn-sm"
+                                                            href="javascript:"
+                                                            onclick="if ( confirm('추방하시겠습니까?') ) $(this).next().submit();">
+                                                        추방
+                                                    </button>
+                                                    <form hidden
+                                                          th:action="@{|/recruitment/${recruitmentPeople.id}/attend/delete|}"
+                                                          method="post">
+                                                        <input type="hidden" name="_method" value="delete">
+                                                    </form>
+                                                    <br>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </details>
+                                </div>
+                            </div>
+
+
+                            <ul th:if="${!@recruitmentService.findByRecruitmentPeopleId(myArticleList.id).isEmpty()}"
+                                class="list-group">
+                                <li th:each="attendLists : ${@recruitmentService.findByRecruitmentPeopleId(myArticleList.id)}"
+                                    th:if="${attendLists.isAttend() == false}"
+                                    class="list-group-item mb-1">
+
+                                    <div>
+                                        <!--                                    <span th:text="${attendLists.member.nickname}"></span>-->
+                                        <a th:href="@{|/member/${attendLists.member.id}/info|}"
+                                           th:text="${attendLists.member.nickname}"
+                                           style="text-decoration: none;"
+                                           class="fw-bolder fs-5 text-info">
+                                        </a>
+                                        <span class="ml-1 fw-bold" data-bs-toggle="tooltip" data-bs-placement="top"
+                                              title="이 숫자는 후기 고도 입니다. "
+                                              th:text="${attendLists.member.getReviewScore()} + 'M'"
+                                              th:style="${attendLists.member.getReviewScore() >= 0 && attendLists.member.getReviewScore() < 450 ? 'color: brown' :
+                 (attendLists.member.getReviewScore() >= 450 && attendLists.member.getReviewScore() < 500 ? 'color: skyblue' :
+                  (attendLists.member.getReviewScore() >= 500 && attendLists.member.getReviewScore() < 1000 ? 'color: limegreen' : 'color: darkgreen'))}">
+    후기 고도 (점수)
+</span>
+                                        <div class="vr"></div>
+                                        <span th:if="${attendLists.member.gender.equals('female')}"
+                                              th:text="여자"></span>
+                                        <span th:if="${attendLists.member.gender.equals('male')}"
+                                              th:text="남자"></span>
+
+                                        <div class="vr"></div>
+
+                                        <i type="button" class="bi bi-person-check" style="font-size: 1.2rem;"
+                                           href="javascript:"
+                                           onclick="if ( confirm('수락하시겠습니까?') ) $(this).next().submit();"></i>
+                                        <form hidden th:action="@{|/recruitment/${attendLists.id}/attend/create|}"
+                                              method="POST">
+                                        </form>
+
+                                        <i type="button" class="ml-2 bi bi-person-fill-slash" style="font-size: 1.2rem;"
+                                           href="javascript:"
+                                           onclick="if ( confirm('거절하시겠습니까?') ) $(this).next().submit();"></i>
+                                        <form hidden th:action="@{|/recruitment/${attendLists.id}/attend/delete|}"
+                                              method="post">
+                                        </form>
+                                    </div>
+                                </li>
+
+                            </ul>
+                            <hr>
+                        </li>
+
+                        <script>
+                            // 툴팁 활성화
+                            document.addEventListener('DOMContentLoaded', function () {
+                                const tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+                                const tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+                                    return new bootstrap.Tooltip(tooltipTriggerEl)
+                                })
+                            });
+                        </script>
+                    </div>
+
 
                 </section>
             </div>

@@ -1,10 +1,14 @@
 package com.ll.olol.boundedContext.notification.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ll.olol.base.rsData.RsData;
 import com.ll.olol.boundedContext.member.entity.Member;
 import com.ll.olol.boundedContext.notification.entity.Notification;
+import com.ll.olol.boundedContext.notification.entity.NotificationDTO;
 import com.ll.olol.boundedContext.notification.repository.EmitterRepository;
 import com.ll.olol.boundedContext.notification.repository.NotificationRepository;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -12,7 +16,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Service
@@ -21,8 +27,11 @@ import java.util.List;
 public class NotificationService {
     private final NotificationRepository notificationRepository;
     private final EmitterRepository emitterRepository;
+    private final ObjectMapper mapper = new ObjectMapper();
     private final static Long DEFAULT_TIMEOUT = 3600000L;
     private final static String NOTIFICATION_NAME = "notify";
+    @Getter
+    private final Map<Long, String> tokenMap = new HashMap<>();
 
     public List<Notification> findByToInstaMember(Member member) {
         return notificationRepository.findByMember(member);
@@ -35,6 +44,36 @@ public class NotificationService {
                 .type(type)
                 .content(content)
                 .articleId(articleId)
+                .build();
+
+        notificationRepository.save(notification);
+
+        return notification;
+    }
+
+    @Transactional
+    public Notification makeReviewNotification(Member member, int type, String content, Long articleId, boolean reviewed) {
+        Notification notification = Notification.builder()
+                .member(member)
+                .type(type)
+                .content(content)
+                .articleId(articleId)
+                .reviewed(reviewed)
+                .build();
+
+        notificationRepository.save(notification);
+
+        return notification;
+    }
+
+    @Transactional
+    public Notification makeReviewWriteNotification(Member reviewer, int type, String content, Long articleId, boolean participant) {
+        Notification notification = Notification.builder()
+                .member(reviewer)
+                .type(type)
+                .content(content)
+                .articleId(articleId)
+                .participant(participant)
                 .build();
 
         notificationRepository.save(notification);
@@ -75,17 +114,29 @@ public class NotificationService {
         return sseEmitter;
     }
 
-    public void send(Long userId, Notification notification) {
+    public void send(Long userId, NotificationDTO notificationDTO) {
+        String json = null;
+        try {
+            // 객체를 JSON 문자열로 변환
+            json = mapper.writeValueAsString(notificationDTO);
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
         // 유저 ID로 SseEmitter를 찾아 이벤트를 발생 시킨다.
+        String finalJson = json;
         emitterRepository.get(userId).ifPresentOrElse(sseEmitter -> {
             try {
-                sseEmitter.send(notification.getContent());
+                sseEmitter.send(finalJson);
             } catch (IOException exception) {
                 // IOException이 발생하면 저장된 SseEmitter를 삭제하고 예외를 발생시킨다.
                 emitterRepository.delete(userId);
                 //throw new ApplicationException(ErrorCode.NOTIFICATION_CONNECTION_ERROR);
             }
         }, () -> log.info("No emitter found"));
+    }
+
+    public void register(final Long userId, final String token) {
+        tokenMap.put(userId, token);
     }
 
 }

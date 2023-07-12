@@ -1,8 +1,9 @@
 package com.ll.olol.boundedContext.recruitment.service;
 
+import com.ll.olol.base.rq.Rq;
 import com.ll.olol.base.rsData.RsData;
 import com.ll.olol.boundedContext.member.entity.Member;
-import com.ll.olol.boundedContext.member.repository.MemberRepository;
+import com.ll.olol.boundedContext.member.service.MemberService;
 import com.ll.olol.boundedContext.notification.event.EventAfterDeportPeople;
 import com.ll.olol.boundedContext.notification.event.EventAfterRecruitmentAttend;
 import com.ll.olol.boundedContext.notification.event.EventAfterRecruitmentPeople;
@@ -10,12 +11,13 @@ import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentPeople;
 import com.ll.olol.boundedContext.recruitment.repository.RecruitmentPeopleRepository;
 import com.ll.olol.boundedContext.recruitment.repository.RecruitmentRepository;
-import java.util.List;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -24,9 +26,10 @@ import org.springframework.transaction.annotation.Transactional;
 public class RecruitmentPeopleService {
 
     private final RecruitmentPeopleRepository recruitmentPeopleRepository;
-    private final MemberRepository memberRepository;
     private final RecruitmentRepository recruitmentRepository;
     private final ApplicationEventPublisher publisher;
+    private final MemberService memberService;
+    private final Rq rq;
     private final int limitPeople = 0;
 
     @Transactional
@@ -40,6 +43,9 @@ public class RecruitmentPeopleService {
         Optional<RecruitmentPeople> first = article.get().getRecruitmentPeople().stream()
                 .filter(t -> t.getMember().getId() == member.getId())
                 .findFirst();
+        if (memberService.additionalInfo(rq.getMember()).isFail()) {
+            return RsData.of("F-2", "마이페이지에서 추가정보를 입력해주세요");
+        }
 
         if (first.isPresent()) {
             return RsData.of("F-1", "이미 신청한 공고입니다.");
@@ -78,19 +84,44 @@ public class RecruitmentPeopleService {
         RecruitmentArticle recruitmentArticle = recruitmentPeople.getRecruitmentArticle();
         Long recruitsNumbers = recruitmentArticle.getRecruitmentArticleForm().getRecruitsNumbers();
         if (recruitmentArticle.getAttend() >= recruitsNumbers) {
+            recruitmentArticle.setDeadLine(true);
             return RsData.of("F-1", "이미 참가 인원이 꽉 찼습니다.");
         }
 
-        publisher.publishEvent(new EventAfterRecruitmentAttend(this, recruitmentPeople));
         recruitmentPeople.setAttend(true);
+        publisher.publishEvent(new EventAfterRecruitmentAttend(this, recruitmentPeople));
+
         return RsData.of("S-1", "수락 완료");
     }
 
     @Transactional
     public RsData deport(RecruitmentPeople recruitmentPeople) {
         recruitmentPeopleRepository.delete(recruitmentPeople);
+        recruitmentPeople.getRecruitmentArticle().setDeadLine(false);
         publisher.publishEvent(new EventAfterDeportPeople(this, recruitmentPeople));
         return RsData.of("S-1", "추방 완료");
     }
 
+    public RecruitmentPeople findById(Long id) {
+        return recruitmentPeopleRepository.findById(id).get();
+    }
+
+    @Transactional
+    public RsData checkedRealParticipant(RecruitmentPeople recruitmentPeople, boolean checkedReal) {
+        recruitmentPeople.checkedParticipant(checkedReal);
+
+        return RsData.of("S-1", "실제 참여자로 체크했습니다.");
+    }
+
+    public RsData<RecruitmentPeople> findByRecruitmentArticleAndMember(RecruitmentArticle recruitmentArticle,
+                                                                       Member reviewer) {
+        RecruitmentPeople recruitmentPeople = recruitmentPeopleRepository.findByRecruitmentArticleAndMember(
+                recruitmentArticle, reviewer);
+
+        if (recruitmentPeople != null) {
+            return RsData.of("S-1", "신청이 확인되었습니다.", recruitmentPeople);
+        }
+
+        return RsData.of("F-1", "확인 안됐습니다.");
+    }
 }

@@ -51,11 +51,11 @@ body {
 }
 
 
-.card {
-    background-color: #FFFFFF;
-    border: none;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
+/*.card {*/
+/*    background-color: #FFFFFF;*/
+/*    border: none;*/
+/*    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);*/
+/*}*/
 
 
 .smaller-text {
@@ -142,27 +142,25 @@ body {
 
 }
 
-.div {
+.div.div {
     display: flex;
     flex-wrap: wrap;
-
-
 }
 
-.containerIn {
-    display: flex;
-    justify-content: start;
-}
+/*.containerIn {*/
+/*    display: flex;*/
+/*    justify-content: start;*/
+/*}*/
 
 .container1 {
     display: flex;
     flex-direction: row-reverse;
 }
 
-.container2 {
-    display: flex;
-    justify-content: space-between;
-}
+/*.container2 {*/
+/*    display: flex;*/
+/*    justify-content: space-between;*/
+/*}*/
 
 /*.viewr1 {*/
 /*    display: flex;*/

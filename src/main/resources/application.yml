@@ -56,6 +56,8 @@ spring:
         format_sql: true
         use_sql_comments: true
         default_batch_fetch_size: 100
+    open-in-view:
+      exclude-patterns: /notification/subscribe
 
 naver:
   url:

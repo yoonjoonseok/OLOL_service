@@ -7,11 +7,24 @@
         <div class="row">
             <div class="col-md-8">
                 <section>
-                    <h2>알림</h2>
+                    <div class="mt-3">
+                        <h2>알림</h2>
+                    </div>
                     <ul th:if="${!#lists.isEmpty(notifications)}" class="list-group">
                         <li th:each="notification: ${notifications}"
                             class="list-group-item">
-                            <a th:href="@{|/recruitment/${notification.getArticleId()}|}"
+                            <a th:unless="${!notification.isReviewed()}"
+                               th:href="@{|/review/reviewerList/${notification.getArticleId()}|}"
+                               th:text="${notification.getContent()}" style="color: green;">
+                            </a>
+
+                            <a th:if="${!notification.isReviewed()} and ${notification.isParticipant()}"
+                               th:href="@{|/review/participantList/${notification.getArticleId()}|}"
+                               th:text="${notification.getContent()}" style="color: green;">
+                            </a>
+
+                            <a th:if="${!notification.isReviewed()} and ${!notification.isParticipant()}"
+                               th:href="@{|/recruitment/${notification.getArticleId()}|}"
                                th:text="${notification.getContent()}" style="color: green;">
                             </a>
                             <span th:text="${#temporals.format(notification.getCreateDate(), 'yyyy.MM.dd HH:mm')}"
@@ -19,6 +32,9 @@
                             </span>
                         </li>
                     </ul>
+                    <div th:if="${#lists.isEmpty(notifications)}">
+                        <span>발생한 알림이 없습니다.</span>
+                    </div>
                 </section>
             </div>
         </div>

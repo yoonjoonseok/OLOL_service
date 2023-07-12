@@ -53,51 +53,144 @@
         }
     </script>
 
-    <h2>회원정보 수정</h2>
 
     <form onsubmit="MyPageForm__submit(this);" th:action method="POST">
-        <div class="row">
-            <div class="col-md-6 mb-2">
-                <label for="nickname" class="form-label">닉네임</label>
-                <input type="text" class="form-control" id="nickname" name="nickname" required
-                       placeholder="닉네임을 입력해주세요.">
+        <div th:if="${member.getEmail() == null}  or ${member.getGender() == null}">
+            <h2>회원정보 수정(최초 1회만 수정 가능합니다!)</h2>
+            <div class="row">
+                <div class="col-md-6 mb-2">
+                    <label for="nickname" class="form-label">닉네임</label>
+                    <input type="text" class="form-control" id="nickname" name="nickname" required
+                           placeholder="닉네임을 입력해주세요.">
+                </div>
+                <div class="col-md-6 mb-2">
+                    <label for="ageRange" class="form-label">연령대</label>
+                    <select required class="form-select" id="ageRange" name="ageRange">
+                        <option value="">연령대</option>
+                        <option value="0">10세 이하</option>
+                        <option value="1">10 ~ 19</option>
+                        <option value="2">20 ~ 29</option>
+                        <option value="3">30 ~ 39</option>
+                        <option value="4">40 ~ 49</option>
+                        <option value="5">50 ~ 59</option>
+                        <option value="6">60 ~ 69</option>
+                        <option value="7">70 ~ 79</option>
+                        <option value="8">80 ~ 89</option>
+                        <option value="8">90 ~ 99</option>
+                    </select>
+                </div>
+                <div class="col-md-6 mb-2">
+                    <label for="gender" class="form-label">성별</label>
+                    <select required class="form-select" id="gender" name="gender">
+                        <option value="">성별</option>
+                        <option value="male">남성</option>
+                        <option value="female">여성</option>
+                    </select>
+                </div>
+                <div class="col-md-6 mb-2">
+                    <label for="email" class="form-label">이메일</label>
+                    <input type="text" class="form-control" id="email" name="email" required
+                           placeholder="가입하신 SNS의 이메일을 입력해주세요.">
+                </div>
             </div>
-            <div class="col-md-6 mb-2">
-                <label for="ageRange" class="form-label">연령대</label>
-                <select required class="form-select" id="ageRange" name="ageRange">
-                    <option value="">연령대</option>
-                    <option value="0">10세 이하</option>
-                    <option value="1">10 ~ 19</option>
-                    <option value="2">20 ~ 29</option>
-                    <option value="3">30 ~ 39</option>
-                    <option value="4">40 ~ 49</option>
-                    <option value="5">50 ~ 59</option>
-                    <option value="6">60 ~ 69</option>
-                    <option value="7">70 ~ 79</option>
-                    <option value="8">80 ~ 89</option>
-                    <option value="8">90 ~ 99</option>
-                </select>
+            <div class="mb-3">
+                <button href="javascript:" class="btn btn-primary"
+                        onclick="if ( confirm('회원정보를 수정하시겠습니까?(다시는 바꾸지 못합니다)') ) $(this).next().submit();">
+                    수정완료
+                </button>
+                <button type="button" class="btn btn-secondary" onclick="window.history.back()">취소</button>
             </div>
-            <div class="col-md-6 mb-2">
-                <label for="gender" class="form-label">성별</label>
-                <select required class="form-select" id="gender" name="gender">
-                    <option value="">성별</option>
-                    <option value="male">남성</option>
-                    <option value="female">여성</option>
-                </select>
-            </div>
-            <div class="col-md-6 mb-2">
-                <label for="email" class="form-label">이메일</label>
-                <input type="text" class="form-control" id="email" name="email" required
-                       placeholder="가입하신 SNS의 이메일을 입력해주세요.">
-            </div>
-        </div>
-        <div class="mb-3">
-            <button type="submit" class="btn btn-primary">수정완료</button>
-            <button type="button" class="btn btn-secondary" onclick="window.history.back()">취소</button>
         </div>
     </form>
-    <div class="row">
+
+    <div class="flex-grow flex items-center justify-center"
+         th:if="${member.getEmail() != null}  or ${member.getGender() != null}">
+        <div class="profile">
+            <div class="card-body">
+                <h2 class="card-title">
+                    <i class="fa-solid fa-user"></i>
+                    사용자 정보
+                </h2>
+
+                <div class="mt-4">
+                    <div>
+                        <i class="fa-solid fa-heart"></i>
+                        닉네임
+                    </div>
+                    <div class="mt-2">
+                        <span class="badge text-bg-success" th:text="${member.getNickname()}"></span>
+                    </div>
+                </div>
+
+                <div class="mt-4">
+                    <div>
+                        <i class="fa-solid fa-mountain"></i>
+                        고도
+                    </div>
+                    <div class="mt-2">
+                        <span class="badge text-bg-success" th:text="|${member.getReviewScore()}M|"></span>
+                    </div>
+                </div>
+
+                <div class="mt-4">
+                    <div>
+                        <i class="bi bi-person-fill"></i>
+                        나이
+                    </div>
+                    <div class="mt-2">
+                        <span class="badge text-bg-success" th:text="|${member.getAge()}0대|"></span>
+                    </div>
+                </div>
+
+                <div class="mt-4">
+                    <div>
+                        <i class="fa-solid fa-person-half-dress"></i>
+                        성별
+                    </div>
+                    <div class="mt-2">
+                        <span class="badge text-bg-success" th:if="${member.getGender().equals('female')}"
+                              th:text="|여자|"></span>
+                        <span class="badge text-bg-success" th:if="${member.getGender().equals('male')}"
+                              th:text="|남자|"></span>
+                    </div>
+                </div>
+
+                <div class="mt-4">
+                    <div>
+                        <i class="fa-solid fa-envelope"></i>
+                        이메일
+                    </div>
+                    <div class="mt-2">
+                        <span class="badge text-bg-success" th:text="${member.getEmail()}"></span>
+                    </div>
+                </div>
+
+                <div class="mt-4">
+                    <div>
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                        신고 당한 횟수
+                    </div>
+                    <div class="mt-2">
+                        <span class="badge text-bg-success"
+                              th:text="|${@reportService.countReport(member.getId())}번|"></span>
+                    </div>
+                </div>
+
+
+                <div class="mt-4">
+                    <div>
+                        <i class="fa-regular fa-clock"></i>
+                        가입
+                    </div>
+                    <div class="mt-2">
+                            <span class="badge text-bg-success"
+                                  th:text="${#temporals.format(member.createDate, 'yy년.MM월.dd일')}"></span>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
         <div class="col-md-6">
             <th:block th:replace="~{usr/member/attendList}"></th:block>
         </div>

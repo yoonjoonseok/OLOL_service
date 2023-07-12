@@ -2,6 +2,7 @@ package com.ll.olol.boundedContext.report.service;
 
 import com.ll.olol.base.rsData.RsData;
 import com.ll.olol.boundedContext.member.entity.Member;
+import com.ll.olol.boundedContext.member.service.MemberService;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
 import com.ll.olol.boundedContext.report.entity.ArticleReport;
 import com.ll.olol.boundedContext.report.repository.ReportRepository;
@@ -13,6 +14,7 @@ import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -27,9 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true) // 아래 메서드들이 전부 readonly 라는 것을 명시, 나중을 위해
 public class ReportService {
     private final ReportRepository reportRepository;
-
-//    public List<ArticleReport> findByFromMember(Member actor) {
-//    }
+    private final MemberService memberService;
 
     @Transactional
     public RsData report(RecruitmentArticle recruitmentArticle, Member actor, int reason) {
@@ -113,5 +113,18 @@ public class ReportService {
         }
 
         return reportRepository.findAll(spec, pageable);
+    }
+
+    public int countReport(Long memberId) {
+        Optional<Member> member = memberService.findById(memberId);
+        List<RecruitmentArticle> recruitmentArticle = member.get().getRecruitmentArticle();
+        int count = 0;
+        for (RecruitmentArticle data : recruitmentArticle) {
+            ArticleReport byRecruitmentArticle = reportRepository.findByRecruitmentArticle(data);
+            if (byRecruitmentArticle != null) {
+                count++;
+            }
+        }
+        return count;
     }
 }
