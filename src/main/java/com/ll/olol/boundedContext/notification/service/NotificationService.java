@@ -33,8 +33,8 @@ public class NotificationService {
     @Getter
     private final Map<Long, String> tokenMap = new HashMap<>();
 
-    public List<Notification> findByToInstaMember(Member member) {
-        return notificationRepository.findByMember(member);
+    public List<Notification> findByMemberOrderByIdDesc(Member member) {
+        return notificationRepository.findByMemberOrderByIdDesc(member);
     }
 
     @Transactional

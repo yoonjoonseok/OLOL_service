@@ -8,6 +8,7 @@ import com.ll.olol.boundedContext.member.service.MemberService;
 import com.ll.olol.boundedContext.recruitment.entity.LikeableRecruitmentArticle;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentPeople;
 import com.ll.olol.boundedContext.recruitment.service.LikeableRecruitmentArticleService;
+import com.ll.olol.boundedContext.recruitment.service.RecruitmentPeopleService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -21,7 +22,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,6 +32,8 @@ public class MemberController {
     private final Rq rq;
     private final MemberService memberService;
     private final MemberRepository memberRepository;
+
+    private final RecruitmentPeopleService recruitmentPeopleService;
     private final LikeableRecruitmentArticleService likeableRecruitmentArticleService;
 
     @PreAuthorize("isAuthenticated()")
@@ -40,12 +42,11 @@ public class MemberController {
         Member actor = rq.getMember();
         model.addAttribute("member", actor);
 
-        Optional<Member> member = memberRepository.findById(actor.getId());
-        List<RecruitmentPeople> recruitmentPeople = member.get().getRecruitmentPeople();
+
+        List<RecruitmentPeople> recruitmentPeople = recruitmentPeopleService.findByMemberOrderByIdDesc(actor);
         model.addAttribute("peopleList", recruitmentPeople);
 
-        List<LikeableRecruitmentArticle> likeableRecruitmentArticles = likeableRecruitmentArticleService.findByFromMember(actor);
-        Collections.reverse(likeableRecruitmentArticles);
+        List<LikeableRecruitmentArticle> likeableRecruitmentArticles = likeableRecruitmentArticleService.findByFromMemberOrderByIdDesc(actor);
         model.addAttribute("likeableRecruitmentArticles", likeableRecruitmentArticles);
         return "usr/layout/myPage";
     }

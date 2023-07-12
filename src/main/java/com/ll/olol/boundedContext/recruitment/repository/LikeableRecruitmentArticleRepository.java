@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface LikeableRecruitmentArticleRepository extends JpaRepository<LikeableRecruitmentArticle, Long> {
-    List<LikeableRecruitmentArticle> findAllByFromMember(Member FromMember);
+    List<LikeableRecruitmentArticle> findByFromMemberOrderByIdDesc(Member FromMember);
 
     Optional<LikeableRecruitmentArticle> findByRecruitmentArticleAndFromMember(RecruitmentArticle recruitmentArticle, Member member);
 }
