@@ -1,5 +1,15 @@
 <html layout:decorate="~{usr/layout/layout.html}">
-
+<head>
+    <style>
+        .checkbox-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+            accent-color: #198754;
+        }
+    </style>
+</head>
 <body>
 <main layout:fragment="main" class="container mt-5">
 
@@ -179,7 +189,7 @@
 
                 <div class="mt-4">
                     <div>
-                        <i class="fa-regular fa-clock"></i>
+                        <i class="fa-solid fa-clock"></i>
                         가입
                     </div>
                     <div class="mt-2">
@@ -189,6 +199,62 @@
                 </div>
             </div>
 
+            <form id="checkboxForm">
+                <div class="mt-4">
+                    <div>
+                        <i class="bi bi-bell-fill"></i>
+                        <span>알림 수신 설정</span>
+                    </div>
+                    <div class="checkbox-container">
+                        <div class="custom-checkbox">
+                            <label for="pushCheckbox">푸시 :</label>
+                            <input type="checkbox" id="pushCheckbox" name="pushCheckbox"
+                                   th:checked="${member.receivePush}">
+                        </div>
+                        <div class="custom-checkbox">
+                            <label for="mailCheckbox">메일 :</label>
+                            <input type="checkbox" id="mailCheckbox" name="mailCheckbox"
+                                   th:checked="${member.receiveMail}">
+                        </div>
+                        <button class="btn btn-outline-success btn-sm" type="submit">설정</button>
+                    </div>
+                </div>
+            </form>
+
+            <script>
+                $(document).ready(function () {
+                    $('#checkboxForm').submit(function (e) {
+                        e.preventDefault(); // Prevent the form from submitting normally
+
+                        // Get the values of the checkboxes
+                        var checkbox1Value = $('#pushCheckbox').is(':checked');
+                        var checkbox2Value = $('#mailCheckbox').is(':checked');
+
+                        // Create a data object to send to the server
+                        var data = {
+                            receivePush: checkbox1Value,
+                            receiveMail: checkbox2Value
+                        };
+
+                        // Send an Ajax request to the server
+                        $.ajax({
+                            type: 'POST',
+                            url: '/member/mypage/notification', // Replace with the actual server endpoint
+                            data: JSON.stringify(data),
+                            contentType: 'application/json', // Set the content type to JSON
+                            success: function (response) {
+                                // Handle the response from the server
+                                alert("알림 수신 설정 변경 완료");
+                                console.log('Success:', response);
+                            },
+                            error: function (error) {
+                                // Handle errors
+                                console.error('Error:', error);
+                            }
+                        });
+                    });
+                });
+            </script>
 
         </div>
         <div class="col-md-6">
