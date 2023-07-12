@@ -3,15 +3,17 @@
 <head>
     <title>모집 공고 등록</title>
     <script src="https://cdn.ckeditor.com/ckeditor5/38.0.1/classic/ckeditor.js"></script>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
     <script id="script" type="text/javascript"
             src="https://openapi.map.naver.com/openapi/v3/maps.js?ncpClientId=x30bss140l">
     </script>
+
     <script type="text/javascript"
             src="https://openapi.map.naver.com/openapi/v3/maps-geocoder.js">
     </script>
+    
     <style>
         /* 추가적인 스타일을 적용할 수 있습니다 */
         /* 모집 공고 등록 화면에서 산 검색 결과에 호버효과 적용을 위한 스타일 */
@@ -25,7 +27,7 @@
 <body>
 
 <main layout:fragment="main" class="container">
-    <div class="d-flex align-items-center p-3 my-3 text-black bg-purple rounded shadow-sm">
+    <div class="d-flex align-items-center p-3 my-3 text-white rounded shadow-sm" style="background-color: #A3C6C4;">
         <div class="lh-1">
             <h1 class="h6 mb-0 text-black lh-1 fs-2">1. 모집 공고 정보를 입력해주세요.</h1>
         </div>
@@ -58,7 +60,7 @@
                     <div class="input-group">
                         <input type="text" id="textInput" placeholder="산 이름" class="form-control"
                                th:field="*{mountainName}">
-                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#myModal"
+                        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#myModal"
                                 onclick="openModal()">산
                             주소 검색
                         </button>
@@ -245,7 +247,8 @@
         </div>
 
 
-        <div class="d-flex align-items-center p-3 my-3 mt-5 text-black bg-purple rounded shadow-sm">
+        <div class="d-flex align-items-center p-3 my-3 mt-5 text-white rounded shadow-sm"
+             style="background-color: #A3C6C4;">
             <div class="lh-1">
                 <h1 class="h6 mb-0 text-black lh-1 fs-2">2. 모집 공고를 소개해주세요.</h1>
             </div>
@@ -273,7 +276,7 @@
             required를 입력하면 해당칸들을 빈칸으로 넘어갈 수가 없다. 또 "이 입력란을 작성하세요" 라는 메시지가 뜸
             -->
         </div>
-        <button type="submit" class="btn btn-primary my-2">저장하기</button>
+        <button type="submit" class="btn btn-success my-2">저장하기</button>
         <script>
             ClassicEditor
                 .create(document.querySelector('#editor'), {

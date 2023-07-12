@@ -5,10 +5,10 @@
 </head>
 <body>
 <main layout:fragment="main">
-    <div class="container mt-5">
+    <div class="container justify-content-center align-items-center mt-5">
         <h2 class="my-4">참가자 목록</h2>
         <div class="row">
-            <div class="col-md-8">
+            <div class="col-md">
                 <div class="mr-3">
                     <a th:href="@{|/recruitment/${recruitmentArticle.id}|}"
                        th:text="${recruitmentArticle.articleName}"
@@ -48,7 +48,7 @@
 
 
                 <a class="btn btn-outline-success mt-5"
-                   th:href="@{|/|}">리뷰를 다 남겼어요.</a>>
+                   th:href="@{|/|}">리뷰를 다 남겼어요.</a>
                 </a>
 
 
