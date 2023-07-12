@@ -1,11 +1,13 @@
-importScripts('https://www.gstatic.com/firebasejs/5.9.2/firebase-app.js');
-importScripts('https://www.gstatic.com/firebasejs/5.9.2/firebase-messaging.js');
-
-firebase.initializeApp({
-    messagingSenderId: "706361316814"
+self.addEventListener("push", (event) => {
+    const payload = JSON.parse(event.data.text());
+    event.waitUntil(
+        registration.showNotification(payload.notification.title, {
+            body: payload.notification.body,
+            image: payload.notification.image,
+            icon: "/resource/common/icon/olol.png"
+        })
+    );
 });
-
-const messaging = firebase.messaging();
 
 self.addEventListener('notificationclick', function (event) {
     event.notification.close(); // 알림 닫기

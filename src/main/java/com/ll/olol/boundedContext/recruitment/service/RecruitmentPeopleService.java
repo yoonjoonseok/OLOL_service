@@ -3,7 +3,6 @@ package com.ll.olol.boundedContext.recruitment.service;
 import com.ll.olol.base.rq.Rq;
 import com.ll.olol.base.rsData.RsData;
 import com.ll.olol.boundedContext.member.entity.Member;
-import com.ll.olol.boundedContext.member.repository.MemberRepository;
 import com.ll.olol.boundedContext.member.service.MemberService;
 import com.ll.olol.boundedContext.notification.event.EventAfterDeportPeople;
 import com.ll.olol.boundedContext.notification.event.EventAfterRecruitmentAttend;
@@ -12,12 +11,13 @@ import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentPeople;
 import com.ll.olol.boundedContext.recruitment.repository.RecruitmentPeopleRepository;
 import com.ll.olol.boundedContext.recruitment.repository.RecruitmentRepository;
-import java.util.List;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Optional;
 
 
 @Service
@@ -26,7 +26,6 @@ import org.springframework.transaction.annotation.Transactional;
 public class RecruitmentPeopleService {
 
     private final RecruitmentPeopleRepository recruitmentPeopleRepository;
-    private final MemberRepository memberRepository;
     private final RecruitmentRepository recruitmentRepository;
     private final ApplicationEventPublisher publisher;
     private final MemberService memberService;

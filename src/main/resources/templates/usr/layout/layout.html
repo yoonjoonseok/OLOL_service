@@ -14,7 +14,7 @@
             </button>
 
             <div class="collapse navbar-collapse " id="navbarNav">
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                     <li class="nav-item active mr-4">
                         <a th:href="@{/recruitment/report/list}" class="btn btn-outline-secondary"
                            th:if="${@rq.admin}">신고된 공고 목록</a>
@@ -35,6 +35,11 @@
                             <i th:unless="${@rq.hasUnreadNotifications}" class="bi bi-bell fa-2x"></i>
                             <i th:if="${@rq.hasUnreadNotifications}" class="bi bi-bell fa-2x "
                                style="color: red;"></i>
+                        </a>
+                    </li>
+                    <li class="nav-item active mr-4">
+                        <a th:href="@{/chat/rooms}" class="nav-link">
+                            <i class="fa-solid fa-comments fa-2x"></i>
                         </a>
                     </li>
 

@@ -1,0 +1,117 @@
+<html layout:decorate="~{usr/layout/layout.html}">
+<head>
+    <style>
+        .profile {
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: white;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+
+    </style>
+
+</head>
+
+<body>
+
+<main layout:fragment="main" class="flex-grow flex items-center justify-center">
+    <div class="profile">
+
+
+        <div class="card-body">
+            <h2 class="card-title">
+                <i class="fa-solid fa-user"></i>
+                사용자 정보
+            </h2>
+
+            <div class="mt-4">
+                <div>
+                    <i class="fa-solid fa-heart"></i>
+                    닉네임
+                </div>
+                <div class="mt-2">
+                    <span class="badge text-bg-success" th:text="${member.getNickname()}"></span>
+                </div>
+            </div>
+
+            <div class="mt-4">
+                <div>
+                    <i class="fa-solid fa-mountain"></i>
+                    고도
+                </div>
+                <div class="mt-2">
+                    <span class="badge text-bg-success" th:text="|${member.getReviewScore()}M|"></span>
+                </div>
+            </div>
+
+            <div class="mt-4">
+                <div>
+                    <i class="bi bi-person-fill"></i>
+                    나이
+                </div>
+                <div class="mt-2">
+                    <span class="badge text-bg-success" th:text="|${member.getAge()}0대|"></span>
+                </div>
+            </div>
+
+            <div class="mt-4">
+                <div>
+                    <i class="fa-solid fa-person-half-dress"></i>
+                    성별
+                </div>
+                <div class="mt-2">
+                        <span class="badge text-bg-success" th:if="${member.gender.equals('female')}"
+                              th:text="|여자|"></span>
+                    <span class="badge text-bg-success" th:if="${member.gender.equals('male')}"
+                          th:text="|남자|"></span>
+                </div>
+            </div>
+
+            <div class="mt-4">
+                <div>
+                    <i class="fa-solid fa-envelope"></i>
+                    이메일
+                </div>
+                <div class="mt-2">
+                    <span class="badge text-bg-success" th:text="${member.getEmail()}"></span>
+                </div>
+            </div>
+
+            <div class="mt-4">
+                <div>
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                    신고 당한 횟수
+                </div>
+                <div class="mt-2">
+                    <span class="badge text-bg-success"
+                          th:text="|${@reportService.countReport(member.getId())}번|"></span>
+                </div>
+            </div>
+
+
+            <div class="mt-4">
+                <div>
+                    <i class="fa-regular fa-clock"></i>
+                    가입
+                </div>
+                <div class="mt-2">
+                            <span class="badge text-bg-success"
+                                  th:text="${#temporals.format(member.createDate, 'yy년.MM월.dd일')}"></span>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+
+</main>
+
+</body>
+
+</html>
