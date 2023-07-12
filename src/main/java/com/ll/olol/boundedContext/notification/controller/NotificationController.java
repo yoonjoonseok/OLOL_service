@@ -1,6 +1,7 @@
 package com.ll.olol.boundedContext.notification.controller;
 
 import com.ll.olol.base.rq.Rq;
+import com.ll.olol.base.rsData.RsData;
 import com.ll.olol.boundedContext.member.entity.Member;
 import com.ll.olol.boundedContext.member.service.MemberService;
 import com.ll.olol.boundedContext.notification.entity.Notification;
@@ -39,6 +40,12 @@ public class NotificationController {
         model.addAttribute("notifications", notifications);
 
         return "usr/notification/list";
+    }
+
+    @DeleteMapping("/deleteAll")
+    public String deleteAll() {
+        RsData rsData = notificationService.deleteByMember(rq.getMember());
+        return rq.redirectWithMsg("/notification/list", rsData);
     }
 
     @ResponseBody

@@ -82,6 +82,13 @@ public class NotificationService {
     }
 
     @Transactional
+    public RsData deleteByMember(Member member) {
+        System.out.println("아" + member.getId());
+        notificationRepository.deleteByMember(member);
+        return RsData.of("S-1", "알림이 전부 삭제되었습니다.");
+    }
+
+    @Transactional
     public RsData markAsRead(List<Notification> notifications) {
         notifications
                 .stream()
@@ -138,5 +145,4 @@ public class NotificationService {
     public void register(final Long userId, final String token) {
         tokenMap.put(userId, token);
     }
-
 }
