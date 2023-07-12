@@ -37,125 +37,130 @@
     <!-- 그리드를 이용해서 col-md-6 6개의 컬럼 폭으로 사이즈를 조정해서 중앙에 배치 -->
     <div class="row justify-content-center align-items-center">
         <div class="col-md-6">
-            <h1>
+            <div class="h1 pb-2 mb-4 text-dark border-bottom border-dark">
                 <!--        <i class="fa-solid fa-mountain-sun"></i>-->
                 <i class="fa-solid fa-mountain-sun fa-lg" style="color: #2c511f;"></i>
-                따뜻한 후기를 남겨주세요
-            </h1>
+                후기를 남겨주세요
+            </div>
 
             <div class="mb-5"></div>
 
             <form onsubmit="ReviewForm__submit(this);" th:action method="POST">
-                <div class="row">
-                    <label class="label">
+                <div class="col">
+                    <div class="p-3 bg-white border border-success rounded-4">
+                        <label class="label">
                         <span class="label-text">
                             <i class="fa-brands fa-gratipay fa-xl" style="color: #2c511f;"></i>
                             이번의 인연은 어땠나요?
                         </span>
-                    </label>
+                        </label>
 
-                    <!-- 라벨을 클릭하면 라벨의 하위요소인 버튼(체크,라디오,일반 등)이 클릭되는 효과) -->
-                    <div class="flex justify-center gap-4">
-                        <label class="flex gap-2 items-center cursor-pointer">
-                            <input type="radio" name="reviewTypeCode" value="1" class="radio peer">
-                            <span class="text-gray-400 peer-checked:text-gray-900 peer-checked:font-bold peer-focus:text-gray-700">
+                        <!-- 라벨을 클릭하면 라벨의 하위요소인 버튼(체크,라디오,일반 등)이 클릭되는 효과) -->
+                        <div class="flex justify-center gap-5">
+                            <label class="flex gap-2 items-center cursor-pointer">
+                                <input type="radio" name="reviewTypeCode" value="1" class="radio peer">
+                                <span class="text-gray-400 peer-checked:text-gray-900 peer-checked:font-bold peer-focus:text-gray-700">
                                 <i class="fa-solid fa-person-rays"></i>
                                 최고에요
                             </span>
-                        </label>
+                            </label>
 
-                        <label class="flex gap-2 items-center cursor-pointer">
-                            <input type="radio" name="reviewTypeCode" value="2" class="radio peer">
-                            <span class="text-gray-400 peer-checked:text-gray-900 peer-checked:font-bold peer-focus:text-gray-700">
+                            <label class="flex gap-2 items-center cursor-pointer">
+                                <input type="radio" name="reviewTypeCode" value="2" class="radio peer">
+                                <span class="text-gray-400 peer-checked:text-gray-900 peer-checked:font-bold peer-focus:text-gray-700">
                                 <i class="fa-regular fa-face-smile"></i>
                                 좋아요
                             </span>
-                        </label>
+                            </label>
 
-                        <label class="flex gap-2 items-center cursor-pointer">
-                            <input type="radio" name="reviewTypeCode" value="3" class="radio peer">
-                            <span class="text-gray-400 peer-checked:text-gray-900 peer-checked:font-bold peer-focus:text-gray-700">
-                                <i class="fa-solid fa-people-roof"></i>
+                            <label class="flex gap-2 items-center cursor-pointer">
+                                <input type="radio" name="reviewTypeCode" value="3" class="radio peer">
+                                <span class="text-gray-400 peer-checked:text-gray-900 peer-checked:font-bold peer-focus:text-gray-700">
+                                <i class="bi bi-emoji-frown"></i>
                                 별로에요
                             </span>
-                        </label>
-                    </div>
+                            </label>
+                        </div>
 
-                    <p></p>
+                        <p></p>
+                        <p></p>
 
-                    <label class="label">
+                        <label class="label">
                         <span class="label-text">
-                            <img src="/resource/common/reviewImages/clock.png" alt="clock_icon" width="30px"
-                                 height="30px">
+<!--                            <img src="/resource/common/reviewImages/clock.png" alt="clock_icon" width="30px"-->
+                            <!--                                 height="30px">-->
+                            <i class="bi bi-clock fa-xl" style="color: #2c511f;"></i>
                             <!--                    <i class="fa-solid fa-check"></i>-->
                             시간 약속은 잘 지켰나요?
                         </span>
-                    </label>
+                        </label>
 
-                    <!-- 라벨을 클릭하면 라벨의 하위요소인 버튼(체크,라디오,일반 등)이 클릭되는 효과) -->
-                    <div class="flex justify-center gap-4">
-                        <label class="flex gap-2 items-center cursor-pointer">
-                            <input type="radio" name="appointmentTimeCode" value="1" class="radio peer">
-                            <span class="text-gray-400 peer-checked:text-gray-900 peer-checked:font-bold peer-focus:text-gray-700">
+                        <!-- 라벨을 클릭하면 라벨의 하위요소인 버튼(체크,라디오,일반 등)이 클릭되는 효과) -->
+                        <div class="flex justify-center gap-5">
+                            <label class="flex gap-2 items-center cursor-pointer">
+                                <input type="radio" name="appointmentTimeCode" value="1" class="radio peer">
+                                <span class="text-gray-400 peer-checked:text-gray-900 peer-checked:font-bold peer-focus:text-gray-700">
                                 <i class="fa-solid fa-person-rays"></i>
                                 잘 지켰어요
                             </span>
-                        </label>
+                            </label>
 
-                        <label class="flex gap-2 items-center cursor-pointer">
-                            <input type="radio" name="appointmentTimeCode" value="2" class="radio peer">
-                            <span class="text-gray-400 peer-checked:text-gray-900 peer-checked:font-bold peer-focus:text-gray-700">
+                            <label class="flex gap-2 items-center cursor-pointer">
+                                <input type="radio" name="appointmentTimeCode" value="2" class="radio peer">
+                                <span class="text-gray-400 peer-checked:text-gray-900 peer-checked:font-bold peer-focus:text-gray-700">
                                 <i class="fa-regular fa-face-smile"></i>
                                 보통이에요
                             </span>
-                        </label>
+                            </label>
 
-                        <label class="flex gap-2 items-center cursor-pointer">
-                            <input type="radio" name="appointmentTimeCode" value="3" class="radio peer">
-                            <span class="text-gray-400 peer-checked:text-gray-900 peer-checked:font-bold peer-focus:text-gray-700">
-                                <i class="fa-solid fa-people-roof"></i>
+                            <label class="flex gap-2 items-center cursor-pointer">
+                                <input type="radio" name="appointmentTimeCode" value="3" class="radio peer">
+                                <span class="text-gray-400 peer-checked:text-gray-900 peer-checked:font-bold peer-focus:text-gray-700">
+                                <i class="bi bi-emoji-frown"></i>
                                 아쉬워요
                             </span>
-                        </label>
-                    </div>
+                            </label>
+                        </div>
 
-                    <p></p>
+                        <p></p>
+                        <p></p>
 
-                    <label class="label">
+                        <label class="label">
                         <span class="label-text">
                             <i class="fa-regular fa-handshake fa-xl" style="color: #2c511f;"></i>
                             등산 시 에티켓은 잘 지켰나요?
                         </span>
-                    </label>
+                        </label>
 
-                    <!-- 라벨을 클릭하면 라벨의 하위요소인 버튼(체크,라디오,일반 등)이 클릭되는 효과) -->
-                    <div class="flex justify-center gap-4">
-                        <label class="flex gap-2 items-center cursor-pointer">
-                            <input type="radio" name="mannerCode" value="1" class="radio peer">
-                            <span class="text-gray-400 peer-checked:text-gray-900 peer-checked:font-bold peer-focus:text-gray-700">
+                        <!-- 라벨을 클릭하면 라벨의 하위요소인 버튼(체크,라디오,일반 등)이 클릭되는 효과) -->
+                        <div class="flex justify-center gap-5">
+                            <label class="flex gap-2 items-center cursor-pointer">
+                                <input type="radio" name="mannerCode" value="1" class="radio peer">
+                                <span class="text-gray-400 peer-checked:text-gray-900 peer-checked:font-bold peer-focus:text-gray-700">
                                 <i class="fa-solid fa-person-rays"></i>
                                 좋아요
                             </span>
-                        </label>
+                            </label>
 
-                        <label class="flex gap-2 items-center cursor-pointer">
-                            <input type="radio" name="mannerCode" value="2" class="radio peer">
-                            <span class="text-gray-400 peer-checked:text-gray-900 peer-checked:font-bold peer-focus:text-gray-700">
+                            <label class="flex gap-2 items-center cursor-pointer">
+                                <input type="radio" name="mannerCode" value="2" class="radio peer">
+                                <span class="text-gray-400 peer-checked:text-gray-900 peer-checked:font-bold peer-focus:text-gray-700">
                                 <i class="fa-regular fa-face-smile"></i>
                                 보통이에요
                             </span>
-                        </label>
+                            </label>
 
-                        <label class="flex gap-2 items-center cursor-pointer">
-                            <input type="radio" name="mannerCode" value="3" class="radio peer">
-                            <span class="text-gray-400 peer-checked:text-gray-900 peer-checked:font-bold peer-focus:text-gray-700">
-                                <i class="fa-solid fa-people-roof"></i>
+                            <label class="flex gap-2 items-center cursor-pointer">
+                                <input type="radio" name="mannerCode" value="3" class="radio peer">
+                                <span class="text-gray-400 peer-checked:text-gray-900 peer-checked:font-bold peer-focus:text-gray-700">
+                                <i class="bi bi-emoji-frown"></i>
                                 아쉬워요
                             </span>
-                        </label>
+                            </label>
+                        </div>
                     </div>
 
-                    <button id="btn-write-1" class="btn btn-outline-success btn-block gap-1">
+                    <button id="btn-write-1" class="btn btn-outline-success btn-block mt-2 gap-1">
                         <i class="fa-solid fa-heart-circle-plus"></i>
                         <span>후기 작성 완료</span>
                     </button>
