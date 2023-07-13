@@ -204,8 +204,18 @@ public class RecruitmentService {
 
     @Transactional
     public RsData update(RecruitmentArticle recruitmentArticle, CreateForm createForm) {
+
+        // 동만 붙은 부분만 가져옴
+        RsData<String> checkMt = mtAddressChecked(createForm.getMtAddress());
+
+        String realMountainAddress = null;
+
+        if (checkMt.isSuccess()) {
+            realMountainAddress = checkMt.getData();
+        }
+
         recruitmentArticle.update(createForm);
-        recruitmentArticle.getRecruitmentArticleForm().update(createForm);
+        recruitmentArticle.getRecruitmentArticleForm().update(createForm, realMountainAddress);
 
         publisher.publishEvent(new EventAfterUpdateArticle(this, recruitmentArticle));
         return RsData.of("S-1", "수정 완료");
