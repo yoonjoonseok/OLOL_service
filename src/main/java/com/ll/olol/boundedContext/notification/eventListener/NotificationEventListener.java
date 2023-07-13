@@ -40,9 +40,10 @@ public class NotificationEventListener {
 
     private void sendNotifications(Notification notification, NotificationDTO notificationDTO) throws IOException {
         //notificationService.send(notification.getMember().getId(), notificationDTO); //sse
-        firebaseCloudMessageService.sendMessageTo(notificationService.getTokenMap().get(notification.getMember().getId()), notificationDTO);
+        if (notification.getMember().isReceivePush())
+            firebaseCloudMessageService.sendMessageTo(notificationService.getTokenMap().get(notification.getMember().getId()), notificationDTO);
 
-        if (2 <= notification.getType() && notification.getType() <= 7) {
+        if (notification.getMember().isReceiveMail() && 2 <= notification.getType() && notification.getType() <= 7) {
             EmailMessage emailMessage = EmailMessage.builder().to(notification.getMember().getEmail()).subject(notification.getContent()).message(notificationDTO.getLink()).build();
             emailService.sendMail(emailMessage);
         }

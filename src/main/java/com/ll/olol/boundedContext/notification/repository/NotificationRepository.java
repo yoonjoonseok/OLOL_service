@@ -8,7 +8,9 @@ import java.util.List;
 
 public interface NotificationRepository extends JpaRepository<Notification, Long> {
 
-    List<Notification> findByMember(Member member);
-
     int countByMemberAndReadDateIsNull(Member member);
+
+    List<Notification> findByMemberOrderByIdDesc(Member member);
+
+    void deleteByMember(Member member);
 }
