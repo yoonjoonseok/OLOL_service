@@ -50,12 +50,12 @@
                                 </span>
 
                                     <details
-                                            th:if="${!@recruitmentService.findByRecruitmentPeopleId(myArticleList.id).isEmpty()}">
+                                            th:if="${!myArticleList.recruitmentPeople.isEmpty()}">
                                         <summary>참가 인원 보기</summary>
                                         <div class="list-group-item list-group-item-action">
                                             <div class="row">
                                                 <div class="mb-2"
-                                                     th:each="recruitmentPeople : ${@recruitmentService.findByRecruitmentPeopleId(myArticleList.id)}"
+                                                     th:each="recruitmentPeople : ${myArticleList.recruitmentPeople}"
                                                      th:if="${recruitmentPeople.isAttend()}">
 
                                                     <!--                                                    <div th:onclick="|location.href='@{/member/{id}/info(id=${recruitmentPeople.member.id})}'|"-->
@@ -114,9 +114,9 @@
                             </div>
 
 
-                            <ul th:if="${!@recruitmentService.findByRecruitmentPeopleId(myArticleList.id).isEmpty()}"
+                            <ul th:if="${!myArticleList.recruitmentPeople.isEmpty()}"
                                 class="list-group">
-                                <li th:each="attendLists : ${@recruitmentService.findByRecruitmentPeopleId(myArticleList.id)}"
+                                <li th:each="attendLists : ${myArticleList.recruitmentPeople}"
                                     th:if="${attendLists.isAttend() == false}"
                                     class="list-group-item mb-1">
 

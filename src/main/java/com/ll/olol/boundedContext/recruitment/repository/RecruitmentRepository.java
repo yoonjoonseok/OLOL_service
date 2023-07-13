@@ -1,5 +1,6 @@
 package com.ll.olol.boundedContext.recruitment.repository;
 
+import com.ll.olol.boundedContext.member.entity.Member;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -18,4 +19,6 @@ public interface RecruitmentRepository extends JpaRepository<RecruitmentArticle,
     List<RecruitmentArticle> findByDeadLineDateBeforeAndIsDeadLine(LocalDateTime localDateTime, boolean DeadLine);
 
     List<RecruitmentArticle> findByRecruitmentArticleForm_CourseTimeBeforeAndIsEventTriggered(LocalDateTime currentTime, boolean isEventTriggered);
+
+    List<RecruitmentArticle> findByMemberOrderByIdDesc(Member loginedMember);
 }

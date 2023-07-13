@@ -7,8 +7,18 @@
         <div class="row">
             <div class="col-md-8">
                 <section>
-                    <div class="mt-3">
-                        <h2>알림</h2>
+                    <div style="display: flex">
+                        <div class="mt-3">
+                            <h2>알림</h2>
+                        </div>
+                        <div style="align-self: flex-end;margin-left: auto;padding: 10px;">
+                            <i class="fa-solid fa-trash-can" href="javascript:"
+                               onclick="if ( confirm('알림을 전부 삭제하시겠습니까?') ) $(this).next().submit();"></i>
+                            <form hidden th:action="@{|/notification/deleteAll|}"
+                                  method="POST">
+                                <input type="hidden" name="_method" value="delete">
+                            </form>
+                        </div>
                     </div>
                     <ul th:if="${!#lists.isEmpty(notifications)}" class="list-group">
                         <li th:each="notification: ${notifications}"

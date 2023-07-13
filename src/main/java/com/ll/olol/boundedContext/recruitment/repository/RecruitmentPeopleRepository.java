@@ -11,4 +11,6 @@ public interface RecruitmentPeopleRepository extends JpaRepository<RecruitmentPe
     List<RecruitmentPeople> findAllByRecruitmentArticle(RecruitmentArticle recruitmentArticle);
 
     RecruitmentPeople findByRecruitmentArticleAndMember(RecruitmentArticle recruitmentArticle, Member reviewer);
+
+    List<RecruitmentPeople> findByMemberOrderByIdDesc(Member actor);
 }

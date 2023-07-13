@@ -33,8 +33,8 @@ public class NotificationService {
     @Getter
     private final Map<Long, String> tokenMap = new HashMap<>();
 
-    public List<Notification> findByToInstaMember(Member member) {
-        return notificationRepository.findByMember(member);
+    public List<Notification> findByMemberOrderByIdDesc(Member member) {
+        return notificationRepository.findByMemberOrderByIdDesc(member);
     }
 
     @Transactional
@@ -79,6 +79,13 @@ public class NotificationService {
         notificationRepository.save(notification);
 
         return notification;
+    }
+
+    @Transactional
+    public RsData deleteByMember(Member member) {
+        System.out.println("아" + member.getId());
+        notificationRepository.deleteByMember(member);
+        return RsData.of("S-1", "알림이 전부 삭제되었습니다.");
     }
 
     @Transactional
@@ -138,5 +145,4 @@ public class NotificationService {
     public void register(final Long userId, final String token) {
         tokenMap.put(userId, token);
     }
-
 }
