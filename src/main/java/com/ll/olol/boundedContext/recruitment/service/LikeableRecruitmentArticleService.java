@@ -5,11 +5,12 @@ import com.ll.olol.boundedContext.member.entity.Member;
 import com.ll.olol.boundedContext.recruitment.entity.LikeableRecruitmentArticle;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
 import com.ll.olol.boundedContext.recruitment.repository.LikeableRecruitmentArticleRepository;
-import java.util.List;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -62,8 +63,8 @@ public class LikeableRecruitmentArticleService {
         return RsData.of("S-1", "찜 취소 가능한 모임 공고입니다");
     }
 
-    public List<LikeableRecruitmentArticle> findByFromMember(Member FromMember) {
-        return likeableRecruitmentArticleRepository.findAllByFromMember(FromMember);
+    public List<LikeableRecruitmentArticle> findByFromMemberOrderByIdDesc(Member FromMember) {
+        return likeableRecruitmentArticleRepository.findByFromMemberOrderByIdDesc(FromMember);
     }
 
     public Optional<LikeableRecruitmentArticle> findById(Long id) {

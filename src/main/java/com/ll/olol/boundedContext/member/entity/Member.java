@@ -1,7 +1,5 @@
 package com.ll.olol.boundedContext.member.entity;
 
-import static jakarta.persistence.GenerationType.IDENTITY;
-
 import com.ll.olol.boundedContext.chat.entity.ChatRoom;
 import com.ll.olol.boundedContext.comment.entity.Comment;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticle;
@@ -9,18 +7,7 @@ import com.ll.olol.boundedContext.recruitment.entity.RecruitmentPeople;
 import com.ll.olol.boundedContext.report.entity.ArticleReport;
 import com.ll.olol.boundedContext.review.entity.Review;
 import com.ll.olol.boundedContext.review.entity.ReviewMember;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EntityListeners;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.OrderBy;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -33,6 +20,12 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+
+import static jakarta.persistence.GenerationType.IDENTITY;
 
 @Entity
 @Getter
@@ -107,6 +100,10 @@ public class Member {
     private List<ArticleReport> articleReport;
 
     private int reviewScore;
+    @Setter
+    private boolean receivePush = true;
+    @Setter
+    private boolean receiveMail = true;
 
     //    @OneToMany(mappedBy = "fromMember", cascade = {CascadeType.ALL})
 //    @OrderBy("id desc") // 정렬
