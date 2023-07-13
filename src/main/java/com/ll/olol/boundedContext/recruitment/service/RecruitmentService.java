@@ -2,6 +2,7 @@ package com.ll.olol.boundedContext.recruitment.service;
 
 import com.ll.olol.base.rsData.RsData;
 import com.ll.olol.boundedContext.api.localCode.LocalCodeApiClient;
+import com.ll.olol.boundedContext.chat.service.ChatService;
 import com.ll.olol.boundedContext.comment.entity.Comment;
 import com.ll.olol.boundedContext.member.entity.Member;
 import com.ll.olol.boundedContext.notification.event.EventAfterCourseTime;
@@ -37,6 +38,8 @@ public class RecruitmentService {
 
     private final RecruitmentFormRepository recruitmentFormRepository;
 
+    private final ChatService chatService;
+
     private final LocalCodeApiClient localCodeApiClient;
 
     private final ApplicationEventPublisher publisher;
@@ -50,8 +53,10 @@ public class RecruitmentService {
     }
 
     @Transactional
-    public RecruitmentArticle createArticle(String articleName, String content, Member member, Integer typeValue,
-                                            LocalDateTime deadLineDate) {
+    public RecruitmentArticle createArticle(String articleName, String content, Member member, Integer typeValue, LocalDateTime deadLineDate) {
+
+        chatService.createChatRoomDetailDTO(member, articleName);
+
         RecruitmentArticle recruitmentArticle = RecruitmentArticle
                 .builder()
                 .member(member)
@@ -62,14 +67,14 @@ public class RecruitmentService {
                 .deadLineDate(deadLineDate)
                 .build();
 
+
         recruitmentRepository.save(recruitmentArticle);
         return recruitmentArticle;
     }
 
     @Transactional
     public void createArticleForm(RecruitmentArticle recruitmentArticle, Integer dayNight, Long recruitsNumber,
-                                  String mountainName, String mtAddress, Long ageRange, String connectType,
-                                  LocalDateTime startTime, Long durationOfTime) {
+                                  String mountainName, String mtAddress, Long ageRange, LocalDateTime startTime, Long durationOfTime) {
         // 동만 붙은 부분만 가져옴
         RsData<String> checkMt = mtAddressChecked(mtAddress);
 
@@ -92,7 +97,6 @@ public class RecruitmentService {
                     .mountainName(mountainName)
                     .mtAddress(realMountainAddress)
                     .ageRange(ageRange)
-                    .connectType(connectType)
                     .startTime(null)
                     .courseTime(null)
                     .localCode(localCodeApiClient.requestLocalCode(realMountainAddress))
@@ -106,7 +110,6 @@ public class RecruitmentService {
                     .mountainName(mountainName)
                     .mtAddress(realMountainAddress)
                     .ageRange(ageRange)
-                    .connectType(connectType)
                     .startTime(startTime)
                     .courseTime(startTime.plusHours(durationOfTime))
                     .localCode(localCodeApiClient.requestLocalCode(realMountainAddress))

@@ -40,6 +40,8 @@ public class Notification {
 
     private boolean participant;
 
+    private String link;
+
     public boolean isRead() {
         return readDate != null;
     }

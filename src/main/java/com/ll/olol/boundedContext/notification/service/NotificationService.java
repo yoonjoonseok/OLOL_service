@@ -38,12 +38,13 @@ public class NotificationService {
     }
 
     @Transactional
-    public Notification make(Member member, int type, String content, Long articleId) {
+    public Notification make(Member member, int type, String content, Long articleId, String link) {
         Notification notification = Notification.builder()
                 .member(member)
                 .type(type)
                 .content(content)
                 .articleId(articleId)
+                .link(link)
                 .build();
 
         notificationRepository.save(notification);
@@ -52,13 +53,14 @@ public class NotificationService {
     }
 
     @Transactional
-    public Notification makeReviewNotification(Member member, int type, String content, Long articleId, boolean reviewed) {
+    public Notification makeReviewNotification(Member member, int type, String content, Long articleId, boolean reviewed, String link) {
         Notification notification = Notification.builder()
                 .member(member)
                 .type(type)
                 .content(content)
                 .articleId(articleId)
                 .reviewed(reviewed)
+                .link(link)
                 .build();
 
         notificationRepository.save(notification);
@@ -67,13 +69,14 @@ public class NotificationService {
     }
 
     @Transactional
-    public Notification makeReviewWriteNotification(Member reviewer, int type, String content, Long articleId, boolean participant) {
+    public Notification makeReviewWriteNotification(Member reviewer, int type, String content, Long articleId, boolean participant, String link) {
         Notification notification = Notification.builder()
                 .member(reviewer)
                 .type(type)
                 .content(content)
                 .articleId(articleId)
                 .participant(participant)
+                .link(link)
                 .build();
 
         notificationRepository.save(notification);

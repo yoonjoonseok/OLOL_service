@@ -92,7 +92,6 @@ public class RecruitmentArticleForm {
         this.mountainName = createForm.getMountainName();
         this.mtAddress = realMtAddress;
         this.ageRange = createForm.getAgeRange();
-        this.connectType = createForm.getConnectType();
         this.durationOfTime = durationOfTime;
     }
 }
