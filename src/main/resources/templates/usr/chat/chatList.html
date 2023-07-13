@@ -41,9 +41,10 @@
 <body>
 <main layout:fragment="main" class="d-flex justify-content-center">
     <div>
-        <h1>대화 목록</h1>
+        <h1>
+            <span th:text="${myNickname}"></span> 님의 대화목록
+        </h1>
 
-        <button onclick="createRoom()">대화방만들기</button>
 
         <table class="table">
             <thead>

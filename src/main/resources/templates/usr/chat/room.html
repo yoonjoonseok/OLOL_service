@@ -40,6 +40,65 @@
         .chat-message button {
             margin-left: 10px;
         }
+
+        /* 추가된 스타일 */
+        .chat-header {
+            text-align: center;
+            position: relative;
+        }
+
+        .chat-room-name {
+            display: inline-block;
+            font-size: 20px;
+            margin-bottom: 0;
+        }
+
+        .chat-room-icon {
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translate(-150%, -50%);
+            display: flex;
+            align-items: center;
+        }
+
+        .chat-room-icon i {
+            margin-right: 5px;
+        }
+
+        .chat-room-participants {
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translate(150%, -50%);
+            display: flex;
+            align-items: center;
+        }
+
+        .chat-room-participants-count {
+            margin-right: 5px;
+        }
+
+        .chat-room-participants-button {
+            font-size: 14px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+
+        .chat-message-input {
+            width: 70%;
+            margin: 10px auto;
+            display: flex;
+            align-items: center;
+        }
+
+        .chat-message-input input {
+            flex: 1;
+        }
     </style>
 
 </head>
@@ -47,21 +106,23 @@
 <main layout:fragment="main">
     <th:block th:fragment="content">
 
-        <!-- 수정된 HTML -->
         <div id="chat" class="chat">
             <div class="chat-header clearfix">
-                <div class="row">
-                    <div class="col-lg-6">
-                        <div class="chat-about">
-                            <span id="myId" class="m-b-0" th:text="${room.roomName}"></span>
-                        </div>
-                    </div>
+                <div class="chat-room-icon">
+                    <i class="fas fa-users"></i>
+                </div>
+                <h1 class="chat-room-name" th:text="${room.roomName}"></h1>
+                <div class="chat-about d-flex align-items-center">
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                            data-bs-target="#participantsModal">
+                        <i class="fas fa-users"></i>
+                        <span class="participant-count" th:text="${members.size()}"></span>
+                    </button>
+                    <button id="button-exit" type="button" class="input-group-text" title="Exit chat">
+                        <i class="fas fa-arrow-right-from-bracket"></i>
+                    </button>
                 </div>
             </div>
-            <button id="button-exit" type="button" class="input-group-text" data-toggle="tooltip"
-                    data-placement="top" title="Exit chat">
-                <i class="fas fa-arrow-right-from-bracket"></i>
-            </button>
 
             <!-- 수정된 HTML -->
             <div id="msgArea" class="chat-history">
@@ -88,13 +149,31 @@
                 </th:block>
             </div>
 
-
-            <div class="chat-message clearfix">
+            <div class="chat-message-input">
                 <input id="msg" type="text" class="form-control" placeholder="Enter text here...">
                 <button id="button-send" type="button" class="input-group-text" data-toggle="tooltip"
                         data-placement="top" title="Send a message">
                     <i id="plane" class="fas fa-paper-plane" style="font-size: inherit;"></i>
                 </button>
+            </div>
+        </div>
+
+        <div class="modal fade" id="participantsModal" tabindex="-1" role="dialog"
+             aria-labelledby="participantsModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="participantsModalLabel">Chat Participants</h5>
+                    </div>
+                    <div class="modal-body">
+                        <ul>
+                            <li th:each="member : ${members}" th:text="${member.nickname}"></li>
+                        </ul>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
             </div>
         </div>
 
