@@ -197,9 +197,6 @@ public class RecruitmentController {
 
         RsData rsData = recruitmentService.update(recruitmentArticle.get(), createForm);
 
-        recruitmentArticle.get().update(createForm);
-        recruitmentArticle.get().getRecruitmentArticleForm().update(createForm);
-
         return rq.redirectWithMsg("/recruitment/" + id, rsData);
     }
 

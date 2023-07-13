@@ -95,7 +95,7 @@ public class RecruitmentService {
                     .dayNight(dayNight)
                     .recruitsNumbers(recruitsNumber)
                     .mountainName(mountainName)
-                    .mtAddress(mtAddress)
+                    .mtAddress(realMountainAddress)
                     .ageRange(ageRange)
                     .startTime(null)
                     .courseTime(null)
@@ -108,7 +108,7 @@ public class RecruitmentService {
                     .dayNight(dayNight)
                     .recruitsNumbers(recruitsNumber)
                     .mountainName(mountainName)
-                    .mtAddress(mtAddress)
+                    .mtAddress(realMountainAddress)
                     .ageRange(ageRange)
                     .startTime(startTime)
                     .courseTime(startTime.plusHours(durationOfTime))
@@ -207,8 +207,18 @@ public class RecruitmentService {
 
     @Transactional
     public RsData update(RecruitmentArticle recruitmentArticle, CreateForm createForm) {
+
+        // 동만 붙은 부분만 가져옴
+        RsData<String> checkMt = mtAddressChecked(createForm.getMtAddress());
+
+        String realMountainAddress = null;
+
+        if (checkMt.isSuccess()) {
+            realMountainAddress = checkMt.getData();
+        }
+
         recruitmentArticle.update(createForm);
-        recruitmentArticle.getRecruitmentArticleForm().update(createForm);
+        recruitmentArticle.getRecruitmentArticleForm().update(createForm, realMountainAddress);
 
         publisher.publishEvent(new EventAfterUpdateArticle(this, recruitmentArticle));
         return RsData.of("S-1", "수정 완료");
@@ -276,7 +286,6 @@ public class RecruitmentService {
                 article.setDeadLine(true);
             }
         }
-
     }
 
     @Transactional
@@ -311,5 +320,9 @@ public class RecruitmentService {
             LocalDateTime currentTime, boolean isEventTriggered) {
         return recruitmentRepository.findByRecruitmentArticleForm_CourseTimeBeforeAndIsEventTriggered(currentTime,
                 isEventTriggered);
+    }
+
+    public List<RecruitmentArticle> findByMemberOrderByIdDesc(Member loginedMember) {
+        return recruitmentRepository.findByMemberOrderByIdDesc(loginedMember);
     }
 }

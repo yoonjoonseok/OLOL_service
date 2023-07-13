@@ -129,4 +129,8 @@ public class RecruitmentPeopleService {
 
         return RsData.of("F-1", "확인 안됐습니다.");
     }
+
+    public List<RecruitmentPeople> findByMemberOrderByIdDesc(Member actor) {
+        return recruitmentPeopleRepository.findByMemberOrderByIdDesc(actor);
+    }
 }

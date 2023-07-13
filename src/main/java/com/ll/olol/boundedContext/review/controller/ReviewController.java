@@ -118,7 +118,9 @@ public class ReviewController {
     public String showReviewerList(@PathVariable Long id, Model model) {
         Member author = rq.getMember();
 
+
         RecruitmentArticle recruitmentArticle = recruitmentService.findById(id).get();
+
         if (!recruitmentArticle.isCourseTimeEnd()) {
             return rq.historyBack("아직 리뷰 작성시간이 아닙니다.");
         }

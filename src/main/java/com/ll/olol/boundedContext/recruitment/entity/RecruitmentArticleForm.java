@@ -72,7 +72,7 @@ public class RecruitmentArticleForm {
         return courseTime.format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm:ss"));
     }
 
-    public void update(CreateForm createForm) {
+    public void update(CreateForm createForm, String realMtAddress) {
         Long durationOfTime = createForm.getDurationOfTime();
         if (durationOfTime == null) {
             durationOfTime = 5L;
@@ -90,7 +90,7 @@ public class RecruitmentArticleForm {
         this.dayNight = createForm.getDayNight();
         this.recruitsNumbers = createForm.getRecruitsNumber();
         this.mountainName = createForm.getMountainName();
-        this.mtAddress = createForm.getMtAddress();
+        this.mtAddress = realMtAddress;
         this.ageRange = createForm.getAgeRange();
         this.durationOfTime = durationOfTime;
     }
