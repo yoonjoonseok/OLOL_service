@@ -38,4 +38,5 @@ out/
 
 ### custom ###
 application-secret.yml
+application-prod.yml
 firebase_service_key.json
