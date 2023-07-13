@@ -69,6 +69,10 @@ public class ChatService {
         }
     }
 
+    public ChatRoom findByRoomName(String roomName) {
+        return chatRoomRepository.findByRoomName(roomName).orElse(null);
+    }
+
 
     public List<ChatMessage> findMessagesByRoomId(String roomId) {
         return chatMessageRepository.findByChatRoom_RoomId(roomId);
