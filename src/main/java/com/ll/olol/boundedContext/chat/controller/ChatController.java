@@ -80,8 +80,13 @@ public class ChatController {
             }
         }
 
+        for (Member m : toJoinRoom.getChatMembers()) {
+            System.out.println(m);
+        }
+
         model.addAttribute("room", chatService.findRoomById(roomId));
         model.addAttribute("member", member);
+        model.addAttribute("members", toJoinRoom.getChatMembers());
 
         return "usr/chat/room";
     }
