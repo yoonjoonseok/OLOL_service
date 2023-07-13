@@ -276,7 +276,7 @@ public class RecruitmentService {
         return RsData.of("S-1", "마감 성공");
     }
 
-    @Scheduled(fixedRate = 60000)
+    //@Scheduled(fixedRate = 60000)
     @Transactional
     public void checkTimeDeadLine() {
         List<RecruitmentArticle> all = recruitmentRepository.findByDeadLineDateBeforeAndIsDeadLine(LocalDateTime.now(),
