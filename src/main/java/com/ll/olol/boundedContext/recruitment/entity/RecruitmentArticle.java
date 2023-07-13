@@ -78,9 +78,9 @@ public class RecruitmentArticle {
 
     public String getTypeValueToString() {
         if (typeValue == 1) {
-            return "정기";
-        } else {
             return "번개";
+        } else {
+            return "정기";
         }
     }
 
