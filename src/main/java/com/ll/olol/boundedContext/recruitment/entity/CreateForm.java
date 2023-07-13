@@ -1,18 +1,13 @@
 package com.ll.olol.boundedContext.recruitment.entity;
 
-import jakarta.validation.constraints.AssertTrue;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.Size;
-import java.time.LocalDateTime;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
+
+import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @Getter
@@ -61,9 +56,7 @@ public class CreateForm {
     private LocalDateTime deadLineDate;
 
     private Long ageRange;
-
-    @NotBlank(message = "내용은 필수항목입니다.")
-    private String connectType;
+    
 
     @AssertTrue(message = "시작 시간은 마감 시간보다 늦어야 합니다.")
     public boolean isStartTimeAfterDeadLineDate() {
@@ -88,6 +81,5 @@ public class CreateForm {
         this.durationOfTime = recruitmentArticleForm.getDurationOfTime();
         this.deadLineDate = recruitmentArticle.getDeadLineDate();
         this.ageRange = recruitmentArticleForm.getAgeRange();
-        this.connectType = recruitmentArticleForm.getConnectType();
     }
 }
