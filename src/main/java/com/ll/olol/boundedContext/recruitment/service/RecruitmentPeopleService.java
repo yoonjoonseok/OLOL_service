@@ -2,6 +2,7 @@ package com.ll.olol.boundedContext.recruitment.service;
 
 import com.ll.olol.base.rq.Rq;
 import com.ll.olol.base.rsData.RsData;
+import com.ll.olol.boundedContext.chat.service.ChatService;
 import com.ll.olol.boundedContext.member.entity.Member;
 import com.ll.olol.boundedContext.member.service.MemberService;
 import com.ll.olol.boundedContext.notification.event.EventAfterDeportPeople;
@@ -29,6 +30,7 @@ public class RecruitmentPeopleService {
     private final RecruitmentRepository recruitmentRepository;
     private final ApplicationEventPublisher publisher;
     private final MemberService memberService;
+    private final ChatService chatService;
     private final Rq rq;
     private final int limitPeople = 0;
 
@@ -91,6 +93,9 @@ public class RecruitmentPeopleService {
         recruitmentPeople.setAttend(true);
         publisher.publishEvent(new EventAfterRecruitmentAttend(this, recruitmentPeople));
 
+        Member member = recruitmentPeople.getMember();
+        String articleName = recruitmentPeople.getRecruitmentArticle().getArticleName();
+        chatService.findByRoomName(articleName).getChatMembers().add(member);
         return RsData.of("S-1", "수락 완료");
     }
 
