@@ -12,16 +12,7 @@ import com.ll.olol.boundedContext.recruitment.entity.RecruitmentArticleForm;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentPeople;
 import com.ll.olol.boundedContext.recruitment.repository.RecruitmentFormRepository;
 import com.ll.olol.boundedContext.recruitment.repository.RecruitmentRepository;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Join;
-import jakarta.persistence.criteria.JoinType;
-import jakarta.persistence.criteria.Predicate;
-import jakarta.persistence.criteria.Root;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import jakarta.persistence.criteria.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
@@ -32,6 +23,11 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -94,7 +90,7 @@ public class RecruitmentService {
                     .dayNight(dayNight)
                     .recruitsNumbers(recruitsNumber)
                     .mountainName(mountainName)
-                    .mtAddress(mtAddress)
+                    .mtAddress(realMountainAddress)
                     .ageRange(ageRange)
                     .connectType(connectType)
                     .startTime(null)
@@ -108,7 +104,7 @@ public class RecruitmentService {
                     .dayNight(dayNight)
                     .recruitsNumbers(recruitsNumber)
                     .mountainName(mountainName)
-                    .mtAddress(mtAddress)
+                    .mtAddress(realMountainAddress)
                     .ageRange(ageRange)
                     .connectType(connectType)
                     .startTime(startTime)
@@ -208,8 +204,18 @@ public class RecruitmentService {
 
     @Transactional
     public RsData update(RecruitmentArticle recruitmentArticle, CreateForm createForm) {
+
+        // 동만 붙은 부분만 가져옴
+        RsData<String> checkMt = mtAddressChecked(createForm.getMtAddress());
+
+        String realMountainAddress = null;
+
+        if (checkMt.isSuccess()) {
+            realMountainAddress = checkMt.getData();
+        }
+
         recruitmentArticle.update(createForm);
-        recruitmentArticle.getRecruitmentArticleForm().update(createForm);
+        recruitmentArticle.getRecruitmentArticleForm().update(createForm, realMountainAddress);
 
         publisher.publishEvent(new EventAfterUpdateArticle(this, recruitmentArticle));
         return RsData.of("S-1", "수정 완료");
@@ -311,5 +317,9 @@ public class RecruitmentService {
             LocalDateTime currentTime, boolean isEventTriggered) {
         return recruitmentRepository.findByRecruitmentArticleForm_CourseTimeBeforeAndIsEventTriggered(currentTime,
                 isEventTriggered);
+    }
+
+    public List<RecruitmentArticle> findByMemberOrderByIdDesc(Member loginedMember) {
+        return recruitmentRepository.findByMemberOrderByIdDesc(loginedMember);
     }
 }

@@ -1,12 +1,11 @@
 package com.ll.olol.boundedContext.notification.controller;
 
 import com.ll.olol.base.rq.Rq;
+import com.ll.olol.base.rsData.RsData;
 import com.ll.olol.boundedContext.member.entity.Member;
 import com.ll.olol.boundedContext.member.service.MemberService;
 import com.ll.olol.boundedContext.notification.entity.Notification;
 import com.ll.olol.boundedContext.notification.service.NotificationService;
-import java.util.Collections;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -14,6 +13,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("/notification")
@@ -32,17 +33,19 @@ public class NotificationController {
             return rq.historyBack("마이페이지에서 추가정보를 입력해주세요.");
         }
 
-        List<Notification> notifications = notificationService.findByToInstaMember(rq.getMember());
-
-        //notifications = notifications.stream().filter(n -> !n.isRead()).collect(Collectors.toList());
-
-        Collections.reverse(notifications);
+        List<Notification> notifications = notificationService.findByMemberOrderByIdDesc(rq.getMember());
 
         notificationService.markAsRead(notifications);
 
         model.addAttribute("notifications", notifications);
 
         return "usr/notification/list";
+    }
+
+    @DeleteMapping("/deleteAll")
+    public String deleteAll() {
+        RsData rsData = notificationService.deleteByMember(rq.getMember());
+        return rq.redirectWithMsg("/notification/list", rsData);
     }
 
     @ResponseBody

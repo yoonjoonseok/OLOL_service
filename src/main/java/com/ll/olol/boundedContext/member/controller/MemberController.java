@@ -8,23 +8,22 @@ import com.ll.olol.boundedContext.member.service.MemberService;
 import com.ll.olol.boundedContext.recruitment.entity.LikeableRecruitmentArticle;
 import com.ll.olol.boundedContext.recruitment.entity.RecruitmentPeople;
 import com.ll.olol.boundedContext.recruitment.service.LikeableRecruitmentArticleService;
+import com.ll.olol.boundedContext.recruitment.service.RecruitmentPeopleService;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/member")
@@ -33,6 +32,8 @@ public class MemberController {
     private final Rq rq;
     private final MemberService memberService;
     private final MemberRepository memberRepository;
+
+    private final RecruitmentPeopleService recruitmentPeopleService;
     private final LikeableRecruitmentArticleService likeableRecruitmentArticleService;
 
     @PreAuthorize("isAuthenticated()")
@@ -41,13 +42,11 @@ public class MemberController {
         Member actor = rq.getMember();
         model.addAttribute("member", actor);
 
-        Optional<Member> member = memberRepository.findById(actor.getId());
-        List<RecruitmentPeople> recruitmentPeople = member.get().getRecruitmentPeople();
+
+        List<RecruitmentPeople> recruitmentPeople = recruitmentPeopleService.findByMemberOrderByIdDesc(actor);
         model.addAttribute("peopleList", recruitmentPeople);
 
-        List<LikeableRecruitmentArticle> likeableRecruitmentArticles = likeableRecruitmentArticleService.findByFromMember(
-                actor);
-        Collections.reverse(likeableRecruitmentArticles);
+        List<LikeableRecruitmentArticle> likeableRecruitmentArticles = likeableRecruitmentArticleService.findByFromMemberOrderByIdDesc(actor);
         model.addAttribute("likeableRecruitmentArticles", likeableRecruitmentArticles);
         return "usr/layout/myPage";
     }
@@ -73,8 +72,7 @@ public class MemberController {
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/mypage")
     public String editInfo(@Valid EditForm editForm) {
-        RsData result = memberService.modifyMemberInfo(rq.getMember(), editForm.getNickname(), editForm.getAgeRange(),
-                editForm.getGender(), editForm.getEmail());
+        RsData result = memberService.modifyMemberInfo(rq.getMember(), editForm.getNickname(), editForm.getAgeRange(), editForm.getGender(), editForm.getEmail());
         if (result.isFail()) {
             return rq.historyBack("추가정보를 입력해주세요");
         }
@@ -98,5 +96,22 @@ public class MemberController {
         model.addAttribute("member", member.get());
 
         return "usr/member/information";
+    }
+
+    @Transactional
+    @PreAuthorize("isAuthenticated()")
+    @ResponseBody
+    @PostMapping("/mypage/notification")
+    public String setNotificationOption(@RequestBody NotificationOption data) {
+        rq.getMember().setReceivePush(data.isReceivePush());
+        rq.getMember().setReceiveMail(data.isReceiveMail());
+
+        return "success";
+    }
+
+    @Getter
+    static class NotificationOption {
+        private boolean receivePush;
+        private boolean receiveMail;
     }
 }
