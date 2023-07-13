@@ -1,6 +1,7 @@
 package com.ll.olol.boundedContext.member.service;
 
 import com.ll.olol.base.rsData.RsData;
+import com.ll.olol.boundedContext.member.controller.MemberController;
 import com.ll.olol.boundedContext.member.entity.Member;
 import com.ll.olol.boundedContext.member.repository.MemberRepository;
 import com.ll.olol.boundedContext.notification.service.FirebaseCloudMessageService;
@@ -92,6 +93,12 @@ public class MemberService {
 
     public Optional<Member> findByNickname(String writer) {
         return memberRepository.findByNickname(writer);
+    }
+
+    @Transactional
+    public void setNotificationOption(Member member, MemberController.NotificationOption data) {
+        member.setReceivePush(data.isReceivePush());
+        member.setReceiveMail(data.isReceiveMail());
     }
 
 //    public Optional<Member> findByUsername(String username) {

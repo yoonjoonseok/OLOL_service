@@ -18,7 +18,6 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -100,19 +99,17 @@ public class MemberController {
         return "usr/member/information";
     }
 
-    @Transactional
     @PreAuthorize("isAuthenticated()")
     @ResponseBody
     @PostMapping("/mypage/notification")
     public String setNotificationOption(@RequestBody NotificationOption data) {
-        rq.getMember().setReceivePush(data.isReceivePush());
-        rq.getMember().setReceiveMail(data.isReceiveMail());
+        memberService.setNotificationOption(rq.getMember(), data);
 
         return "success";
     }
 
     @Getter
-    static class NotificationOption {
+    public static class NotificationOption {
         private boolean receivePush;
         private boolean receiveMail;
     }
