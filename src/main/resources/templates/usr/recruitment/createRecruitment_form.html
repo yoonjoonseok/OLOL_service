@@ -219,7 +219,8 @@
 
             <div class="col-md-6 mb-2">
                 <label for="ageRange" class="form-label">연령대</label>
-                <input autocomplete="off" type="number" placeholder="연령대" class="form-control" th:field="*{ageRange}">
+                <input autocomplete="off" min="10" step="10" type="number" placeholder="연령대" class="form-control"
+                       th:field="*{ageRange}">
             </div>
 
 
