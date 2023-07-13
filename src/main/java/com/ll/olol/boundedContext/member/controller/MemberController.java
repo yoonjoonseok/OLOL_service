@@ -18,7 +18,6 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
@@ -72,11 +71,13 @@ public class MemberController {
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/mypage")
     public String editInfo(@Valid EditForm editForm) {
-        RsData result = memberService.modifyMemberInfo(rq.getMember(), editForm.getNickname(), editForm.getAgeRange(), editForm.getGender(), editForm.getEmail());
-        if (result.isFail()) {
-            return rq.historyBack("추가정보를 입력해주세요");
+        RsData result = null;
+        try {
+            result = memberService.modifyMemberInfo(rq.getMember(), editForm.getNickname(), editForm.getAgeRange(), editForm.getGender(), editForm.getEmail());
+        } catch (Exception e) {
+            return rq.historyBack("중복된 닉네임 혹은 이메일입니다.");
         }
-//        memberService.modifyUser(rq.getMember());
+
         return rq.redirectWithMsg("/recruitment/list", result.getMsg());
     }
 
@@ -98,19 +99,17 @@ public class MemberController {
         return "usr/member/information";
     }
 
-    @Transactional
     @PreAuthorize("isAuthenticated()")
     @ResponseBody
     @PostMapping("/mypage/notification")
     public String setNotificationOption(@RequestBody NotificationOption data) {
-        rq.getMember().setReceivePush(data.isReceivePush());
-        rq.getMember().setReceiveMail(data.isReceiveMail());
+        memberService.setNotificationOption(rq.getMember(), data);
 
         return "success";
     }
 
     @Getter
-    static class NotificationOption {
+    public static class NotificationOption {
         private boolean receivePush;
         private boolean receiveMail;
     }
