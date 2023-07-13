@@ -226,8 +226,8 @@
 
             <div class="col-md-6 mb-2">
                 <label for="startTime" class="form-label">출발 시간 (선택)</label>
-                <input type="datetime-local" class="form-control" th:field="*{startTime}"
-                       th:min="${#dates.format(#dates.createNow(), 'yyyy-MM-dd HH:mm')}">
+                <input type="datetime-local" class="form-control" th:field="*{startTime}">
+                       <!--th:min="${#dates.format(#dates.createNow(), 'yyyy-MM-dd HH:mm')}">-->
             </div>
 
             <div class="col-md-6 mb-2">
@@ -238,8 +238,8 @@
 
             <div class="col-md-6 mb-2">
                 <label for="deadLineDate" class="form-label">모집 마감 시간</label>
-                <input type="datetime-local" class="form-control" th:field="*{deadLineDate}"
-                       th:min="${#dates.format(#dates.createNow(), 'yyyy-MM-dd HH:mm')}">
+                <input type="datetime-local" class="form-control" th:field="*{deadLineDate}">
+                       <!--th:min="${#dates.format(#dates.createNow(), 'yyyy-MM-dd HH:mm')}">-->
             </div>
         </div>
 
