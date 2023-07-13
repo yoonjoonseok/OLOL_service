@@ -26,15 +26,6 @@
                                 <span th:text="${reviewMember.getReviewMember().getNickname()}">
                                 </span>
 
-<!--                                <a th:unless="${#lists.isEmpty(wroteReviewList)}"-->
-<!--                                   class="btn btn-outline-success disabled"-->
-<!--                                   role="button"-->
-<!--                                   aria-disabled="true">리뷰남기러 가기</a>-->
-
-<!--                                <a id="reviewButton"-->
-<!--                                   class="btn btn-outline-success"-->
-<!--                                   th:href="@{|/review/write/${reviewMember.id}|}">리뷰남기러 가기</a>-->
-
                                 <button class="btn btn-outline-success"
                                         th:onclick="'location.href=\'' + @{/review/write/} + ${reviewMember.id} + '\''">
                                     리뷰남기러 가기
