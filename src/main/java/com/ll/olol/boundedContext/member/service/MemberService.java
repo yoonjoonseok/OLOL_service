@@ -79,7 +79,7 @@ public class MemberService {
 
         memberRepository.save(resultMember);
 
-        return RsData.of("S-1", "닉네임 수정 성공");
+        return RsData.of("S-1", "내 정보 수정 성공");
     }
 
     public RsData additionalInfo(Member loginedMember) {

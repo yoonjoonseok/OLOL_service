@@ -72,11 +72,13 @@ public class MemberController {
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/mypage")
     public String editInfo(@Valid EditForm editForm) {
-        RsData result = memberService.modifyMemberInfo(rq.getMember(), editForm.getNickname(), editForm.getAgeRange(), editForm.getGender(), editForm.getEmail());
-        if (result.isFail()) {
-            return rq.historyBack("추가정보를 입력해주세요");
+        RsData result = null;
+        try {
+            result = memberService.modifyMemberInfo(rq.getMember(), editForm.getNickname(), editForm.getAgeRange(), editForm.getGender(), editForm.getEmail());
+        } catch (Exception e) {
+            return rq.historyBack("중복된 닉네임 혹은 이메일입니다.");
         }
-//        memberService.modifyUser(rq.getMember());
+
         return rq.redirectWithMsg("/recruitment/list", result.getMsg());
     }
 
